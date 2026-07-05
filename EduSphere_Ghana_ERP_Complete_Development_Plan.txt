@@ -1,0 +1,3008 @@
+================================================================================
+           EDUSPHERE GHANA ERP — COMPLETE MASTER DEVELOPMENT PLAN
+   Including Dynamic Scoring Engine, Dynamic Promotion Engine & Website Builder
+                             Version 2.1 | June 2026
+================================================================================
+
+TABLE OF CONTENTS
+-----------------
+1.  Executive Summary
+2.  Feasibility Study
+3.  Project Charter & Scope
+4.  System Requirements Specification (SRS)
+5.  User Stories & Use Cases
+6.  UML Diagrams (Textual)
+7.  Entity Relationship Diagram (ERD) & Data Dictionary
+8.  Dynamic Scoring Engine — Deep Specification
+8B. Dynamic Promotion Engine — Deep Specification (Ghana Basic & SHS)
+9.  School Website Builder — Deep Specification
+10. Database Migrations & Seeds (Laravel)
+11. XAMPP & Laravel Setup Guide
+12. Phase-by-Phase Development Plan
+13. API Documentation
+14. Security Checklist
+15. Testing Plan
+16. Deployment Guide
+17. Backup & Restore Guide
+18. Role Manuals
+19. Training Materials
+20. Roadmap
+
+================================================================================
+SECTION 1: EXECUTIVE SUMMARY
+================================================================================
+
+EduSphere Ghana ERP is a cloud-ready, multi-tenant, multi-campus, GES-compliant
+School ERP and SaaS platform serving Nursery, KG, Primary, JHS, SHS, TVET,
+Colleges, and Universities across Ghana and beyond.
+
+Two major enhancements are included in this master plan:
+
+A) DYNAMIC SCORING ENGINE
+   - Each school independently configures class score components (exercises,
+     homework, projects, practicals, tests, observations, and custom fields).
+   - Each school sets the class score maximum and exam score maximum.
+   - The system auto-scales both to any target weight (e.g., 50/50, 30/70, 40/60).
+   - Teachers enter raw scores per component; the system aggregates and scales.
+   - Fully configurable per school, per level, per subject, per term.
+
+B) DYNAMIC PROMOTION ENGINE
+   - Implements Ghana's basic school practice: end-of-year promotion is decided
+     in Term 3, using the cumulative/average performance across Term 1, Term 2,
+     and Term 3 (GES does not impose one single rigid national percentage for
+     basic-school promotion — schools set internal promotion policy guided by
+     continuous assessment; EduSphere lets each school configure its own rule,
+     e.g. annual average of all 3 terms, or "average for 2 of 3 terms including
+     Term 3", patterns commonly used by Ghanaian basic schools).
+   - Separate, independently configurable rule sets per level (Nursery/KG,
+     Primary, JHS, SHS), since promotion logic differs by level in Ghana.
+   - JHS 3 (Basic 9) and SHS terminal-year candidates are automatically
+     excluded from internal promotion and routed to BECE/WASSCE + CSSPS
+     placement instead of school-decided promotion.
+   - Repetition tracking with a configurable repeat limit (GES practice
+     generally allows a pupil to repeat a class at most once before further
+     review).
+   - Headteacher/Principal review-and-approve workflow before results are
+     published to parents, with full audit trail.
+
+C) DRAG-AND-DROP SCHOOL WEBSITE BUILDER
+   - Every school gets its own subdomain/custom domain website.
+   - Built-in page builder with drag-and-drop sections/blocks.
+   - Components: hero, about, news, gallery, events, admissions, contact, etc.
+   - SEO settings, branding, color themes, and typography controls.
+   - Publish/unpublish, revision history, preview mode.
+   - Content feeds directly from ERP data (news, events, staff, gallery).
+
+Tech Stack:
+  Backend:   PHP 8.3+, Laravel 12, MySQL 8, Redis, REST API
+  Frontend:  Bootstrap 5, HTML5, CSS3, JavaScript ES6, Alpine.js, jQuery
+  Tools:     Chart.js, DomPDF, QR Generator, Laravel Sanctum, PWA
+  Builder:   GrapesJS (open-source drag-and-drop page builder, JS)
+  DevOps:    XAMPP (dev), Apache/Nginx (prod), SSL, Cloudflare-ready
+
+================================================================================
+SECTION 2: FEASIBILITY STUDY
+================================================================================
+
+2.1 TECHNICAL FEASIBILITY
+--------------------------
+- PHP/Laravel ecosystem is mature, well-documented, and widely supported.
+- MySQL 8 supports JSON columns for flexible schema (scoring components).
+- GrapesJS is a proven open-source page builder used in production systems.
+- Redis is available on XAMPP via Windows Redis or can be replaced with file cache
+  for development.
+- All libraries (Chart.js, DomPDF, Alpine.js) are free and open-source.
+- PWA support via Laravel PWA package or custom service worker.
+VERDICT: Technically feasible with the chosen stack.
+
+2.2 ECONOMIC FEASIBILITY
+-------------------------
+- SaaS subscription model: Free, Standard (GHS 200/mo), Premium (GHS 500/mo),
+  Enterprise (custom).
+- Revenue streams: subscriptions, SMS credits, setup fees, training, white-label.
+- Estimated break-even: 50 schools on Standard plan within 12 months.
+- Development cost (internal team): estimated 8-12 months for MVP.
+VERDICT: Economically viable with phased rollout.
+
+2.3 OPERATIONAL FEASIBILITY
+----------------------------
+- Non-technical school staff are the primary users; UI must be simple.
+- Offline attendance and score entry with sync handles poor connectivity.
+- Training materials (video, PDF, in-app tours) reduce support burden.
+- Helpdesk module with ticket SLA ensures ongoing support.
+VERDICT: Operationally feasible with proper training and onboarding.
+
+2.4 LEGAL & COMPLIANCE FEASIBILITY
+------------------------------------
+- GES (Ghana Education Service) curriculum and SBA framework compliance is built in.
+- Data Protection Act 2012 (Ghana) compliance via consent, retention, and audit logs.
+- SSNIT and PAYE-ready payroll reports for HR module.
+VERDICT: Legally compliant with Ghanaian education and data laws.
+
+================================================================================
+SECTION 3: PROJECT CHARTER & SCOPE
+================================================================================
+
+3.1 PROJECT CHARTER
+--------------------
+Project Name:    EduSphere Ghana ERP
+Sponsor:         [School/Company Name]
+Project Manager: [Name]
+Start Date:      [Date]
+Target MVP:      Phase 1-4 (approx. 3 months)
+Full Release:    Phase 1-12 (approx. 12 months)
+
+Objectives:
+  1. Deliver a GES-compliant, multi-tenant school ERP for Ghana.
+  2. Support dynamic, school-configurable scoring and report cards.
+  3. Provide each school a drag-and-drop website builder.
+  4. Ensure data isolation, security, and scalability.
+  5. Enable SaaS billing and subscription management.
+
+Success Criteria:
+  - 100% GES SBA format compliance for all supported school levels.
+  - Sub-3-second page load on standard Ghanaian internet connections.
+  - Zero cross-tenant data leaks in penetration testing.
+  - 99% uptime SLA for Premium and Enterprise plans.
+
+3.2 SCOPE — IN SCOPE
+---------------------
+All 34 modules listed in the master prompt, PLUS:
+  - Dynamic Scoring Engine (class score components + scaling)
+  - School Website Builder (GrapesJS-based drag-and-drop)
+
+3.3 SCOPE — OUT OF SCOPE (Phase 1)
+------------------------------------
+  - Native mobile apps (Android/iOS) — PWA covers this initially.
+  - Live RFID/biometric hardware integration — hooks provided, integration later.
+  - Real-time GPS tracking — API hooks provided, integration Phase 11+.
+  - WhatsApp Business API — stub provided, activation requires Meta approval.
+
+================================================================================
+SECTION 4: SYSTEM REQUIREMENTS SPECIFICATION (SRS)
+================================================================================
+
+4.1 FUNCTIONAL REQUIREMENTS
+-----------------------------
+
+FR-001: Multi-Tenant Architecture
+  The system SHALL support multiple schools on one platform with strict data
+  isolation via school_id on all tenant tables and tenant middleware.
+
+FR-002: Dynamic Scoring Engine
+  FR-002a: Each school SHALL configure class score components independently
+           (name, maximum marks, weight/order, active/inactive).
+  FR-002b: Schools SHALL set the class score total (e.g., 50 or 100) and exam
+           score total (e.g., 100).
+  FR-002c: Schools SHALL set the target scaled weight for class score and exam
+           score (e.g., class=50%, exam=50%; or class=30%, exam=70%).
+  FR-002d: The system SHALL auto-calculate:
+           - Component totals per student per subject per term.
+           - Scaled class score = (raw class total / class max) * class weight.
+           - Scaled exam score  = (raw exam mark / exam max) * exam weight.
+           - Grand total = scaled class score + scaled exam score.
+  FR-002e: Configuration SHALL be per school, with optional overrides per
+           level (Primary, JHS, SHS) and per subject.
+  FR-002f: Teachers SHALL enter raw scores; the system scales automatically.
+  FR-002g: Score entry SHALL support spreadsheet-style grid, Excel/CSV upload,
+           copy-paste, autosave, and missing-score alerts.
+  FR-002h: A configuration preview SHALL show teachers and admins exactly how
+           scores will be calculated before publishing.
+
+FR-002P: Dynamic Promotion Engine
+  FR-002P-a: Each school SHALL configure a Promotion Configuration per academic
+             level (Nursery/KG, Primary, JHS, SHS, Tertiary), since GES does
+             not enforce one fixed national promotion percentage at the basic
+             level — promotion policy is set internally by each school based
+             on continuous assessment performance.
+  FR-002P-b: For Nursery–JHS2 (Basic 1–8), the engine SHALL compute, at the
+             close of Term 3, an annual performance figure from the three
+             terms' published grand totals, using the school's selected
+             METHOD:
+               Method 1 — Annual Average: average of Term 1 + Term 2 + Term 3
+                          grand totals (weights per term configurable, default
+                          equal weight 1:1:1).
+               Method 2 — Two-of-Three: average of the pupil's best 2 of the
+                          3 terms, provided Term 3 is one of the two counted
+                          (mirrors common Ghanaian basic-school practice).
+               Method 3 — Subject Pass Count: pupil must obtain at least the
+                          configured pass mark in at least N of the subjects
+                          studied, AND meet the minimum overall average.
+  FR-002P-c: The school SHALL set a Promotion Threshold (e.g., overall average
+             ≥ 40%, ≥ 50%, or ≥ 60%) and, optionally, a per-subject minimum
+             pass mark and a minimum number of subjects that must be passed.
+  FR-002P-d: JHS 3 (Basic 9) pupils and SHS terminal-year (graduating) students
+             SHALL be automatically excluded from internal promotion
+             processing; instead they are flagged "BECE Candidate" or
+             "WASSCE Candidate" and routed to the External Examination &
+             CSSPS/Tertiary Placement module.
+  FR-002P-e: For SHS (Forms 1–3 / Years 1–3), promotion to the next form SHALL
+             be configurable using continuous assessment + house-exam
+             aggregate, with optional core/elective subject pass-count rules
+             and conduct/attendance gating, reflecting practice at Ghanaian
+             senior high schools.
+  FR-002P-f: The system SHALL track repeats per student per class and enforce
+             a configurable repeat limit (default: 1 repeat per class level)
+             before flagging the case for Headteacher/Principal manual review.
+  FR-002P-g: The engine SHALL auto-generate a Promotion List at the end of
+             Term 3, classifying every pupil as Promoted, Conditional/On
+             Probation, or Repeat, with the figures and rule that produced
+             each classification fully visible (no "black box" decisions).
+  FR-002P-h: The Class Teacher and Headteacher/Principal SHALL review and
+             approve the Promotion List (with ability to override individual
+             decisions with a mandatory reason) before it is published.
+  FR-002P-i: On publish, the system SHALL automatically create each promoted
+             student's enrollment record in the next class for the new
+             academic year (student_enrollments.promoted_from_class_id),
+             and SHALL automatically re-enroll repeating students in the
+             same class.
+  FR-002P-j: Promotion status SHALL appear on the Term 3 report card
+             ("Promoted to Basic 5", "Repeated", "BECE Candidate", etc.).
+
+FR-003: School Website Builder
+  FR-003a: Each school SHALL have a website accessible at their subdomain or
+           custom domain.
+  FR-003b: The website builder SHALL use drag-and-drop with pre-built blocks:
+           Hero, About, Admissions, News Feed, Events, Gallery, Staff, Contact,
+           Custom HTML, Custom Image, Video Embed, Testimonials, Call-to-Action.
+  FR-003c: Schools SHALL be able to add/remove/reorder pages.
+  FR-003d: SEO settings (title, meta description, og:image) per page.
+  FR-003e: Branding: logo, colors, fonts, favicon.
+  FR-003f: Content blocks can pull live data from ERP (news posts, events,
+           gallery images) or be manually authored.
+  FR-003g: Publish/unpublish with preview mode and revision history.
+  FR-003h: Website is publicly accessible WITHOUT login; ERP is protected.
+
+FR-004 through FR-034: [All 34 modules from the master prompt — see Section 12
+  Phase Plan for implementation details per phase]
+
+4.2 NON-FUNCTIONAL REQUIREMENTS
+---------------------------------
+
+NFR-001 Performance:   Page load < 3s on 3G; DB queries < 500ms indexed.
+NFR-002 Scalability:   Support 10,000+ students per school; 500+ schools.
+NFR-003 Security:      RBAC, MFA-ready, CSRF, XSS, SQL injection prevention,
+                       rate limiting, encrypted sensitive fields.
+NFR-004 Availability:  99% uptime target; queue workers monitored.
+NFR-005 Usability:     WCAG 2.1 AA accessibility; screen-reader labels; large
+                       fonts; icon+label navigation; step-by-step forms.
+NFR-006 Compatibility: Chrome, Firefox, Safari, Edge; Android; iOS (PWA).
+NFR-007 Localization:  English primary; Ghana-specific date/currency formats.
+NFR-008 Backup:        Daily automated backups; point-in-time restore.
+NFR-009 Compliance:    GES SBA formats; Ghana Data Protection Act 2012.
+NFR-010 Offline:       Attendance and score entry work offline with sync.
+
+================================================================================
+SECTION 5: USER STORIES & USE CASES
+================================================================================
+
+5.1 DYNAMIC SCORING ENGINE — USER STORIES
+------------------------------------------
+
+US-DS-001 (School Admin):
+  "As a School Admin, I want to define the class score components for each level
+  so that teachers know exactly what to enter and the system calculates correctly."
+  Acceptance:
+    - Admin can add component (name, max marks, display order).
+    - Admin can set class score total and exam score total.
+    - Admin can set scale weights (e.g., class=50, exam=50 out of 100).
+    - System validates that component max marks sum <= class score total.
+    - Preview shows sample calculation before saving.
+
+US-DS-002 (Teacher):
+  "As a Teacher, I want to enter raw scores for each component per student and
+  see the system automatically calculate the total class score and final grade."
+  Acceptance:
+    - Score entry grid shows columns per configured component.
+    - Real-time running total shown per student row.
+    - System flags out-of-range entries instantly.
+    - Autosave drafts every 30 seconds.
+
+US-DS-003 (HOD):
+  "As an HOD, I want to verify teacher-entered scores before they are sent to
+  the headteacher for approval."
+  Acceptance:
+    - HOD sees a subject-level broadsheet with all students and components.
+    - HOD can flag errors and return to teacher with comments.
+    - HOD approval is timestamped and logged.
+
+US-DS-004 (Parent):
+  "As a Parent, I want to see my child's report card showing both the class score
+  breakdown and the exam score, and understand how the final grade was achieved."
+  Acceptance:
+    - Report card shows each component and marks.
+    - Shows scaled class score, scaled exam score, and total.
+    - Grade and position shown with the grading scale key.
+
+US-DS-005 (Super Admin):
+  "As a Super Admin, I want to see that each school's scoring configuration is
+  independent and does not affect other schools."
+  Acceptance:
+    - Score configurations are scoped by school_id.
+    - No cross-school data visible in any configuration screen.
+
+5.2 SCHOOL WEBSITE BUILDER — USER STORIES
+------------------------------------------
+
+US-WB-001 (School Admin):
+  "As a School Admin, I want to build our school website by dragging and dropping
+  sections so that I can create a professional website without coding knowledge."
+  Acceptance:
+    - GrapesJS editor loads within the ERP admin panel.
+    - Pre-built blocks are available in the left panel.
+    - Changes auto-save as drafts.
+    - Preview button shows the site as visitors see it.
+    - Publish button makes the site live.
+
+US-WB-002 (School Admin):
+  "As a School Admin, I want to add our news posts and upcoming events to the
+  website automatically so I don't have to update the website manually."
+  Acceptance:
+    - Dynamic News Block pulls from the ERP news/announcements module.
+    - Dynamic Events Block pulls from the ERP calendar/events module.
+    - Gallery block pulls from ERP document/gallery module.
+
+US-WB-003 (School Admin):
+  "As a School Admin, I want to set our school colors, logo, and fonts on the
+  website to match our branding."
+  Acceptance:
+    - Branding panel: upload logo, set primary/secondary/accent colors.
+    - Font selector with Google Fonts integration.
+    - Changes reflected live in the editor preview.
+
+US-WB-004 (Super Admin):
+  "As a Super Admin, I want each school's website to be isolated so that School A
+  cannot edit or view School B's website."
+  Acceptance:
+    - Website content is scoped by school_id.
+    - Custom domain routing maps domain to school safely.
+
+5.3 CORE ERP USE CASES (Summary)
+----------------------------------
+
+UC-001: Student Enrollment
+  Actor: Admissions Officer
+  Flow: Create application -> review documents -> conduct interview/exam ->
+        approve/reject -> generate admission letter -> register student ->
+        assign class/house -> issue ID card.
+
+UC-002: SBA Score Entry & Report Generation
+  Actor: Teacher, HOD, Headteacher
+  Flow: Teacher enters component scores -> system calculates class score ->
+        teacher enters exam score -> system scales and totals -> HOD verifies ->
+        Headteacher approves -> system generates PDF report card with QR code.
+
+UC-003: Fee Collection
+  Actor: Cashier, Parent
+  Flow: Invoice generated per student per term -> parent views invoice on portal ->
+        payment made (cash/MoMo/bank) -> cashier records payment -> receipt auto-
+        generated -> arrears tracked -> reminders sent.
+
+UC-004: Website Publishing
+  Actor: School Admin
+  Flow: Open website builder -> drag blocks onto page -> edit content ->
+        configure SEO -> preview -> publish -> site live on school domain.
+
+================================================================================
+SECTION 6: UML DIAGRAMS (TEXTUAL NOTATION)
+================================================================================
+
+6.1 SYSTEM CONTEXT DIAGRAM
+---------------------------
+
+  [Super Admin Platform] --manages--> [EduSphere SaaS Platform]
+  [School Admin/Owner]   --configures--> [School Tenant Instance]
+  [Teachers]             --enter scores--> [Scoring Engine]
+  [Parents/Students]     --view--> [Portals & School Website]
+  [Payment Gateways]     --integrate--> [Fees Module]
+  [SMS Gateway]          --send via--> [Communication Module]
+  [GES Standards]        --inform--> [Report Engine]
+
+6.2 SCORING ENGINE FLOW (Activity Diagram)
+------------------------------------------
+
+  [Admin Configures Components]
+        |
+        v
+  [Admin Sets Class Max & Exam Max]
+        |
+        v
+  [Admin Sets Scale Weights (e.g., 50/50)]
+        |
+        v
+  [Teacher Enters Raw Component Scores]
+        |
+        v
+  [System Sums Raw Components -> Raw Class Total]
+        |
+        v
+  [System Scales: (Raw Class Total / Class Max) * Class Weight]
+        |
+        v
+  [Teacher Enters Raw Exam Score]
+        |
+        v
+  [System Scales: (Raw Exam / Exam Max) * Exam Weight]
+        |
+        v
+  [Grand Total = Scaled Class + Scaled Exam]
+        |
+        v
+  [System Assigns Grade per Grading Scale]
+        |
+        v
+  [HOD Verifies -> Headteacher Approves -> PDF Generated]
+
+6.3 WEBSITE BUILDER FLOW
+-------------------------
+
+  [Admin Opens Builder] -> [GrapesJS Loads Current Page HTML/CSS]
+        |
+        v
+  [Admin Drags Block from Panel]
+        |
+        v
+  [Block Dropped on Canvas] -> [Edit Block Content]
+        |
+        v
+  [Auto-Save Draft to DB (page_revisions)]
+        |
+        v
+  [Preview Mode] -> [Inspect as Visitor]
+        |
+        v
+  [Publish] -> [page_revisions.is_published = true]
+        |
+        v
+  [Public School Website Route Serves Published Page]
+
+6.4 MULTI-TENANT SEQUENCE DIAGRAM
+-----------------------------------
+
+  Browser -> [Tenant Middleware: identify school by domain/subdomain]
+          -> [Set school_id in request context]
+          -> [Global Scope applied to all Eloquent queries]
+          -> [Controller/Service processes request]
+          -> [Only school's data returned]
+          -> [Response to Browser]
+
+================================================================================
+SECTION 7: ENTITY RELATIONSHIP DIAGRAM (ERD) & DATA DICTIONARY
+================================================================================
+
+7.1 PLATFORM-LEVEL TABLES
+---------------------------
+
+platform_admins
+  id, name, email, password, role, mfa_secret, last_login_at,
+  created_at, updated_at, deleted_at
+
+plans
+  id, name (Free/Standard/Premium/Enterprise), price_monthly, price_yearly,
+  max_students, max_staff, max_campuses, features (JSON), sms_credits_monthly,
+  storage_gb, is_active, created_at, updated_at
+
+schools
+  id, name, short_name, school_code, logo, address, region, district,
+  phone, email, website_domain, custom_domain, subdomain,
+  plan_id (FK plans), subscription_status, trial_ends_at,
+  owner_name, owner_email, owner_phone,
+  branding (JSON: primary_color, secondary_color, font, favicon),
+  settings (JSON), sms_gateway_config (JSON: encrypted),
+  email_config (JSON: encrypted), is_active, onboarding_completed,
+  created_at, updated_at, deleted_at
+
+subscriptions
+  id, school_id (FK), plan_id (FK), starts_at, ends_at, amount_paid,
+  currency, payment_reference, payment_method, status, auto_renew,
+  created_at, updated_at
+
+sms_credit_ledger
+  id, school_id, type (purchase/usage/refund), credits, balance_after,
+  reference, note, created_at
+
+feature_flags
+  id, school_id, feature_key, is_enabled, created_at, updated_at
+
+7.2 CAMPUS & SETTINGS
+-----------------------
+
+campuses
+  id, school_id (FK), name, code, address, phone, email, principal_name,
+  is_main, is_active, created_at, updated_at, deleted_at
+
+school_settings
+  id, school_id, campus_id (nullable), key, value (TEXT), created_at, updated_at
+
+7.3 USERS & ROLES
+------------------
+
+users
+  id, school_id, campus_id (nullable), name, email, phone, password (hashed),
+  role_id (FK), profile_photo, employee_id, gender, date_of_birth,
+  address, is_active, email_verified_at, mfa_secret, mfa_enabled,
+  last_login_at, last_login_ip, created_by, updated_by,
+  created_at, updated_at, deleted_at
+
+roles
+  id, school_id (NULL = platform role), name, slug, description,
+  is_system (bool: cannot delete), created_at, updated_at
+
+permissions
+  id, name, slug, module, description, created_at, updated_at
+
+role_permissions
+  id, role_id (FK), permission_id (FK)
+
+user_permissions (overrides per user)
+  id, user_id (FK), permission_id (FK), granted (bool)
+
+7.4 ACADEMIC STRUCTURE
+-----------------------
+
+academic_years
+  id, school_id, name (e.g. 2024/2025), start_date, end_date,
+  is_current, created_by, created_at, updated_at, deleted_at
+
+terms
+  id, school_id, academic_year_id (FK), name (Term 1/2/3), start_date,
+  end_date, reopening_date, is_current, created_at, updated_at, deleted_at
+
+departments
+  id, school_id, campus_id, name, code, hod_user_id (FK users),
+  description, created_at, updated_at, deleted_at
+
+programmes
+  id, school_id, department_id (FK), name, code, duration_years,
+  level (Primary/JHS/SHS/TVET/Tertiary), created_at, updated_at
+
+classes
+  id, school_id, campus_id, academic_year_id (FK), programme_id (FK nullable),
+  name (e.g. Class 3, Form 1), level, class_teacher_id (FK users nullable),
+  capacity, created_at, updated_at, deleted_at
+
+streams
+  id, school_id, class_id (FK), name (e.g. A, B, Gold, Blue),
+  class_teacher_id (FK users nullable), capacity, created_at, updated_at
+
+subjects
+  id, school_id, department_id (FK nullable), name, code, level,
+  is_core (bool), is_elective (bool), created_at, updated_at, deleted_at
+
+class_subjects
+  id, school_id, class_id (FK), stream_id (FK nullable), subject_id (FK),
+  teacher_id (FK users), academic_year_id (FK), term_id (FK nullable),
+  periods_per_week, created_at, updated_at
+
+7.5 DYNAMIC SCORING ENGINE TABLES (NEW — DETAILED)
+----------------------------------------------------
+
+scoring_configurations
+  id, school_id, campus_id (nullable),
+  level (ALL / Primary / JHS / SHS / TVET / Tertiary),
+  subject_id (nullable: NULL = applies to all subjects at this level),
+  academic_year_id (nullable),
+  name (e.g. "Standard SHS Configuration"),
+  class_score_max        -- e.g., 50 or 100 (raw total teacher enters up to)
+  class_score_weight     -- e.g., 50 (what it scales to on report card)
+  exam_score_max         -- e.g., 100 (raw exam mark)
+  exam_score_weight      -- e.g., 50 (what exam scales to on report card)
+  grand_total            -- always class_score_weight + exam_score_weight
+  rounding_method        -- ROUND / FLOOR / CEIL
+  decimal_places         -- 0, 1, or 2
+  is_active, is_default,
+  created_by, updated_by, created_at, updated_at, deleted_at
+
+  CONSTRAINTS:
+    CHECK (class_score_weight + exam_score_weight = grand_total)
+    CHECK (grand_total IN (100, 50) OR grand_total > 0)
+
+  EXAMPLE CONFIGURATIONS:
+    GES Standard JHS:
+      class_score_max=50, class_score_weight=50,
+      exam_score_max=100, exam_score_weight=50, grand_total=100
+      Meaning: teacher enters up to 50 for class score (no scaling needed
+      since 50/50=1.0 * 50 = 50), and up to 100 for exam (100/100 * 50 = 50).
+
+    Alternative 30/70:
+      class_score_max=30, class_score_weight=30,
+      exam_score_max=100, exam_score_weight=70, grand_total=100
+
+    Alternative where class score is out of 100 but scales to 50:
+      class_score_max=100, class_score_weight=50,
+      exam_score_max=100, exam_score_weight=50, grand_total=100
+      Formula: scaled_class = (raw_class/100)*50; scaled_exam=(raw_exam/100)*50
+
+score_components
+  id, school_id, scoring_configuration_id (FK),
+  name (e.g. Exercise 1, Homework, Project Work, Test, Practical, Observation),
+  max_marks     -- e.g., 10, 5, 20
+  display_order -- for ordering on score sheet and report card
+  is_active,
+  is_required (bool: must be entered before submission),
+  created_by, updated_by, created_at, updated_at, deleted_at
+
+  CONSTRAINT: SUM(max_marks) per scoring_configuration_id <= class_score_max
+  (enforced at application level with validation)
+
+  EXAMPLE for class_score_max=50:
+    Exercise 1:  max 10
+    Exercise 2:  max 10
+    Homework:    max 5
+    Project:     max 15
+    Class Test:  max 10
+    TOTAL:       50 ✓
+
+student_scores
+  id, school_id, student_id (FK), class_id (FK), stream_id (FK nullable),
+  subject_id (FK), term_id (FK), academic_year_id (FK),
+  scoring_configuration_id (FK),
+  teacher_id (FK users),
+
+  -- Component scores stored as JSON for flexibility:
+  component_scores (JSON)
+    e.g. {"component_1_id": 8, "component_2_id": 9, "component_3_id": 14, ...}
+
+  -- Computed fields (stored for performance, recalculated on demand):
+  raw_class_total     -- sum of component scores
+  scaled_class_score  -- (raw_class_total / class_score_max) * class_score_weight
+  raw_exam_score      -- as entered by teacher
+  scaled_exam_score   -- (raw_exam_score / exam_score_max) * exam_score_weight
+  grand_total         -- scaled_class + scaled_exam
+  grade               -- A1, B2, etc.
+  grade_point         -- numeric GPA equivalent
+  subject_position    -- position in subject within class/stream
+  class_position      -- aggregate position (set by report engine)
+  total_students      -- for position display (e.g., "3 out of 45")
+  remarks             -- auto-generated or teacher-written
+  is_absent_exam      -- bool
+  moderation_note,
+
+  status (draft / submitted / hod_verified / approved / published),
+  submitted_at, hod_verified_at, hod_verified_by (FK users),
+  approved_at, approved_by (FK users), published_at,
+
+  created_by, updated_by, created_at, updated_at, deleted_at
+
+score_history (audit trail for score changes)
+  id, student_score_id (FK), changed_by (FK users), change_type (create/update),
+  old_values (JSON), new_values (JSON), reason, ip_address, created_at
+
+grading_scales
+  id, school_id, name (e.g. GES Standard), level,
+  is_active, is_default, created_at, updated_at
+
+grading_scale_items
+  id, grading_scale_id (FK), grade (A1, B2...), min_score, max_score,
+  grade_point, description (Excellent, Very Good...), display_order
+
+7.6 STUDENT & GUARDIAN TABLES
+-------------------------------
+
+students
+  id, school_id, campus_id, student_id_number, first_name, middle_name,
+  last_name, date_of_birth, gender, nationality, religion, blood_group,
+  photo, address, region, district, has_disability, disability_notes,
+  house_id (FK nullable), scholarship_id (FK nullable),
+  previous_school, transfer_date, transfer_reason,
+  current_class_id (FK), current_stream_id (FK nullable),
+  enrollment_date, status (active/graduated/transferred/withdrawn/deceased),
+  nhis_number, created_by, updated_by, created_at, updated_at, deleted_at
+
+guardians
+  id, school_id, first_name, last_name, relationship, phone, alt_phone,
+  email, occupation, address, is_primary (bool), photo,
+  can_pickup (bool), created_at, updated_at, deleted_at
+
+student_guardians
+  id, student_id (FK), guardian_id (FK), is_primary, created_at
+
+student_enrollments
+  id, school_id, student_id (FK), academic_year_id (FK), term_id (FK nullable),
+  class_id (FK), stream_id (FK nullable), enrollment_date, status,
+  promoted_from_class_id (FK nullable), created_at, updated_at
+
+7.6B PROMOTION ENGINE TABLES
+-------------------------------
+
+promotion_configurations
+  id, school_id, level (nursery/kg/primary/jhs/shs/tertiary),
+  class_id (FK nullable, for class-specific override),
+  method (annual_average/two_of_three/subject_pass_count),
+  term_weights_json (e.g. {"term1":1,"term2":1,"term3":1}),
+  promotion_threshold (decimal, e.g. 40.00),
+  conditional_threshold (decimal nullable, e.g. 35.00 for "on probation"),
+  min_subjects_to_pass (int nullable),
+  per_subject_pass_mark (decimal nullable),
+  repeat_limit (int, default 1),
+  exclude_terminal_year (bool, default true — auto-excludes BECE/WASSCE
+    candidates from internal promotion processing),
+  is_active, created_by, updated_at, created_at
+
+promotion_runs
+  id, school_id, academic_year_id (FK), level, run_by (FK users),
+  status (draft/teacher_reviewed/approved/published),
+  generated_at, approved_by (FK users nullable), approved_at, published_at
+
+student_promotion_records
+  id, school_id, promotion_run_id (FK), student_id (FK),
+  from_class_id (FK), to_class_id (FK nullable),
+  academic_year_id (FK), term1_score, term2_score, term3_score,
+  computed_average, method_used, rule_snapshot_json (frozen copy of the
+    configuration used, for audit purposes even if config later changes),
+  decision (promoted/conditional/repeat/bece_candidate/wassce_candidate),
+  is_override (bool), override_reason (text nullable),
+  decided_by (FK users nullable), decided_at, created_at, updated_at
+
+student_repeat_history
+  id, school_id, student_id (FK), class_id (FK), academic_year_id (FK),
+  repeat_count_at_this_class, reason, recorded_by (FK users), created_at
+
+7.7 STAFF TABLES
+-----------------
+
+staff (extends users with staff-specific fields)
+  id, user_id (FK users), school_id, campus_id, staff_number,
+  designation, department_id (FK), employment_type (permanent/contract/temp),
+  qualification, specialization, professional_cert, date_joined,
+  date_left (nullable), contract_start, contract_end, salary_grade,
+  bank_name, bank_account, bank_branch, ssnit_number, tin_number,
+  emergency_contact_name, emergency_contact_phone,
+  national_id_type, national_id_number,
+  created_by, updated_by, created_at, updated_at, deleted_at
+
+staff_documents
+  id, staff_id (FK), document_type, file_path, uploaded_at, expiry_date,
+  created_at, updated_at
+
+staff_qualifications
+  id, staff_id (FK), institution, qualification, year_obtained,
+  certificate_path, created_at
+
+staff_appraisals
+  id, staff_id (FK), academic_year_id (FK), term_id (FK nullable),
+  appraiser_id (FK users), criteria (JSON), total_score, grade,
+  comments, status, created_at, updated_at
+
+7.8 ATTENDANCE TABLES
+----------------------
+
+attendance_records
+  id, school_id, campus_id, class_id (FK), stream_id (FK nullable),
+  student_id (FK), academic_year_id (FK), term_id (FK), date,
+  status (present/absent/late/excused), arrival_time, method
+  (manual/qr/rfid/biometric/gps), late_minutes, notes,
+  recorded_by (FK users), synced_from_offline (bool),
+  created_at, updated_at
+
+  INDEX: (school_id, class_id, date)
+  UNIQUE: (school_id, student_id, date, term_id) -- one record per student per day
+
+7.9 FEES & ACCOUNTING TABLES
+------------------------------
+
+fee_structures
+  id, school_id, campus_id, academic_year_id (FK), term_id (FK nullable),
+  class_id (FK nullable: NULL = all classes), name, amount,
+  due_date, is_mandatory, created_at, updated_at, deleted_at
+
+invoices
+  id, school_id, campus_id, student_id (FK), academic_year_id (FK),
+  term_id (FK), invoice_number, total_amount, amount_paid, balance,
+  status (pending/partial/paid/overdue/waived), due_date,
+  notes, created_by, created_at, updated_at
+
+invoice_items
+  id, invoice_id (FK), fee_structure_id (FK nullable), description,
+  amount, discount_amount, net_amount
+
+payments
+  id, school_id, invoice_id (FK), student_id (FK), amount, payment_date,
+  method (cash/momo/bank_transfer/cheque/online), reference_number,
+  received_by (FK users), receipt_number, notes,
+  gateway_response (JSON), is_reversed (bool),
+  created_at, updated_at
+
+chart_of_accounts
+  id, school_id, account_code, account_name, account_type
+  (Asset/Liability/Equity/Revenue/Expense), parent_id (FK nullable),
+  is_active, created_at, updated_at
+
+journal_entries
+  id, school_id, entry_date, reference, description, created_by (FK),
+  approved_by (FK nullable), status (draft/posted), created_at, updated_at
+
+journal_lines
+  id, journal_entry_id (FK), account_id (FK), debit, credit, description
+
+7.10 SCHOOL WEBSITE BUILDER TABLES (NEW — DETAILED)
+-----------------------------------------------------
+
+website_pages
+  id, school_id, title, slug (unique per school), meta_description,
+  og_image, page_type (home/about/admissions/contact/news/custom),
+  is_published, published_at, is_homepage (bool),
+  display_order, created_by, updated_by, created_at, updated_at, deleted_at
+
+page_revisions
+  id, website_page_id (FK), revision_number, html_content (LONGTEXT),
+  css_content (LONGTEXT), components_json (LONGTEXT: GrapesJS JSON),
+  is_current_draft (bool), is_published (bool), published_at,
+  published_by (FK users nullable), notes, created_by, created_at
+
+website_blocks (pre-built block library)
+  id, name, slug, category (Layout/Content/Media/Dynamic/Contact),
+  html_template (LONGTEXT), preview_image, is_dynamic (bool),
+  dynamic_source (news/events/gallery/staff: nullable),
+  is_active, display_order, created_at, updated_at
+
+website_settings
+  id, school_id,
+  site_name, site_tagline, logo_path, favicon_path,
+  primary_color, secondary_color, accent_color, text_color, bg_color,
+  heading_font, body_font,
+  social_facebook, social_twitter, social_instagram, social_youtube,
+  google_analytics_id, custom_header_scripts (TEXT),
+  contact_address, contact_phone, contact_email, contact_map_embed,
+  is_published (bool: entire site on/off),
+  created_at, updated_at
+
+website_menus
+  id, school_id, location (header/footer), name, created_at, updated_at
+
+website_menu_items
+  id, menu_id (FK), parent_id (FK nullable), label, url,
+  page_id (FK website_pages nullable), open_new_tab, display_order,
+  created_at, updated_at
+
+website_gallery_items
+  id, school_id, title, description, image_path, album_id (FK nullable),
+  display_order, is_published, created_at, updated_at
+
+7.11 REMAINING ERP MODULE TABLES (SUMMARY)
+-------------------------------------------
+
+-- Module 9: Attendance (see 7.8)
+-- Module 10: Assignments
+assignments, assignment_submissions, assignment_attachments, assignment_feedback
+
+-- Module 11: LMS
+lms_courses, lms_lessons, lms_resources, lms_quizzes, lms_quiz_questions,
+lms_quiz_attempts, lms_forums, lms_forum_posts, lms_certificates,
+lms_enrollments, lms_progress
+
+-- Module 14: Fees (see 7.9)
+-- Module 15: Accounting (see 7.9)
+budgets, budget_items
+
+-- Module 16: Library
+library_books, library_loans, library_reservations, library_fines,
+library_categories
+
+-- Module 17: Inventory
+inventory_items, inventory_categories, suppliers, purchase_orders,
+po_items, stock_transactions, assets, asset_assignments, requisitions
+
+-- Module 18: Hostel
+dormitories, dormitory_rooms, dormitory_beds, hostel_allocations,
+hostel_fees, hostel_incidents, hostel_visitors, hostel_rollcalls
+
+-- Module 19: Transport
+vehicles, transport_routes, route_stops, drivers, vehicle_allocations,
+transport_fees, fuel_logs, maintenance_logs
+
+-- Module 20: HR/Payroll
+leave_types, leave_requests, timesheets, payroll_periods, payroll_runs,
+payslips, payslip_items, staff_loans, staff_deductions
+
+-- Module 21: Communication
+message_templates, messages, message_recipients, notification_logs,
+sms_delivery_logs, announcements
+
+-- Module 22: Health
+health_records (restricted), health_visits, medications, allergies,
+immunizations
+
+-- Module 23: Discipline
+discipline_cases, warnings, suspensions, rewards, incident_reports,
+counseling_sessions
+
+-- Module 24: Alumni
+alumni_profiles, alumni_donations, alumni_events, mentoring_matches,
+job_postings, transcript_requests
+
+-- Module 25: Website CMS (see 7.10)
+
+-- Module 26: AI Analytics
+ai_flags, ai_flag_types, ai_recommendations (human-reviewed)
+
+-- Module 27: Documents
+documents, document_categories, document_versions, document_access_logs
+
+-- Module 28: Helpdesk
+tickets, ticket_messages, ticket_categories, knowledge_base_articles
+
+-- Module 29: Audit
+audit_logs (immutable), backup_schedules, backup_logs, consent_records,
+data_retention_policies
+
+-- Module 30: API
+api_keys, webhooks, webhook_delivery_logs, integration_configs
+
+-- Module 31: Calendar
+events, event_attendees, room_bookings, rooms
+
+-- Module 32: Visitor Management
+visitor_logs, visitor_badges, pickup_authorizations
+
+-- Module 33: Safeguarding
+safeguarding_cases (highly restricted), safeguarding_escalations,
+safeguarding_audit_logs (immutable)
+
+-- Module 34: Monitoring
+health_checks, error_logs, queue_monitor_logs, incident_runbooks
+
+================================================================================
+SECTION 8: DYNAMIC SCORING ENGINE — COMPLETE SPECIFICATION
+================================================================================
+
+8.1 CORE CALCULATION LOGIC
+----------------------------
+
+The scoring engine is implemented as a Laravel Service class:
+  App\Services\Scoring\ScoringEngineService
+
+CALCULATION FORMULA:
+  1. raw_class_total    = SUM of all entered component scores for student
+  2. scaled_class_score = ROUND((raw_class_total / class_score_max) * class_score_weight, decimal_places)
+  3. scaled_exam_score  = ROUND((raw_exam_score / exam_score_max) * exam_score_weight, decimal_places)
+  4. grand_total        = scaled_class_score + scaled_exam_score
+  5. grade              = lookup in grading_scale_items where grand_total BETWEEN min_score AND max_score
+
+EXAMPLE CALCULATIONS:
+
+  SCHOOL A (class=50/50, exam=100/50, total=100):
+    Components: Ex1=8/10, Ex2=9/10, HW=4/5, Project=12/15, Test=7/10
+    raw_class_total    = 8+9+4+12+7 = 40
+    scaled_class_score = (40/50)*50 = 40.0
+    raw_exam_score     = 72
+    scaled_exam_score  = (72/100)*50 = 36.0
+    grand_total        = 40 + 36 = 76 → Grade: B2
+
+  SCHOOL B (class=100/30, exam=100/70, total=100):
+    Components sum to 70 out of 100
+    scaled_class_score = (70/100)*30 = 21.0
+    raw_exam_score     = 58
+    scaled_exam_score  = (58/100)*70 = 40.6
+    grand_total        = 21 + 40.6 = 61.6 → ROUND to 62 → Grade: C4
+
+  SCHOOL C (GES standard: class=50/50, exam=100/50):
+    Components: Ex1=10, Ex2=8, Test=18, Project=14 (max: 10+10+20+10=50)
+    raw_class_total    = 50
+    scaled_class_score = (50/50)*50 = 50
+    raw_exam_score     = 64
+    scaled_exam_score  = (64/100)*50 = 32
+    grand_total        = 82 → Grade: B2
+
+8.2 CONFIGURATION WIZARD (ADMIN UI FLOW)
+-----------------------------------------
+
+STEP 1: Choose Scope
+  - Apply to: All Levels / Primary Only / JHS Only / SHS Only / Custom
+  - Apply to: All Subjects / Specific Subjects
+  - Apply to: All Terms / Specific Term
+
+STEP 2: Set Score Maximums
+  - Class Score Maximum: [___] (raw total teacher enters, e.g., 50 or 100)
+  - Exam Score Maximum:  [___] (raw exam mark, usually 100)
+
+STEP 3: Set Report Card Weights
+  - Class Score Weight on Report Card: [___] (e.g., 50)
+  - Exam Score Weight on Report Card:  [___] (e.g., 50)
+  - Grand Total:                       [auto: sum] (e.g., 100)
+
+STEP 4: Define Class Score Components
+  [+ Add Component]
+  | Component Name    | Max Marks | Order | Required | Active |
+  |--------------------|-----------|-------|----------|--------|
+  | Exercise 1         | 10        | 1     | Yes      | Yes    |
+  | Exercise 2         | 10        | 2     | No       | Yes    |
+  | Homework           | 5         | 3     | No       | Yes    |
+  | Project Work       | 15        | 4     | Yes      | Yes    |
+  | Class Test         | 10        | 5     | Yes      | Yes    |
+  |                   TOTAL: 50/50 ✓                           |
+  [Drag to reorder] [Delete row] [Add row]
+
+  Validation: If sum of max_marks > class_score_max → red warning
+  Validation: If sum of max_marks < class_score_max → orange note
+               "Teachers can enter up to 50 total but components sum to 48"
+
+STEP 5: Preview Calculation
+  System shows a sample calculation table:
+  "If a student scores: Ex1=8, Ex2=9, HW=5, Project=12, Test=9
+   Raw Class Total: 43 / 50
+   Scaled Class Score: (43/50) × 50 = 43.0
+   If Exam Score = 68 / 100
+   Scaled Exam Score: (68/100) × 50 = 34.0
+   Grand Total: 77.0 → Grade: B2"
+
+STEP 6: Save & Activate
+  - [Save as Draft] [Activate Configuration]
+  - Warning: "Activating will apply to new score entries. Existing published
+    scores will NOT be recalculated unless you choose to recalculate."
+  - [Recalculate Existing Drafts] toggle
+
+8.3 TEACHER SCORE ENTRY INTERFACE
+-----------------------------------
+
+Route: /school/scores/enter?class=5&subject=12&term=3&year=2025
+
+Layout: Spreadsheet-style grid (DataTables or custom)
+
+Columns:
+  #  | Student Name | Ex1 (/10) | Ex2 (/10) | HW (/5) | Project (/15) | Test (/10) | Class Total | Exam (/100) | Final | Grade
+
+Features:
+  - Tab/Enter to move between cells
+  - Red highlight if score > component max
+  - Running total column updates as teacher types
+  - "Paste from Excel" button: accepts clipboard tab-separated data
+  - CSV Upload: drag-drop CSV with student_id, component columns
+  - Auto-save every 30 seconds (saves as draft)
+  - Lock icon appears on approved scores (cannot edit without HOD unlock)
+  - Filter: show missing scores only
+  - Bulk: "Set all absent" checkbox column
+
+8.4 REPORT CARD DISPLAY (SCORING SECTION)
+------------------------------------------
+
+Subject Performance Table on Report Card:
+  | Subject           | Class Score (/50) | Exam Score (/50) | Total (/100) | Grade | Position |
+  |-------------------|-------------------|------------------|--------------|-------|----------|
+  | Mathematics       | 43                | 34               | 77           | B2    | 5/45     |
+  | English Language  | 38                | 41               | 79           | B2    | 3/45     |
+  | Science           | 45                | 38               | 83           | A     | 2/45     |
+  | ...               |                   |                  |              |       |          |
+  | Aggregate:        |                   |                  |              |       |          |
+
+NOTE: Column headers dynamically show the configured weights:
+  If school uses 30/70: "Class Score (/30)" and "Exam Score (/70)"
+  If school uses 40/60: "Class Score (/40)" and "Exam Score (/60)"
+
+8.5 LOCKING & WORKFLOW
+------------------------
+
+  Status Transitions:
+  draft -> submitted -> hod_verified -> approved -> published
+
+  Rules:
+  - Teacher can edit when status = draft
+  - HOD can return to draft with comment
+  - Once approved, only Headteacher can unlock
+  - Once published, report cards are generated; unlock requires audit reason
+  - Deadline enforcement: admin sets deadline per term; after deadline, auto-lock drafts
+
+8.6 AGGREGATE CALCULATION (GES STYLE)
+---------------------------------------
+
+  Aggregate = SUM of best N subject grades (grade points)
+  N is configurable per school/level (e.g., 6 best subjects for JHS)
+  Grade points: A1=1, B2=2, B3=3, C4=4, C5=5, C6=6, D7=7, E8=8, F9=9
+  Lower aggregate = better performance
+  Promotion rule: see SECTION 8B (Dynamic Promotion Engine) for the full
+  Term 1+2+3 based promotion specification — this aggregate/grade-point
+  figure is one optional input into that engine, not the promotion engine
+  itself.
+
+================================================================================
+SECTION 8B: DYNAMIC PROMOTION ENGINE — COMPLETE SPECIFICATION
+================================================================================
+
+8B.1 HOW PROMOTION ACTUALLY WORKS IN GHANAIAN SCHOOLS (RESEARCH BASIS)
+--------------------------------------------------------------------------
+
+Unlike the BECE/WASSCE grading scale (which IS nationally fixed by WAEC),
+promotion from one class to the next WITHIN a school (e.g. Basic 4 -> Basic 5)
+is NOT governed by one single rigid percentage handed down by GES. GES sets
+the curriculum, the continuous-assessment (SBA) framework, and the academic
+calendar (3 terms/year for basic schools), but day-to-day promotion decisions
+are an internal school policy matter, built on top of that continuous
+assessment data. This is why EduSphere implements promotion as a CONFIGURABLE
+ENGINE (same philosophy as the Scoring Engine) rather than hard-coding one
+formula — different schools genuinely use different thresholds and methods.
+
+Patterns observed across Ghanaian basic schools and reflected in the engine:
+  - Decision point: end of Term 3 (the final term of the academic year).
+  - Basis: the pupil's performance across ALL THREE terms, not Term 3 alone.
+  - Common method A — "Annual Average": average the Term 1, Term 2 and Term 3
+    overall scores; pupil proceeds if the annual average clears the school's
+    threshold (commonly 40-60%, school-defined).
+  - Common method B — "Two of Three Terms": pupil proceeds if their average
+    across any two of the three terms (one of which must be Term 3) clears
+    the threshold — this gives some allowance for one bad term.
+  - A pupil who is allowed to repeat a class is typically allowed to repeat
+    that class ONCE; persistent failure triggers a Headteacher/PTA case
+    conference rather than automatic repeated detention.
+  - JHS 3 (Basic 9) pupils do not get "promoted" internally — they sit the
+    BECE (set by WAEC) and are placed into SHS via CSSPS, based on their
+    BECE aggregate (best six subjects, lower aggregate = better; pass mark
+    is grade 6 = roughly 50% per subject; national qualifying aggregate
+    guidance is commonly aggregate 36 or better, though placement also
+    depends on CSSPS school choices and category).
+  - SHS promotion from one form/year to the next is decided by the school
+    based on continuous assessment + house/mock exams, plus conduct and
+    attendance; WASSCE (also WAEC-set) at the end of SHS is a certification
+    exam, not an internal promotion decision.
+  - Tertiary institutions promote/progress students by credit accumulation
+    and Cumulative Weighted Average (CWA)/GPA per semester rather than by
+    "terms," so the Promotion Engine treats Tertiary as an out-of-scope
+    variant exposed via the same configuration screen for completeness, but
+    driven by credits-earned instead of term scores.
+
+Because GES leaves the exact percentage and method to each school, EduSphere
+ships with a sensible Ghana-aligned DEFAULT (Annual Average, threshold 40%,
+repeat limit 1) but every figure is editable per school and per level.
+
+8B.2 CORE CALCULATION LOGIC
+------------------------------
+
+Implemented as a Laravel Service class:
+  App\Services\Promotion\PromotionEngineService
+
+INPUT: For each student in a class, the already-published grand_total score
+(from the Scoring Engine, Section 8) for Term 1, Term 2, and Term 3, across
+all subjects (or a single configured "promotion subject set," e.g. core
+subjects only, if the school chooses that variant).
+
+CALCULATION FORMULA (Method 1 — Annual Average, the GES-aligned default):
+  1. term1_overall = average of grand_total across all subjects in Term 1
+  2. term2_overall = average of grand_total across all subjects in Term 2
+  3. term3_overall = average of grand_total across all subjects in Term 3
+  4. annual_average = ROUND(
+        (term1_overall*w1 + term2_overall*w2 + term3_overall*w3)
+        / (w1+w2+w3), decimal_places)
+     -- w1, w2, w3 default to 1 (equal weight) but are school-configurable
+  5. decision:
+       IF annual_average >= promotion_threshold        -> "Promoted"
+       ELSE IF annual_average >= conditional_threshold  -> "Conditional"
+                                                            (probation, with
+                                                            HOD/parent review)
+       ELSE                                              -> "Repeat"
+
+CALCULATION FORMULA (Method 2 — Two of Three Terms):
+  1. Compute term1_overall, term2_overall, term3_overall as above.
+  2. Select the pupil's best 2 of the 3 terms, REQUIRING Term 3 to be one of
+     the two selected (configurable toggle: "Term 3 must be included").
+  3. two_term_average = average of the 2 selected terms.
+  4. Apply the same threshold comparison as Method 1.
+
+CALCULATION FORMULA (Method 3 — Subject Pass Count):
+  1. For the annual average subject scores, count how many subjects meet or
+     exceed per_subject_pass_mark.
+  2. decision:
+       IF subjects_passed >= min_subjects_to_pass AND
+          annual_average  >= promotion_threshold        -> "Promoted"
+       ELSE                                              -> "Repeat" /
+                                                            "Conditional"
+       (Mirrors how some Ghanaian and West African schools combine a subject
+       count rule with an overall average rule.)
+
+EXAMPLE (Basic 4, Annual Average method, threshold 40%):
+  Term 1 overall = 58.0
+  Term 2 overall = 62.4
+  Term 3 overall = 55.8
+  annual_average = (58.0+62.4+55.8)/3 = 58.7
+  58.7 >= 40  ->  Decision: PROMOTED to Basic 5
+
+EXAMPLE (Basic 6, Two-of-Three method, threshold 50%):
+  Term 1 overall = 38.0  (weak term)
+  Term 2 overall = 54.0
+  Term 3 overall = 57.0
+  Best 2 of 3 INCLUDING Term 3: Term 2 (54.0) + Term 3 (57.0) = avg 55.5
+  55.5 >= 50  ->  Decision: PROMOTED to Basic 7
+  (Note: Term 1's poor score is forgiven by this method — exactly the
+   allowance this method is designed to give.)
+
+EXAMPLE (JHS 3 / Basic 9):
+  exclude_terminal_year = true for this configuration
+  -> Engine SKIPS internal promotion entirely.
+  -> Student is tagged "BECE Candidate" and appears in the External
+     Examinations module instead, pending WAEC's BECE results and CSSPS
+     placement into SHS.
+
+8B.3 CONFIGURATION WIZARD (ADMIN UI FLOW)
+----------------------------------------------
+
+STEP 1: Choose Scope
+  - Level: Nursery / KG / Primary / JHS / SHS / Tertiary
+  - Apply to: All classes in level / Specific class override
+  - Terminal-year toggle: "Exclude BECE/WASSCE candidates from this rule"
+    (auto-detected from class level, e.g. JHS 3, SHS 3/4, but editable)
+
+STEP 2: Choose Method
+  ( ) Annual Average of all 3 terms          [GES-aligned default]
+  ( ) Best 2 of 3 terms (Term 3 must count)
+  ( ) Subject pass-count + overall average
+  ( ) Credit/CWA accumulation (Tertiary only)
+
+STEP 3: Set Thresholds
+  - Promotion Threshold:    [40] %   (pupil proceeds at or above this)
+  - Conditional Threshold:  [35] %   (optional "on probation" band)
+  - Per-Subject Pass Mark:  [40] %   (used only for Method 3)
+  - Minimum Subjects to Pass: [6]    (used only for Method 3)
+  - Term Weights: Term1 [1] : Term2 [1] : Term3 [1]   (default equal)
+
+STEP 4: Repeat Policy
+  - Maximum times a pupil may repeat this class: [1]
+  - On exceeding limit: ( ) Flag for Headteacher case conference
+                        ( ) Auto-promote with "Promoted on Age/Policy Grounds"
+                        ( ) Require PTA/parent sign-off before promotion
+
+STEP 5: Preview Calculation
+  System shows a live sample using a real or dummy pupil:
+  "Ama Serwaa — Basic 4B
+   Term 1: 58.0 | Term 2: 62.4 | Term 3: 55.8
+   Annual Average: 58.7 -> Decision: PROMOTED to Basic 5"
+
+STEP 6: Save & Activate
+  - [Save as Draft] [Activate Configuration]
+  - Configuration is versioned; each promotion_run stores a frozen
+    rule_snapshot_json so that re-opening an old promotion list later still
+    shows exactly which rule produced each decision, even if the school
+    later changes its policy.
+
+8B.4 PROMOTION RUN WORKFLOW (END OF TERM 3)
+------------------------------------------------
+
+  Route: /school/promotions/run?academic_year=2025-2026&level=primary
+
+  1. GENERATE: Admin/Headteacher clicks "Generate Promotion List."
+     - System requires all Term 3 scores for the level to be in "published"
+       status (from the Scoring Engine workflow) before it will run.
+     - Engine computes a decision for every student per Section 8B.2 and
+       writes student_promotion_records (status: draft).
+
+  2. PROMOTION LIST REVIEW SCREEN:
+     | Student        | Class | T1   | T2   | T3   | Avg  | Decision   |
+     |----------------|-------|------|------|------|------|------------|
+     | Ama Serwaa     | 4B    | 58.0 | 62.4 | 55.8 | 58.7 | Promoted   |
+     | Kofi Mensah    | 4B    | 32.0 | 38.5 | 35.0 | 35.2 | Conditional|
+     | Yaw Boateng     | 4B    | 20.0 | 25.0 | 22.0 | 22.3 | Repeat     |
+     | Adwoa Nyarko    | 9A    | —    | —    | —    | —    | BECE Cand. |
+     Color flags: green=Promoted, amber=Conditional, red=Repeat,
+     grey=Excluded (terminal year).
+     Filter/sort by decision; export to PDF/Excel.
+
+  3. CLASS TEACHER REVIEW:
+     - Class teacher can add remarks per pupil ("recommend promotion despite
+       borderline score due to improvement trend") and flag for override.
+     - Status -> teacher_reviewed.
+
+  4. OVERRIDE (optional, audited):
+     - Any authorized role (Class Teacher proposes, Headteacher approves) can
+       override a computed decision for an individual student.
+     - Mandatory override_reason text field; both old and new decision are
+       stored (is_override=true) for audit and cannot be silently changed
+       later.
+
+  5. HEADTEACHER/PRINCIPAL APPROVAL:
+     - Reviews the full list and either [Approve] or [Send Back to Class
+       Teacher] with comments.
+     - Status -> approved.
+
+  6. PUBLISH:
+     - Status -> published.
+     - System automatically:
+         a. Creates next-year student_enrollments rows for all "Promoted"
+            and "Conditional" pupils, with class_id = the configured next
+            class and promoted_from_class_id = current class.
+         b. Re-creates a same-class enrollment for "Repeat" pupils and
+            increments student_repeat_history.
+         c. Marks "BECE Candidate"/"WASSCE Candidate" students as pending
+            in the External Examinations module rather than enrolling them
+            automatically — their placement class is set once CSSPS/SHS
+            admission or tertiary admission results are entered.
+     - Promotion status/labels become visible on the Term 3 report card and
+       on the parent portal ("Your child has been promoted to Basic 5" /
+       "Your child is on academic probation in Basic 4" / etc.).
+
+8B.5 SHS-SPECIFIC CONFIGURATION
+------------------------------------
+
+  SHS promotion configurations differ from basic school in these respects:
+  - Subjects are split into Core (compulsory: English, Maths, Integrated
+    Science/Social Studies, etc.) and Elective (programme-specific, e.g.
+    General Science, Business, Visual Arts, Agriculture, Technical, Home
+    Economics, General Arts).
+  - Promotion rule can require: minimum average in CORE subjects AND minimum
+    average in ELECTIVE subjects separately, not just one blended average.
+  - Conduct and attendance gates are commonly added as additional
+    promotion conditions (configurable boolean checks fed from the
+    Discipline and Attendance modules).
+  - SHS terminal year (final year before WASSCE) is automatically excluded
+    from internal promotion, identical in spirit to JHS 3, and routed to the
+    External Examinations (WASSCE) module instead.
+  - House/mock exam results can optionally be blended into the SHS annual
+    average via an extra configurable weight (e.g. Term scores 70% + Mock
+    Exam 30%).
+
+8B.6 INTEGRATION POINTS
+----------------------------
+
+  - Scoring Engine (Section 8): supplies the published per-term grand totals
+    that the Promotion Engine consumes; promotion cannot run until scores for
+    the level are published, preventing promotion decisions on incomplete
+    data.
+  - Report Card module: prints the promotion decision and the next class
+    name on the Term 3 report card.
+  - Parent Portal/SMS: notifies guardians of the promotion outcome.
+  - External Examinations module: receives JHS 3/SHS-terminal pupils flagged
+    "BECE Candidate"/"WASSCE Candidate" and later records WAEC results and
+    CSSPS/tertiary placement, which then determines their actual next class
+    or institution.
+  - HR/Class Management: next-year class lists, streaming, and class-teacher
+    assignment are auto-populated from the published promotion run.
+  - Audit Log: every computed decision, every override, and every approval
+    step is logged with actor, timestamp, and reason.
+
+================================================================================
+SECTION 9: SCHOOL WEBSITE BUILDER — COMPLETE SPECIFICATION
+================================================================================
+
+9.1 TECHNOLOGY CHOICE: GRAPES.JS
+----------------------------------
+
+GrapesJS is a free, open-source, browser-based page builder framework.
+  CDN: https://unpkg.com/grapesjs/dist/grapes.min.js
+  License: BSD-3-Clause (free for commercial use)
+  Integration: Load in a Laravel Blade view; save/load via AJAX to Laravel API.
+
+9.2 ARCHITECTURE
+-----------------
+
+  Laravel Backend:
+    Routes:
+      GET  /school/website                    -> WebsiteBuilderController@index
+      GET  /school/website/pages              -> PageController@index
+      POST /school/website/pages              -> PageController@store
+      GET  /school/website/pages/{id}/edit    -> PageController@edit (loads builder)
+      POST /school/website/pages/{id}/save    -> PageController@save (AJAX: saves GrapesJS JSON + HTML/CSS)
+      POST /school/website/pages/{id}/publish -> PageController@publish
+      GET  /school/website/settings           -> SettingsController@index
+      POST /school/website/settings           -> SettingsController@update
+
+  Public Website Routes (separate middleware group — no auth required):
+      GET /{slug}  -> PublicWebsiteController@show (serves published page for school domain)
+      GET /        -> PublicWebsiteController@home (serves homepage)
+
+  Tenant Identification for Public Routes:
+      Middleware: IdentifySchoolByDomain
+        - Checks request host against schools.custom_domain and schools.subdomain
+        - Sets app('school') context
+        - If no match → 404
+
+9.3 PAGE BUILDER BLADE VIEW
+-----------------------------
+
+<!-- resources/views/school/website/builder.blade.php -->
+
+Key sections:
+  1. Top Toolbar: Page name | [Preview] [Save Draft] [Publish] [Back to Pages]
+  2. Left Panel: Blocks library (draggable blocks)
+  3. Center Canvas: The page being built
+  4. Right Panel: Style Manager + Traits (properties of selected element)
+  5. Layers Panel: DOM tree view
+
+JavaScript init:
+  const editor = grapesjs.init({
+    container: '#gjs',
+    fromElement: false,
+    storageManager: {
+      type: 'remote',
+      stepsBeforeSave: 3,
+      urlStore: '/school/website/pages/{{ $page->id }}/save',
+      urlLoad: '/school/website/pages/{{ $page->id }}/load',
+      params: { _token: '{{ csrf_token() }}' },
+      autosave: true,
+      autoload: true,
+    },
+    blockManager: {
+      blocks: @json($blocks) // blocks from website_blocks table
+    },
+    canvas: {
+      styles: [
+        '{{ asset("css/website-frontend.css") }}',
+        '/school/website/preview-styles/{{ $school->id }}'  // dynamic school branding CSS
+      ]
+    }
+  });
+
+9.4 PRE-BUILT BLOCKS
+----------------------
+
+STATIC BLOCKS:
+  hero-banner:       Full-width hero with background image, title, subtitle, CTA button
+  about-section:     Two-column: text left, image right
+  stats-bar:         3-4 number stats (e.g., "500 Students | 40 Staff | Est. 1990")
+  gallery-grid:      3-column image grid (static images)
+  testimonials:      Carousel of quote cards
+  cta-banner:        Full-width colored banner with button
+  contact-form:      Name, email, message form (submits to Laravel endpoint)
+  map-embed:         Google Maps iframe placeholder
+  text-block:        Rich text block
+  image-block:       Single image with caption
+  video-embed:       YouTube/Vimeo embed by URL
+  two-columns:       Flexible two-column layout container
+  three-columns:     Flexible three-column layout container
+  divider:           Horizontal rule / spacing block
+  admissions-cta:    Specific block: "Apply Now" with link to online admissions form
+
+DYNAMIC BLOCKS (pull from ERP):
+  news-feed:         Latest N news/announcements from ERP (AJAX-loaded on public site)
+  events-list:       Upcoming events from ERP calendar
+  gallery-dynamic:   Published gallery items from ERP
+  staff-grid:        Featured staff profiles from ERP (staff marked as "show on website")
+  notice-board:      Pinned announcements from communication module
+
+  Dynamic blocks render a placeholder in the builder.
+  On the public website, a frontend JS call hits:
+    /api/public/{school_id}/news?limit=6
+    /api/public/{school_id}/events?limit=5
+    etc.
+  These endpoints return JSON; a small frontend template renders them.
+
+9.5 BRANDING & THEMING
+------------------------
+
+Admin Panel > Website > Settings > Branding:
+
+  School Name:    [___________]
+  Tagline:        [___________]
+  Logo:           [Upload PNG/SVG] (max 2MB)
+  Favicon:        [Upload ICO/PNG]
+  Primary Color:  [Color Picker] default: #003366 (GES blue)
+  Secondary Color:[Color Picker] default: #FFD700 (gold)
+  Accent Color:   [Color Picker]
+  Heading Font:   [Dropdown: Google Fonts]
+  Body Font:      [Dropdown: Google Fonts]
+
+  These settings generate a dynamic CSS file served at:
+    /school/website/preview-styles/{school_id}
+
+  Example generated CSS:
+    :root {
+      --primary: #003366;
+      --secondary: #FFD700;
+      --accent: #FF6B35;
+      --heading-font: 'Playfair Display', serif;
+      --body-font: 'Open Sans', sans-serif;
+    }
+
+9.6 NAVIGATION / MENU BUILDER
+-------------------------------
+
+Admin Panel > Website > Navigation:
+
+  Header Menu:
+    [+ Add Item]
+    | Label     | Link / Page     | Open new tab | Order | Actions |
+    |-----------|-----------------|--------------|-------|---------|
+    | Home      | Page: Homepage  | No           | 1     | Edit Del|
+    | About     | Page: About Us  | No           | 2     | Edit Del|
+    | Admissions| Page: Admissions| No           | 3     | Edit Del|
+    | News      | Page: News      | No           | 4     | Edit Del|
+    | Contact   | Page: Contact   | No           | 5     | Edit Del|
+    [Drag to reorder]
+
+  Footer Menu: similar configuration
+
+9.7 SEO SETTINGS PER PAGE
+---------------------------
+
+  Page Title:           [___________________________________]
+  Meta Description:     [___________________________________] max 160 chars
+  OG Image:             [Upload] (for social sharing preview)
+  Canonical URL:        [auto-generated, editable]
+  No-index:             [toggle]
+
+9.8 PAGES MANAGEMENT
+----------------------
+
+Admin Panel > Website > Pages:
+
+  [+ New Page] button
+  | Title     | Slug       | Type    | Status    | Last Updated | Actions |
+  |-----------|------------|---------|-----------|--------------|---------|
+  | Home      | /          | Home    | Published | 2 hrs ago    | Edit Preview Delete |
+  | About Us  | /about     | About   | Published | 1 day ago    | ...     |
+  | Admissions| /admissions| Admiss. | Draft     | 3 days ago   | ...     |
+
+  Page types control available dynamic blocks.
+  Deleting a page moves to trash (soft delete). Homepage cannot be deleted.
+
+9.9 CUSTOM DOMAIN / SUBDOMAIN SETUP
+-------------------------------------
+
+  Each school gets: {school_code}.edusphere.edu.gh (subdomain)
+  Premium/Enterprise: connect custom domain (e.g., www.greenvalleyschool.edu.gh)
+
+  XAMPP/Dev: add to hosts file:
+    127.0.0.1  greenvalley.edusphere.local
+
+  Production:
+    - School adds CNAME record: www -> schools.edusphere.edu.gh
+    - Platform detects custom domain via schools.custom_domain column
+    - SSL via Let's Encrypt wildcard or per-domain
+
+================================================================================
+SECTION 10: DATABASE MIGRATIONS & SEEDS (LARAVEL)
+================================================================================
+
+NOTE: All migration file names follow Laravel convention: YYYY_MM_DD_HHMMSS_name.php
+Run with: php artisan migrate --seed
+
+MIGRATION ORDER:
+  1. plans
+  2. schools
+  3. campuses
+  4. subscriptions
+  5. users
+  6. roles, permissions, role_permissions
+  7. academic_years, terms
+  8. departments, programmes, classes, streams, subjects
+  9. scoring_configurations
+  10. score_components
+  11. grading_scales, grading_scale_items
+  12. students, guardians, student_guardians, student_enrollments
+  13. student_scores, score_history
+  14. staff, staff_documents, staff_qualifications
+  15. attendance_records
+  16. assignments, assignment_submissions
+  17. fee_structures, invoices, invoice_items, payments
+  18. chart_of_accounts, journal_entries, journal_lines
+  19. website_pages, page_revisions, website_blocks, website_settings
+  20. website_menus, website_menu_items
+  21. [all remaining module tables]
+  22. audit_logs
+
+SAMPLE MIGRATION — scoring_configurations:
+
+<?php
+// database/migrations/2024_01_09_000001_create_scoring_configurations_table.php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration {
+    public function up(): void {
+        Schema::create('scoring_configurations', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('school_id')->constrained('schools')->cascadeOnDelete();
+            $table->foreignId('campus_id')->nullable()->constrained('campuses')->nullOnDelete();
+            $table->enum('level', ['ALL','Nursery','KG','Primary','JHS','SHS','TVET','Tertiary'])->default('ALL');
+            $table->foreignId('subject_id')->nullable()->constrained('subjects')->nullOnDelete();
+            $table->foreignId('academic_year_id')->nullable()->constrained('academic_years')->nullOnDelete();
+            $table->string('name');
+            $table->decimal('class_score_max', 8, 2)->default(50);
+            $table->decimal('class_score_weight', 8, 2)->default(50);
+            $table->decimal('exam_score_max', 8, 2)->default(100);
+            $table->decimal('exam_score_weight', 8, 2)->default(50);
+            $table->decimal('grand_total', 8, 2)->default(100);
+            $table->enum('rounding_method', ['ROUND','FLOOR','CEIL'])->default('ROUND');
+            $table->tinyInteger('decimal_places')->default(0);
+            $table->boolean('is_active')->default(true);
+            $table->boolean('is_default')->default(false);
+            $table->foreignId('created_by')->nullable()->constrained('users')->nullOnDelete();
+            $table->foreignId('updated_by')->nullable()->constrained('users')->nullOnDelete();
+            $table->timestamps();
+            $table->softDeletes();
+            $table->index(['school_id', 'level', 'is_active']);
+        });
+    }
+    public function down(): void { Schema::dropIfExists('scoring_configurations'); }
+};
+
+SAMPLE MIGRATION — score_components:
+
+<?php
+// database/migrations/2024_01_09_000002_create_score_components_table.php
+
+return new class extends Migration {
+    public function up(): void {
+        Schema::create('score_components', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('school_id')->constrained('schools')->cascadeOnDelete();
+            $table->foreignId('scoring_configuration_id')->constrained('scoring_configurations')->cascadeOnDelete();
+            $table->string('name'); // "Exercise 1", "Homework", "Project Work"
+            $table->decimal('max_marks', 8, 2);
+            $table->integer('display_order')->default(0);
+            $table->boolean('is_active')->default(true);
+            $table->boolean('is_required')->default(false);
+            $table->foreignId('created_by')->nullable()->constrained('users')->nullOnDelete();
+            $table->foreignId('updated_by')->nullable()->constrained('users')->nullOnDelete();
+            $table->timestamps();
+            $table->softDeletes();
+            $table->index(['scoring_configuration_id', 'display_order']);
+        });
+    }
+    public function down(): void { Schema::dropIfExists('score_components'); }
+};
+
+SAMPLE MIGRATION — student_scores:
+
+<?php
+return new class extends Migration {
+    public function up(): void {
+        Schema::create('student_scores', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('school_id')->constrained('schools');
+            $table->foreignId('student_id')->constrained('students');
+            $table->foreignId('class_id')->constrained('classes');
+            $table->foreignId('stream_id')->nullable()->constrained('streams');
+            $table->foreignId('subject_id')->constrained('subjects');
+            $table->foreignId('term_id')->constrained('terms');
+            $table->foreignId('academic_year_id')->constrained('academic_years');
+            $table->foreignId('scoring_configuration_id')->constrained('scoring_configurations');
+            $table->foreignId('teacher_id')->constrained('users');
+            $table->json('component_scores')->nullable(); // {"1":8,"2":9,"3":4}
+            $table->decimal('raw_class_total', 8, 2)->nullable();
+            $table->decimal('scaled_class_score', 8, 2)->nullable();
+            $table->decimal('raw_exam_score', 8, 2)->nullable();
+            $table->decimal('scaled_exam_score', 8, 2)->nullable();
+            $table->decimal('grand_total', 8, 2)->nullable();
+            $table->string('grade', 5)->nullable();
+            $table->decimal('grade_point', 4, 2)->nullable();
+            $table->integer('subject_position')->nullable();
+            $table->integer('total_students')->nullable();
+            $table->text('remarks')->nullable();
+            $table->boolean('is_absent_exam')->default(false);
+            $table->text('moderation_note')->nullable();
+            $table->enum('status', ['draft','submitted','hod_verified','approved','published'])->default('draft');
+            $table->timestamp('submitted_at')->nullable();
+            $table->timestamp('hod_verified_at')->nullable();
+            $table->foreignId('hod_verified_by')->nullable()->constrained('users');
+            $table->timestamp('approved_at')->nullable();
+            $table->foreignId('approved_by')->nullable()->constrained('users');
+            $table->timestamp('published_at')->nullable();
+            $table->foreignId('created_by')->nullable()->constrained('users');
+            $table->foreignId('updated_by')->nullable()->constrained('users');
+            $table->timestamps();
+            $table->softDeletes();
+            $table->unique(['school_id','student_id','subject_id','term_id','academic_year_id'], 'unique_score');
+            $table->index(['school_id','class_id','term_id']);
+        });
+    }
+    public function down(): void { Schema::dropIfExists('student_scores'); }
+};
+
+SAMPLE MIGRATION — website_pages:
+
+<?php
+return new class extends Migration {
+    public function up(): void {
+        Schema::create('website_pages', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('school_id')->constrained('schools')->cascadeOnDelete();
+            $table->string('title');
+            $table->string('slug');
+            $table->text('meta_description')->nullable();
+            $table->string('og_image')->nullable();
+            $table->enum('page_type',['home','about','admissions','contact','news','events','gallery','custom'])->default('custom');
+            $table->boolean('is_published')->default(false);
+            $table->timestamp('published_at')->nullable();
+            $table->boolean('is_homepage')->default(false);
+            $table->integer('display_order')->default(0);
+            $table->foreignId('created_by')->nullable()->constrained('users');
+            $table->foreignId('updated_by')->nullable()->constrained('users');
+            $table->timestamps();
+            $table->softDeletes();
+            $table->unique(['school_id','slug']);
+            $table->index(['school_id','is_published']);
+        });
+    }
+    public function down(): void { Schema::dropIfExists('website_pages'); }
+};
+
+DATABASE SEEDS:
+  DatabaseSeeder calls:
+    PlanSeeder         (creates Free/Standard/Premium/Enterprise plans)
+    RoleSeeder         (creates all roles with permissions)
+    GradingScaleSeeder (GES standard grading scale)
+    WebsiteBlockSeeder (pre-built blocks library)
+    DemoSchoolSeeder   (sample school with sample data for testing)
+    ScoringConfigSeeder (sample scoring configurations)
+
+================================================================================
+SECTION 11: XAMPP & LARAVEL SETUP GUIDE
+================================================================================
+
+11.1 REQUIREMENTS
+------------------
+  - XAMPP 8.3+ with PHP 8.3, MySQL 8, Apache
+  - Composer 2.x
+  - Node.js 20+ and npm 10+
+  - Git 2.x
+  - Redis (optional for dev; use file/database cache as fallback)
+
+11.2 INSTALLATION STEPS
+------------------------
+
+STEP 1: Install XAMPP
+  Download from https://www.apachefriends.org/
+  Install to C:\xampp (Windows) or /opt/lampp (Linux/Mac)
+  Start Apache and MySQL from XAMPP Control Panel.
+
+STEP 2: Clone/Create Laravel Project
+  cd C:\xampp\htdocs
+  composer create-project laravel/laravel edusphere
+  cd edusphere
+
+STEP 3: Configure Database
+  Open phpMyAdmin: http://localhost/phpmyadmin
+  Create database: edusphere_db (UTF8MB4 collation)
+  Create user: edusphere_user with password (or use root for dev only)
+
+STEP 4: Configure .env
+  APP_NAME="EduSphere Ghana ERP"
+  APP_ENV=local
+  APP_KEY=  (run: php artisan key:generate)
+  APP_DEBUG=true
+  APP_URL=http://localhost/edusphere/public
+
+  DB_CONNECTION=mysql
+  DB_HOST=127.0.0.1
+  DB_PORT=3306
+  DB_DATABASE=edusphere_db
+  DB_USERNAME=root
+  DB_PASSWORD=
+
+  CACHE_STORE=file
+  SESSION_DRIVER=file
+  QUEUE_CONNECTION=database
+
+  MAIL_MAILER=log  (for dev; use smtp for production)
+
+STEP 5: Install Dependencies
+  composer install
+  npm install
+  npm run build
+
+STEP 6: Run Migrations and Seeds
+  php artisan migrate --seed
+
+STEP 7: Install GrapesJS (for Website Builder)
+  npm install grapesjs grapesjs-preset-webpage
+  (or use CDN in the Blade template)
+
+STEP 8: Set Up Queue Worker (for background jobs)
+  php artisan queue:table
+  php artisan migrate
+  php artisan queue:work  (keep running, or use Supervisor in production)
+
+STEP 9: Set Up Scheduler (for automated tasks)
+  Add to Windows Task Scheduler or cron:
+  * * * * * php C:\xampp\htdocs\edusphere\artisan schedule:run
+
+STEP 10: Configure Virtual Hosts for Multi-Tenant (Optional in Dev)
+  Edit C:\xampp\apache\conf\extra\httpd-vhosts.conf:
+
+  <VirtualHost *:80>
+    DocumentRoot "C:/xampp/htdocs/edusphere/public"
+    ServerName edusphere.local
+    ServerAlias *.edusphere.local
+  </VirtualHost>
+
+  Add to C:\Windows\System32\drivers\etc\hosts:
+    127.0.0.1  edusphere.local
+    127.0.0.1  demo.edusphere.local
+    127.0.0.1  greenvalley.edusphere.local
+
+STEP 11: Install Storage Link
+  php artisan storage:link
+
+STEP 12: Run Tests
+  php artisan test
+
+STEP 13: Access the Application
+  http://localhost/edusphere/public       (or http://edusphere.local if vhosts configured)
+  Super Admin login: admin@edusphere.com / password123 (from seed)
+  Demo School Admin: schooladmin@demo.edu.gh / password123
+
+================================================================================
+SECTION 12: PHASE-BY-PHASE DEVELOPMENT PLAN
+================================================================================
+
+PHASE 1: ANALYSIS, SETUP & MVP FOUNDATION
+-------------------------------------------
+Duration: 3-4 weeks
+
+Requirements:
+  - Complete SRS documentation (this document)
+  - XAMPP + Laravel environment setup
+  - Base project scaffold
+  - Multi-tenant foundation
+
+Acceptance Criteria:
+  - Laravel project runs on XAMPP without errors
+  - Tenant middleware correctly identifies school by domain
+  - Super Admin can log in and see dashboard
+  - School can be created by Super Admin
+
+Deliverables:
+  - Base Laravel project with:
+    * Multi-tenant middleware (IdentifyTenant.php)
+    * Global scope (SchoolScope.php) applied to all tenant models
+    * Plans and Schools CRUD (Super Admin)
+    * Authentication (Laravel Breeze/Sanctum)
+    * Role-based middleware
+    * Admin layout (Bootstrap 5 sidebar)
+    * Super Admin dashboard with school count, revenue, health status
+  - Database migrations for: plans, schools, campuses, users, roles, permissions
+  - RoleSeeder, PlanSeeder, SuperAdminSeeder
+
+Code Structure:
+  app/
+    Http/
+      Middleware/
+        IdentifyTenant.php
+        CheckPermission.php
+        EnsureSchoolIsActive.php
+    Models/
+      School.php (with SchoolScope trait)
+      User.php
+      Plan.php
+    Services/
+      TenantService.php
+      AuthService.php
+    Repositories/
+      SchoolRepository.php
+      UserRepository.php
+  resources/views/
+    layouts/
+      app.blade.php (main ERP layout)
+      auth.blade.php (login/register layout)
+      public.blade.php (school website layout)
+    super-admin/
+      dashboard.blade.php
+      schools/index.blade.php, create.blade.php, show.blade.php
+    auth/
+      login.blade.php, register.blade.php
+
+Tests:
+  - TenantIsolationTest: School A data not visible to School B
+  - AuthTest: Login, logout, role-based redirect
+  - SuperAdminTest: Can create/edit/delete schools
+
+PHASE 2: ERD, MIGRATIONS, SEEDS & DATA DICTIONARY
+---------------------------------------------------
+Duration: 2-3 weeks
+
+Deliverables:
+  - All 100+ migration files (ordered as listed in Section 10)
+  - Model files for every table with:
+    * Fillable arrays
+    * Relationships (belongsTo, hasMany, etc.)
+    * Global school scope
+    * Soft deletes where applicable
+  - Comprehensive seeders:
+    * PlanSeeder (4 plans)
+    * RoleSeeder (24 roles + all permissions)
+    * GradingScaleSeeder (GES standard)
+    * WebsiteBlockSeeder (15 blocks)
+    * DemoSchoolSeeder (full realistic demo)
+  - Data Dictionary document (all tables, columns, types, constraints)
+
+PHASE 3: AUTHENTICATION, TENANT & RBAC
+----------------------------------------
+Duration: 2 weeks
+
+Deliverables:
+  - Multi-guard authentication (platform_admins, users)
+  - Role-permission system with gate/policy
+  - MFA-ready design (email OTP hook)
+  - Tenant middleware: domain-based school detection
+  - School onboarding wizard (5 steps):
+    Step 1: School details & branding
+    Step 2: Academic year and terms
+    Step 3: Create admin account
+    Step 4: Configure scoring (new!)
+    Step 5: Launch website builder (new!)
+  - Subscription management: plan selection, upgrade, feature gating
+  - Session security: IP pinning, user agent check, session timeout
+  - Password policies: min length, complexity, expiry
+
+Tests:
+  - RBAC: each role can only access permitted routes
+  - Tenant: requests without valid school rejected
+  - Auth: failed login throttling, MFA flow
+
+PHASE 4: SCHOOL ONBOARDING & SETTINGS
+---------------------------------------
+Duration: 2 weeks
+
+Deliverables:
+  - Guided onboarding checklist (interactive, tracks completion %)
+  - School settings: name, logo, branding, contact, academic calendar
+  - Campus management CRUD
+  - User management: create/edit/deactivate staff accounts
+  - Email/SMS configuration per school
+  - Feature flags: enable/disable modules per school per plan
+
+PHASE 5: STUDENT INFORMATION, STAFF & ACADEMICS
+------------------------------------------------
+Duration: 3 weeks
+
+Deliverables:
+  - Student CRUD: biodata, photo, guardians, emergency contacts, medical
+  - Student enrollment and class assignment
+  - Guardian portal accounts (auto-created, invite sent)
+  - Staff CRUD: records, qualifications, contracts, documents
+  - Academic structure: years, terms, departments, programmes, classes, streams
+  - Subject management and teacher allocation
+  - Admissions CRM: online form, document upload, review workflow
+
+PHASE 6: TIMETABLE & ATTENDANCE
+---------------------------------
+Duration: 2 weeks
+
+Deliverables:
+  - Timetable builder (manual, with clash detection)
+  - Attendance: manual grid entry by class teacher
+  - QR code attendance: student scans QR, attendance recorded
+  - Offline attendance PWA: service worker caches form, syncs when online
+  - Late tracking and absence alerts to parents via SMS
+  - Attendance reports: by student, class, day, term
+
+PHASE 7: DYNAMIC SCORING ENGINE & REPORT CARDS
+------------------------------------------------
+Duration: 4 weeks (PRIORITY PHASE)
+
+Deliverables:
+  - Scoring configuration wizard (Section 8.2)
+  - Score component CRUD with drag-to-reorder
+  - Teacher score entry grid (spreadsheet-style)
+  - Real-time calculation display
+  - CSV/Excel import for scores
+  - Copy-paste from spreadsheet support
+  - HOD verification workflow
+  - Headteacher approval workflow
+  - Auto-calculation service (ScoringEngineService.php)
+  - Grading scale configuration
+  - Subject positions, class positions, aggregate calculation
+  - Conduct and behavior ratings
+  - Editable auto-generated comments + AI suggestion hook
+  - Report card PDF generation (DomPDF)
+  - Report card templates: Lower Primary, Upper Primary, JHS, SHS, custom
+  - QR code on report card for verification
+  - Public verification endpoint (minimal data, no login required)
+  - Broadsheet PDF (all students, all subjects in one grid)
+  - Merit list, subject analysis reports
+  - Parent/student portal: view report card online
+
+Tests:
+  - Scoring calculation accuracy (unit tests for all weight combinations)
+  - PDF generation (feature test)
+  - Workflow: teacher->HOD->headteacher (integration test)
+  - Tenant isolation: School A cannot see School B scores
+
+PHASE 8: FINANCE
+-----------------
+Duration: 3 weeks
+
+Deliverables:
+  - Fee structure setup (per class, per term)
+  - Invoice generation (bulk and individual)
+  - Payment recording: cash, MoMo, bank transfer
+  - Receipt generation (PDF)
+  - Arrears tracking and automated reminders
+  - Discounts, waivers, scholarships
+  - Chart of accounts
+  - Journal entries (double-entry)
+  - Financial reports: trial balance, income statement, balance sheet
+  - Cashbook and ledger views
+  - Budget management
+
+PHASE 9: SCHOOL WEBSITE BUILDER
+---------------------------------
+Duration: 3 weeks (NEW PHASE)
+
+Deliverables:
+  - GrapesJS integration in Laravel admin panel
+  - Page CRUD: create, list, edit, delete, reorder pages
+  - Block library: 15 pre-built blocks (static + dynamic)
+  - Save/load page content via AJAX (GrapesJS remote storage)
+  - Publish/unpublish pages
+  - Revision history: last 10 revisions stored, can rollback
+  - Branding settings: logo, colors, fonts
+  - Navigation menu builder
+  - SEO settings per page
+  - Dynamic blocks: News, Events, Gallery, Staff from ERP
+  - Public website routing: tenant-aware, no auth required
+  - Custom domain/subdomain setup
+  - Preview mode (iframe of published site)
+  - Mobile-responsive output (Bootstrap 5 base theme)
+  - Website analytics: page views (Google Analytics integration)
+
+Tests:
+  - Page save and load (AJAX round-trip)
+  - Publish/unpublish (public access before/after)
+  - Tenant isolation (School A cannot edit School B website)
+  - Dynamic blocks return correct school data
+  - Custom domain routing
+
+PHASE 10: PORTALS, LMS & OPERATIONS
+--------------------------------------
+Duration: 4 weeks
+
+Deliverables:
+  - Parent portal: dashboard, children overview, attendance, fees, reports, messages
+  - Student portal: timetable, assignments, results, digital ID
+  - LMS: courses, lessons, quizzes, forum, certificates
+  - Communication: SMS blast, email templates, announcements, push notifications
+  - Library management
+  - Inventory and assets
+  - Hostel management
+  - Transport management
+  - HR and payroll
+  - Health records (restricted access)
+  - Discipline and counseling
+  - Alumni module
+
+PHASE 11: AI, API, PWA & SAAS
+-------------------------------
+Duration: 3 weeks
+
+Deliverables:
+  - AI analytics: at-risk student flags (based on attendance + grades trend)
+  - Fee default risk prediction (rule-based, explainable)
+  - Smart search across students, staff, subjects
+  - AI comment suggestions for report cards (human must review and accept)
+  - Versioned REST API (v1): authentication, students, scores, attendance, fees
+  - API key management
+  - Webhooks: fee payment, score published, attendance alert
+  - PWA: service worker, offline attendance, offline score entry
+  - SaaS billing: Paystack/Flutterwave integration for subscription payments
+  - Super Admin: revenue dashboard, SMS credit sales, school analytics
+
+PHASE 12: TESTING, DEPLOYMENT & DOCUMENTATION
+----------------------------------------------
+Duration: 3 weeks
+
+Deliverables:
+  - Complete test suite: unit, feature, integration, browser (Laravel Dusk)
+  - Performance testing: load test with 500 concurrent users
+  - Security testing: OWASP Top 10 check, SQL injection scan, XSS scan
+  - Accessibility audit: WCAG 2.1 AA
+  - XAMPP to production migration guide
+  - Production server setup (Ubuntu + Nginx + PHP-FPM + MySQL 8 + Redis)
+  - SSL configuration (Let's Encrypt)
+  - Supervisor configuration (queue workers)
+  - Cron setup (Laravel scheduler)
+  - Backup configuration (daily DB + storage backup to S3/Wasabi)
+  - Monitoring setup (Laravel Telescope for dev, Sentry for prod)
+  - All documentation (user manuals, API docs, admin guide)
+  - Training videos script and materials
+  - Soft launch with 5 pilot schools
+
+================================================================================
+SECTION 13: API DOCUMENTATION
+================================================================================
+
+BASE URL: https://api.edusphere.edu.gh/v1
+AUTHENTICATION: Bearer token (Laravel Sanctum)
+CONTENT-TYPE: application/json
+
+13.1 AUTHENTICATION ENDPOINTS
+-------------------------------
+
+POST /auth/login
+  Body: { "email": "str", "password": "str", "school_code": "str" }
+  Returns: { "token": "str", "user": {...}, "school": {...}, "permissions": [...] }
+
+POST /auth/logout
+  Headers: Authorization: Bearer {token}
+  Returns: { "message": "Logged out" }
+
+GET /auth/me
+  Returns: { "user": {...}, "school": {...} }
+
+13.2 STUDENTS ENDPOINTS
+------------------------
+
+GET /students
+  Query: page, per_page, class_id, search, status
+  Returns: paginated list of students
+
+POST /students
+  Body: student biodata fields
+  Returns: created student
+
+GET /students/{id}
+  Returns: student with guardians, enrollment, scores summary
+
+PUT /students/{id}
+  Body: updated fields
+  Returns: updated student
+
+13.3 SCORING ENDPOINTS
+-----------------------
+
+GET /scoring/configurations
+  Returns: list of scoring configurations for school
+
+POST /scoring/configurations
+  Body: { name, level, class_score_max, class_score_weight, exam_score_max,
+          exam_score_weight, grand_total, components: [{name, max_marks, order}] }
+  Returns: created configuration with components
+
+GET /scoring/scores?class_id=&subject_id=&term_id=
+  Returns: score sheet for class/subject/term
+
+POST /scoring/scores
+  Body: { student_id, subject_id, term_id, component_scores: {}, raw_exam_score }
+  Returns: calculated scores
+
+POST /scoring/scores/bulk
+  Body: { scores: [{student_id, component_scores, raw_exam_score}, ...] }
+  Returns: { saved: N, errors: [] }
+
+POST /scoring/scores/{id}/submit
+POST /scoring/scores/{id}/verify (HOD)
+POST /scoring/scores/{id}/approve (Headteacher)
+
+GET /reports/student/{student_id}/term/{term_id}
+  Returns: report card data (JSON)
+
+GET /reports/student/{student_id}/term/{term_id}/pdf
+  Returns: PDF binary (application/pdf)
+
+13.4 WEBSITE BUILDER ENDPOINTS
+--------------------------------
+
+GET /website/pages
+  Returns: list of pages for school
+
+POST /website/pages
+  Body: { title, slug, page_type, meta_description }
+  Returns: created page
+
+GET /website/pages/{id}
+  Returns: page with latest draft content
+
+POST /website/pages/{id}/save
+  Body: { components: {GrapesJS JSON}, html: "str", css: "str" }
+  Returns: { revision_id, saved_at }
+
+POST /website/pages/{id}/publish
+  Returns: { published_at, public_url }
+
+GET /website/settings
+PUT /website/settings
+
+13.5 PUBLIC API ENDPOINTS (No Auth — for dynamic website blocks)
+------------------------------------------------------------------
+
+GET /public/{school_code}/news?limit=6
+GET /public/{school_code}/events?limit=5&upcoming=true
+GET /public/{school_code}/gallery?album=general&limit=12
+GET /public/{school_code}/staff?featured=true
+GET /public/{school_code}/verify-report?qr_code=ABC123  (minimal verification)
+
+================================================================================
+SECTION 14: SECURITY CHECKLIST
+================================================================================
+
+[ ] Authentication
+    [x] Passwords hashed with bcrypt (Laravel default)
+    [x] MFA-ready: email OTP hook in AuthService
+    [x] Account lockout after 5 failed attempts (throttle middleware)
+    [x] Session regenerated on login
+    [x] HTTPS enforced in production (.env: APP_URL=https://...)
+    [x] Remember-me token rotation
+
+[ ] Authorization
+    [x] RBAC: every route protected by role/permission middleware
+    [x] Laravel Policies for model-level checks
+    [x] Tenant middleware: school_id validated on every request
+    [x] API: Sanctum token tied to school context
+    [x] Super Admin routes on separate guard
+
+[ ] Data Protection
+    [x] All queries via Eloquent ORM (no raw SQL unless parameterized)
+    [x] Global scope adds school_id to all tenant queries
+    [x] Sensitive fields encrypted: sms_gateway_config, payment keys
+    [x] Safeguarding cases: additional permission gate
+    [x] Health records: separate restricted role check
+
+[ ] Input Validation
+    [x] Laravel Form Requests for all input
+    [x] XSS: HTML purified for CMS/LMS content (HTMLPurifier)
+    [x] File uploads: type whitelist, size limit, stored outside web root
+    [x] Malware scan hook (ready for ClamAV integration)
+    [x] Score range validation (0 <= score <= max_marks)
+
+[ ] API Security
+    [x] Sanctum: CSRF for web, Bearer token for API
+    [x] Rate limiting: 60 requests/minute (global), 10/minute for auth
+    [x] CORS configured: only allowed origins
+    [x] API versioning: /v1 prefix, old versions deprecated with notice
+
+[ ] Infrastructure
+    [x] .env never committed to version control (.gitignore)
+    [x] Database credentials not in code
+    [x] Debug mode OFF in production
+    [x] Error pages don't reveal stack traces
+    [x] Redis password set in production
+    [x] File permissions: storage/ writable, not publicly accessible directly
+
+[ ] Audit & Monitoring
+    [x] All model changes logged in audit_logs (created_by, updated_by, old/new values)
+    [x] Score changes logged in score_history (immutable)
+    [x] Safeguarding audit logs immutable (no soft delete, no update)
+    [x] Login/logout events logged with IP and user agent
+    [x] Failed login attempts logged
+
+[ ] Backups
+    [x] Daily database backup via Laravel scheduler
+    [x] Files backup (storage/) daily
+    [x] Backup files encrypted before upload to cloud
+    [x] Monthly restore test (automated or manual checklist)
+    [x] Retention: 30 daily, 12 monthly, 5 yearly
+
+================================================================================
+SECTION 15: TESTING PLAN
+================================================================================
+
+15.1 UNIT TESTS
+----------------
+
+ScoringEngineServiceTest:
+  test_scales_class_score_50_50()
+  test_scales_class_score_30_70()
+  test_scales_class_score_40_60()
+  test_handles_zero_exam_score()
+  test_handles_maximum_class_score()
+  test_grade_assigned_correctly_A1()
+  test_grade_assigned_correctly_F9()
+  test_aggregate_sum_of_best_six()
+  test_position_calculated_correctly()
+
+WebsiteBuilderServiceTest:
+  test_page_saved_successfully()
+  test_page_published_updates_is_published_flag()
+  test_revision_created_on_save()
+  test_rollback_to_previous_revision()
+  test_dynamic_news_block_returns_correct_school_data()
+
+15.2 FEATURE TESTS
+-------------------
+
+ScoreEntryFeatureTest:
+  test_teacher_can_enter_scores()
+  test_teacher_cannot_enter_scores_above_max()
+  test_teacher_can_submit_scores()
+  test_hod_can_verify_scores()
+  test_hod_can_return_scores_to_teacher()
+  test_headteacher_can_approve_scores()
+  test_report_card_pdf_generated_after_approval()
+  test_qr_verification_returns_correct_data()
+
+WebsiteBuilderFeatureTest:
+  test_admin_can_create_page()
+  test_admin_can_save_page_content()
+  test_admin_can_publish_page()
+  test_public_can_access_published_page()
+  test_public_cannot_access_unpublished_page()
+  test_school_a_cannot_edit_school_b_page()
+  test_dynamic_news_block_shows_correct_school_news()
+
+15.3 INTEGRATION TESTS
+-----------------------
+
+TenantIsolationTest:
+  test_school_a_students_not_in_school_b_list()
+  test_school_a_scores_not_in_school_b_broadsheet()
+  test_school_a_website_not_editable_by_school_b_admin()
+  test_api_token_from_school_a_rejected_by_school_b()
+
+15.4 BROWSER TESTS (Laravel Dusk)
+-----------------------------------
+
+ScoreEntryBrowserTest:
+  test_teacher_can_tab_through_score_grid()
+  test_running_total_updates_in_real_time()
+  test_autosave_saves_draft_without_button_click()
+  test_paste_from_excel_populates_grid()
+
+WebsiteBuilderBrowserTest:
+  test_drag_block_onto_canvas()
+  test_edit_block_text()
+  test_save_draft()
+  test_preview_shows_published_page()
+  test_publish_button_triggers_publish()
+
+15.5 PERFORMANCE TESTS
+-----------------------
+
+  Tool: Apache JMeter or k6
+  Scenarios:
+    - 100 concurrent teachers submitting scores → p95 < 2s
+    - 500 concurrent parents viewing report cards → p95 < 3s
+    - PDF generation for 500 students → batch completes < 10 minutes
+    - Website builder save → < 500ms response
+    - Public website page load → < 2s (cached)
+
+15.6 SECURITY TESTS
+--------------------
+
+  - SQL injection: test all score/student endpoints with SQLMap
+  - XSS: test CMS content blocks with XSS payloads
+  - CSRF: test form submissions without CSRF token
+  - Tenant bypass: attempt to access other school data via ID manipulation
+  - Privilege escalation: teacher attempts to access HOD routes
+  - Score tampering: attempt to modify approved scores via API
+  - Website injection: attempt to inject scripts via GrapesJS save endpoint
+
+================================================================================
+SECTION 16: DEPLOYMENT GUIDE
+================================================================================
+
+16.1 PRODUCTION SERVER REQUIREMENTS
+-------------------------------------
+
+  - Ubuntu 22.04 LTS
+  - Nginx 1.24+
+  - PHP 8.3-FPM with extensions: mbstring, xml, curl, zip, gd, intl, bcmath, redis
+  - MySQL 8.0+
+  - Redis 7+
+  - Supervisor (process manager for queue workers)
+  - Certbot (Let's Encrypt SSL)
+  - Node.js 20+ (for asset building)
+
+16.2 NGINX CONFIGURATION
+--------------------------
+
+server {
+    listen 80;
+    server_name *.edusphere.edu.gh edusphere.edu.gh;
+    return 301 https://$host$request_uri;
+}
+
+server {
+    listen 443 ssl;
+    server_name *.edusphere.edu.gh edusphere.edu.gh;
+    root /var/www/edusphere/public;
+    index index.php;
+
+    ssl_certificate /etc/letsencrypt/live/edusphere.edu.gh/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/edusphere.edu.gh/privkey.pem;
+
+    location / {
+        try_files $uri $uri/ /index.php?$query_string;
+    }
+
+    location ~ \.php$ {
+        fastcgi_pass unix:/var/run/php/php8.3-fpm.sock;
+        fastcgi_index index.php;
+        fastcgi_param SCRIPT_FILENAME $realpath_root$fastcgi_script_name;
+        include fastcgi_params;
+    }
+
+    client_max_body_size 20M;
+    gzip on;
+    gzip_types text/css application/javascript application/json;
+}
+
+16.3 SUPERVISOR CONFIGURATION
+-------------------------------
+
+[program:edusphere-worker]
+process_name=%(program_name)s_%(process_num)02d
+command=php /var/www/edusphere/artisan queue:work redis --sleep=3 --tries=3 --max-time=3600
+autostart=true
+autorestart=true
+numprocs=4
+redirect_stderr=true
+stdout_logfile=/var/log/edusphere-worker.log
+
+16.4 DEPLOYMENT COMMANDS
+--------------------------
+
+git pull origin main
+composer install --no-dev --optimize-autoloader
+npm ci && npm run build
+php artisan migrate --force
+php artisan config:cache
+php artisan route:cache
+php artisan view:cache
+php artisan queue:restart
+sudo supervisorctl restart edusphere-worker:*
+php artisan storage:link
+
+================================================================================
+SECTION 17: BACKUP & RESTORE GUIDE
+================================================================================
+
+17.1 AUTOMATED BACKUP (Laravel Scheduler)
+------------------------------------------
+
+In App\Console\Kernel.php:
+  $schedule->command('backup:run')->dailyAt('02:00');
+  $schedule->command('backup:clean')->weekly();
+
+Package: spatie/laravel-backup
+
+Config: backup.php
+  - Include: database + storage/app/public
+  - Destination: local (for dev), S3/Wasabi (for production)
+  - Password-protect zip: yes
+  - Max age: 30 days (daily), 365 days (monthly)
+  - Notification: email on failure
+
+17.2 MANUAL BACKUP
+-------------------
+
+  # Database backup:
+  mysqldump -u root -p edusphere_db > backup_$(date +%Y%m%d).sql
+
+  # Files backup:
+  tar -czf files_backup_$(date +%Y%m%d).tar.gz /var/www/edusphere/storage/app/public
+
+17.3 RESTORE PROCEDURE
+-----------------------
+
+  Step 1: Stop queue workers:
+    sudo supervisorctl stop edusphere-worker:*
+
+  Step 2: Restore database:
+    mysql -u root -p edusphere_db < backup_YYYYMMDD.sql
+
+  Step 3: Restore files:
+    tar -xzf files_backup_YYYYMMDD.tar.gz -C /
+
+  Step 4: Clear caches:
+    php artisan cache:clear
+    php artisan config:cache
+
+  Step 5: Restart workers:
+    sudo supervisorctl start edusphere-worker:*
+
+  Step 6: Test restore:
+    - Log in as Super Admin
+    - Verify school count matches pre-backup
+    - Check a sample report card PDF renders
+    - Verify website builder loads for a school
+
+================================================================================
+SECTION 18: ROLE MANUALS
+================================================================================
+
+18.1 SUPER ADMIN MANUAL
+------------------------
+
+The Super Admin manages the entire EduSphere platform.
+
+Dashboard shows:
+  - Total schools, active subscriptions, monthly revenue
+  - SMS credits sold, support tickets open
+  - System health: queue status, disk usage, error rate
+
+Key Tasks:
+  - Create/edit/suspend/delete schools
+  - Assign plans and manage subscriptions
+  - Add/remove feature flags per school
+  - View audit logs across all schools (read-only)
+  - Manage platform-level SMS credit packages
+  - View and respond to support tickets
+  - Trigger manual backups
+  - View system health dashboard
+
+18.2 SCHOOL ADMIN MANUAL
+--------------------------
+
+The School Admin manages all aspects of their school's EduSphere instance.
+
+Dashboard shows:
+  - Student count, staff count, active classes
+  - Term summary: attendance rate, fee collection rate
+  - Pending score approvals, pending admissions
+  - Website status (published/draft)
+
+Key Tasks:
+  - Complete onboarding wizard
+  - Manage academic year, terms, classes
+  - Configure scoring engine (Section 8.2)
+  - Build and publish school website (Section 9)
+  - Create staff accounts and assign roles
+  - View financial overview
+  - Generate school-wide reports
+  - Configure SMS/email settings
+  - Manage data retention and backups
+
+18.3 TEACHER MANUAL
+--------------------
+
+Teachers access EduSphere to manage their class and subject scores.
+
+Dashboard shows:
+  - My classes and subjects
+  - Score entry progress (how many done vs. total)
+  - Pending assignments to grade
+  - Today's attendance status
+
+Key Tasks:
+  1. Entering Scores:
+     Go to: Academics > Scores > My Subjects
+     Select: Term, Subject, Class
+     Score grid loads with student names and component columns
+     Enter raw scores per component
+     System shows running class total and predicted grade
+     Save as Draft (auto-save also runs every 30 seconds)
+     When complete, click "Submit for Verification"
+
+  2. Attendance:
+     Go to: Attendance > Mark Attendance
+     Select class and date
+     Click Present/Absent/Late for each student
+     Or use QR: students scan their ID QR code
+     Submit
+
+  3. Assignments:
+     Create assignment, set deadline and rubric
+     View submissions, give feedback, record marks
+
+18.4 PARENT MANUAL
+-------------------
+
+Parents access the Parent Portal at: https://{school}.edusphere.edu.gh/parent
+
+Login: Email and password received in invitation SMS/email.
+
+Features:
+  - View child's report card (after headteacher publishes)
+  - View attendance record
+  - Check fees and outstanding balance
+  - Download receipts
+  - Receive SMS/email notifications
+  - Send messages to school
+  - Request appointments
+
+18.5 HOD MANUAL
+----------------
+
+HODs verify teacher scores before they go to the headteacher.
+
+Key Tasks:
+  - Go to: Academics > Scores > Pending Verification
+  - Select subject and class
+  - Review broadsheet: all students, all components
+  - Check for obvious errors (outliers, missing scores)
+  - Click "Verify" to approve OR "Return" with comment to send back to teacher
+  - View trends: subject performance this term vs last term
+
+================================================================================
+SECTION 19: TRAINING MATERIALS
+================================================================================
+
+19.1 IN-APP GUIDED TOUR
+------------------------
+
+Implemented using: Shepherd.js (open-source tour library)
+Triggers: On first login for each role, or via Help > Start Tour.
+
+Tour Topics:
+  - School Admin: Onboarding Wizard (5 steps)
+  - School Admin: Scoring Configuration (5 steps)
+  - School Admin: Website Builder (6 steps)
+  - Teacher: Score Entry (4 steps)
+  - HOD: Score Verification (3 steps)
+  - Parent: Viewing Report Card (3 steps)
+
+19.2 TOOLTIPS
+--------------
+
+Every configuration field has a [?] icon that shows:
+  - What the field means
+  - Example value
+  - Impact on calculations
+
+Example:
+  Field: "Class Score Maximum"
+  Tooltip: "The highest raw total a student can score from class work.
+            Example: If you have Exercise 1 (10), Exercise 2 (10),
+            Homework (5), Project (15), Test (10) — your max is 50.
+            Set this to 50."
+
+19.3 VIDEO TUTORIALS (SCRIPTS)
+-------------------------------
+
+Video 1: Setting Up Your Scoring System (8 mins)
+  0:00 - Introduction to scoring configuration
+  1:00 - Opening the Scoring Wizard
+  2:00 - Setting class score max and exam score max
+  3:30 - Setting scale weights (e.g., 50/50 or 30/70)
+  5:00 - Adding score components
+  6:30 - Preview calculation
+  7:30 - Activating configuration
+
+Video 2: Entering Scores as a Teacher (6 mins)
+  0:00 - Opening the score grid
+  1:00 - Navigating with Tab key
+  2:00 - Entering scores, seeing live total
+  3:00 - Pasting from Excel
+  4:00 - Uploading CSV
+  5:00 - Submitting for verification
+
+Video 3: Building Your School Website (10 mins)
+  0:00 - Accessing the Website Builder
+  1:00 - Adding a new page
+  2:00 - Dragging blocks onto the canvas
+  3:30 - Editing block content
+  5:00 - Adding dynamic news block
+  6:30 - Setting school branding
+  8:00 - Building navigation menu
+  9:00 - Publishing the site
+
+19.4 QUICK REFERENCE CARDS
+---------------------------
+
+CARD 1: Score Calculation Formulas
+  Scaled Class = (Raw Class Total ÷ Class Max) × Class Weight
+  Scaled Exam  = (Raw Exam Score ÷ Exam Max) × Exam Weight
+  Grand Total  = Scaled Class + Scaled Exam
+
+  Example (50/50 school):
+    Class: 40/50 → (40÷50)×50 = 40
+    Exam:  72/100 → (72÷100)×50 = 36
+    Total: 40+36 = 76 → B2
+
+CARD 2: GES Grading Scale (Standard)
+  A1: 80-100 (Excellent)
+  B2: 70-79  (Very Good)
+  B3: 60-69  (Good)
+  C4: 55-59  (Credit)
+  C5: 50-54  (Credit)
+  C6: 45-49  (Credit)
+  D7: 40-44  (Pass)
+  E8: 35-39  (Pass)
+  F9: 0-34   (Fail)
+
+CARD 3: Website Builder Keyboard Shortcuts
+  Ctrl+Z       Undo
+  Ctrl+Y       Redo
+  Ctrl+S       Save Draft
+  Delete       Delete selected block
+  Escape       Deselect
+  Ctrl+P       Preview mode
+
+================================================================================
+SECTION 20: ROADMAP
+================================================================================
+
+YEAR 1 — FOUNDATION & LAUNCH
+  Q1: Phases 1-4 (Setup, Auth, Onboarding)
+  Q2: Phases 5-7 (Students, Staff, Scoring Engine) — PILOT LAUNCH
+  Q3: Phase 8-9 (Finance, Website Builder) — COMMERCIAL LAUNCH
+  Q4: Phases 10-11 (Portals, LMS, Operations, AI, PWA)
+
+YEAR 2 — GROWTH & INTEGRATION
+  Q1: Phase 12 (Testing, Security Hardening, Docs)
+      Live RFID/biometric integration
+      WhatsApp Business API integration
+  Q2: GPS transport tracking integration
+      CBT (Computer-Based Testing) module
+      National examination result import (WAEC, BECE)
+  Q3: Android native app (React Native)
+      Offline-first mobile app for teachers
+      Multi-language support (Twi, Ewe, Ga, Hausa)
+  Q4: Marketplace: third-party module integrations
+      API partner program
+      Ghana EMIS (Education Management Information System) integration
+
+YEAR 3 — EXPANSION
+  Q1: Expand to other West African countries (Nigeria, Côte d'Ivoire, Senegal)
+  Q2: University module: course registration, CGPA, transcripts
+  Q3: AI-powered adaptive learning paths
+  Q4: EduSphere Analytics Cloud (aggregate anonymized insights for GES)
+
+VERSION HISTORY
+  v1.0  Phase 1-6   Core ERP with SBA
+  v1.1  Phase 7     Dynamic Scoring Engine
+  v1.2  Phase 8     Finance
+  v1.3  Phase 9     Website Builder  ← MAJOR NEW FEATURE
+  v2.0  Phase 10-11 Full Platform
+  v3.0  Year 2      Mobile + Integrations
+  v4.0  Year 3      Regional Expansion + AI
+
+================================================================================
+APPENDIX A: SCORING CONFIGURATION EXAMPLES
+================================================================================
+
+EXAMPLE 1: GES STANDARD JHS
+  Name: GES JHS Standard
+  Level: JHS
+  Class Score Max: 50, Class Score Weight: 50
+  Exam Score Max: 100, Exam Score Weight: 50
+  Grand Total: 100
+  Components:
+    Exercise 1:   10 marks
+    Exercise 2:   10 marks
+    Homework:     5 marks
+    Class Test 1: 10 marks
+    Class Test 2: 10 marks
+    Project Work: 5 marks
+    TOTAL:        50 ✓
+
+EXAMPLE 2: PRIMARY (30/70 SPLIT)
+  Name: Primary 30/70
+  Level: Primary
+  Class Score Max: 30, Class Score Weight: 30
+  Exam Score Max: 100, Exam Score Weight: 70
+  Grand Total: 100
+  Components:
+    Classwork:    10 marks
+    Homework:     10 marks
+    Project:      10 marks
+    TOTAL:        30 ✓
+
+EXAMPLE 3: SHS (40/60 WITH HIGH CLASS SCORE MAX)
+  Name: SHS 40/60 (Class out of 100)
+  Level: SHS
+  Class Score Max: 100, Class Score Weight: 40
+  Exam Score Max: 100, Exam Score Weight: 60
+  Grand Total: 100
+  Formula: scaled_class = (raw_class/100)*40
+  Components:
+    Exercise:     20 marks
+    Quiz 1:       15 marks
+    Quiz 2:       15 marks
+    Assignment:   20 marks
+    Practical:    20 marks
+    Test:         10 marks
+    TOTAL:        100 ✓
+
+EXAMPLE 4: UNIVERSITY COURSEWORK
+  Name: University 50/50
+  Level: Tertiary
+  Class Score Max: 50, Class Score Weight: 50
+  Exam Score Max: 100, Exam Score Weight: 50
+  Grand Total: 100
+  Components:
+    Assignment 1: 10 marks
+    Assignment 2: 10 marks
+    Mid-Sem Test: 20 marks
+    Presentation: 10 marks
+    TOTAL:        50 ✓
+
+================================================================================
+APPENDIX A2: PROMOTION ENGINE — WORKED EXAMPLES
+================================================================================
+
+EXAMPLE 1: BASIC SCHOOL — ANNUAL AVERAGE METHOD (DEFAULT)
+  Level: Primary, Class: Basic 4, Method: Annual Average
+  Promotion Threshold: 40%, Conditional Threshold: 35%
+  Student: Ama Serwaa
+    Term 1 overall: 58.0   Term 2 overall: 62.4   Term 3 overall: 55.8
+    Annual Average = (58.0+62.4+55.8)/3 = 58.7
+    58.7 >= 40  ->  PROMOTED to Basic 5
+
+EXAMPLE 2: BASIC SCHOOL — TWO-OF-THREE-TERMS METHOD
+  Level: Primary, Class: Basic 6, Method: Two of Three (Term 3 required)
+  Promotion Threshold: 50%
+  Student: Kwabena Owusu
+    Term 1 overall: 38.0   Term 2 overall: 54.0   Term 3 overall: 57.0
+    Best 2 of 3 incl. Term 3: (54.0+57.0)/2 = 55.5
+    55.5 >= 50  ->  PROMOTED to Basic 7
+
+EXAMPLE 3: CONDITIONAL / BORDERLINE CASE
+  Level: Primary, Class: Basic 4, Method: Annual Average
+  Promotion Threshold: 40%, Conditional Threshold: 35%
+  Student: Kofi Mensah
+    Term 1 overall: 32.0   Term 2 overall: 38.5   Term 3 overall: 35.0
+    Annual Average = 35.2
+    35.0 <= 35.2 < 40  ->  CONDITIONAL (sent for HOD/parent review;
+    Headteacher may approve promotion with a remediation plan, or convert
+    to Repeat)
+
+EXAMPLE 4: REPEAT CASE WITH REPEAT-LIMIT CHECK
+  Level: Primary, Class: Basic 3, repeat_limit = 1
+  Student: Yaw Boateng (already repeated Basic 3 once last year)
+    Annual Average this year: 22.3 (below threshold)
+    System flags: "Repeat limit reached — escalate to Headteacher case
+    conference" instead of auto-assigning a second repeat.
+
+EXAMPLE 5: JHS 3 (TERMINAL YEAR) — EXCLUDED FROM INTERNAL PROMOTION
+  Level: JHS, Class: JHS 3 / Basic 9, exclude_terminal_year = true
+  Student: Adwoa Nyarko
+    Engine does not compute a promotion decision.
+    Status: "BECE Candidate" — routed to External Examinations module;
+    next placement (SHS school/programme) is determined later by WAEC's
+    BECE result and the CSSPS placement outcome, not by this engine.
+
+EXAMPLE 6: SHS — CORE + ELECTIVE SPLIT WITH CONDUCT GATE
+  Level: SHS, Class: SHS 2, Method: Annual Average (Core & Elective split)
+  Core threshold: 45%, Elective threshold: 40%, Conduct: must be "Satisfactory"
+  Student: Emmanuel Asante
+    Core average: 52.0 (pass)   Elective average: 47.0 (pass)
+    Conduct rating: Satisfactory
+    ->  PROMOTED to SHS 3
+
+================================================================================
+APPENDIX B: WEBSITE BUILDER BLOCK CATALOG
+================================================================================
+
+CATEGORY: LAYOUT
+  hero-banner-01:    Full-width hero, background image, centered text + 2 buttons
+  hero-banner-02:    Split hero: text left, image right
+  two-column-01:     Equal columns with padding
+  three-column-01:   Three equal columns
+  full-width-text:   Wide text block with heading
+
+CATEGORY: CONTENT
+  about-with-image:  About section: image + text with bullet points
+  principal-message: Principal's message with photo and signature
+  mission-vision:    Side-by-side mission and vision cards
+  why-choose-us:     Icon grid with 6 reasons (editable icons, titles, descriptions)
+  admissions-steps:  Numbered steps for admissions process
+  cta-banner:        Colored full-width call-to-action with button
+  testimonials-carousel: Student/parent quote carousel
+
+CATEGORY: MEDIA
+  image-gallery-static:  3×2 image grid, lightbox on click
+  video-embed:           YouTube/Vimeo URL embed
+  single-image:          Full-width or contained image with caption
+  image-with-text:       Image left/right with text
+
+CATEGORY: DYNAMIC (pulls from ERP)
+  news-feed-dynamic:     Latest 3 or 6 news posts, links to full post
+  events-list-dynamic:   Next 5 upcoming events with date/time/venue
+  gallery-dynamic:       Latest gallery photos from ERP
+  staff-grid-dynamic:    Featured staff cards from ERP staff module
+  notice-board-dynamic:  Pinned notices/announcements
+
+CATEGORY: CONTACT & INFO
+  contact-form:          Name, email, phone, message form
+  contact-info:          Address, phone, email, map embed
+  social-links:          Facebook, Twitter, Instagram, YouTube icons
+  map-embed:             Google Maps by coordinates
+
+CATEGORY: ADMISSIONS-SPECIFIC
+  admissions-hero:       Hero with "Apply Now" button linking to admissions form
+  requirements-list:     Admission requirements with download links
+  fees-overview:         Fee structure table (static or ERP-linked)
+  application-steps:     Visual timeline of admission process
+
+================================================================================
+APPENDIX C: FILE & FOLDER STRUCTURE
+================================================================================
+
+edusphere/
+├── app/
+│   ├── Console/
+│   │   ├── Commands/
+│   │   │   ├── GenerateReportCards.php
+│   │   │   ├── SendAttendanceAlerts.php
+│   │   │   └── SyncOfflineScores.php
+│   │   └── Kernel.php
+│   ├── Http/
+│   │   ├── Controllers/
+│   │   │   ├── SuperAdmin/
+│   │   │   ├── School/
+│   │   │   │   ├── ScoreController.php
+│   │   │   │   ├── ScoringConfigurationController.php
+│   │   │   │   ├── PromotionConfigurationController.php
+│   │   │   │   ├── PromotionRunController.php
+│   │   │   │   ├── WebsiteBuilderController.php
+│   │   │   │   └── PublicWebsiteController.php
+│   │   │   └── Api/V1/
+│   │   ├── Middleware/
+│   │   │   ├── IdentifyTenant.php
+│   │   │   ├── CheckPermission.php
+│   │   │   ├── EnsureSchoolIsActive.php
+│   │   │   └── IdentifySchoolByDomain.php (for public website)
+│   │   └── Requests/
+│   │       ├── ScoreEntryRequest.php
+│   │       ├── ScoringConfigurationRequest.php
+│   │       ├── PromotionConfigurationRequest.php
+│   │       └── WebsitePageRequest.php
+│   ├── Models/
+│   │   ├── Traits/
+│   │   │   ├── BelongsToSchool.php (global scope trait)
+│   │   │   └── HasAuditLog.php
+│   │   ├── ScoringConfiguration.php
+│   │   ├── ScoreComponent.php
+│   │   ├── StudentScore.php
+│   │   ├── PromotionConfiguration.php
+│   │   ├── PromotionRun.php
+│   │   ├── StudentPromotionRecord.php
+│   │   ├── StudentRepeatHistory.php
+│   │   ├── WebsitePage.php
+│   │   ├── PageRevision.php
+│   │   └── WebsiteSettings.php
+│   ├── Services/
+│   │   ├── Scoring/
+│   │   │   ├── ScoringEngineService.php
+│   │   │   ├── GradeCalculatorService.php
+│   │   │   ├── PositionCalculatorService.php
+│   │   │   └── ReportCardGeneratorService.php
+│   │   ├── Promotion/
+│   │   │   ├── PromotionEngineService.php
+│   │   │   ├── PromotionRunService.php
+│   │   │   └── RepeatLimitService.php
+│   │   ├── Website/
+│   │   │   ├── WebsiteBuilderService.php
+│   │   │   ├── PageRevisionService.php
+│   │   │   └── DynamicBlockService.php
+│   │   └── Tenant/
+│   │       └── TenantService.php
+│   └── Repositories/
+│       ├── StudentScoreRepository.php
+│       └── WebsitePageRepository.php
+├── database/
+│   ├── migrations/
+│   └── seeders/
+│       ├── ScoringConfigurationSeeder.php
+│       ├── PromotionConfigurationSeeder.php
+│       └── WebsiteBlockSeeder.php
+├── resources/
+│   ├── views/
+│   │   ├── school/
+│   │   │   ├── scores/
+│   │   │   │   ├── index.blade.php
+│   │   │   │   ├── enter.blade.php (spreadsheet grid)
+│   │   │   │   └── configuration.blade.php
+│   │   │   ├── promotions/
+│   │   │   │   ├── configuration.blade.php
+│   │   │   │   ├── run.blade.php (generate + review list)
+│   │   │   │   └── history.blade.php
+│   │   │   └── website/
+│   │   │       ├── index.blade.php (pages list)
+│   │   │       ├── builder.blade.php (GrapesJS editor)
+│   │   │       ├── settings.blade.php (branding)
+│   │   │       └── preview.blade.php
+│   │   └── public/ (school public website templates)
+│   │       ├── layout.blade.php
+│   │       └── page.blade.php
+│   └── js/
+│       ├── score-entry.js (spreadsheet grid, autosave, paste)
+│       └── website-builder.js (GrapesJS init, custom blocks)
+└── tests/
+    ├── Unit/
+    │   └── Services/
+    │       ├── Scoring/ScoringEngineServiceTest.php
+    │       └── Promotion/PromotionEngineServiceTest.php
+    └── Feature/
+        ├── ScoreEntryTest.php
+        ├── PromotionRunTest.php
+        └── WebsiteBuilderTest.php
+
+================================================================================
+END OF DOCUMENT
+================================================================================
+
+Document: EduSphere Ghana ERP — Complete Master Development Plan
+Version:  2.1
+Date:     June 2026
+Pages:    ~90 pages equivalent
+Sections: 21 main sections (incl. 8B) + 3 appendices
+
+This document covers:
+  ✓ Original 34 ERP modules from master prompt
+  ✓ Dynamic Scoring Engine (class score components + flexible weights)
+  ✓ Dynamic Promotion Engine (Term 1+2+3 based promotion, GES-aligned,
+    configurable per level — Basic & SHS — with BECE/WASSCE exclusion)
+  ✓ School Website Builder (GrapesJS drag-and-drop)
+  ✓ Complete database schema with migrations
+  ✓ XAMPP + Laravel setup guide
+  ✓ 12-phase development plan with runnable code guidance
+  ✓ API documentation
+  ✓ Security checklist
+  ✓ Testing plan
+  ✓ Deployment guide
+  ✓ Backup & restore guide
+  ✓ Role manuals
+  ✓ Training materials
+  ✓ Product roadmap
+
+================================================================================
