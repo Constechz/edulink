@@ -1059,11 +1059,39 @@
         @media (max-width: 991.98px) {
             .hero-title {
                 font-size: 2.5rem;
+                text-align: center;
             }
             .hero-section {
                 padding: clamp(7.5rem, 12vh, 10.5rem) 0 clamp(4rem, 8vh, 6.5rem) 0;
             }
+            .navbar-collapse {
+                background: rgba(9, 13, 22, 0.95);
+                border-radius: 12px;
+                padding: 1.5rem;
+                margin-top: 1rem;
+                border: 1px solid var(--border-color);
+            }
+            .navbar-collapse .d-flex {
+                flex-direction: column;
+                width: 100%;
+                gap: 0.75rem !important;
+                align-items: stretch !important;
+            }
+            .navbar-collapse .d-flex .btn-nav-outline,
+            .navbar-collapse .d-flex .btn-nav-primary {
+                text-align: center;
+                justify-content: center;
+                width: 100%;
+            }
         }
+
+        @media (max-width: 767.98px) {
+            .showcase-display-card {
+                padding: 1.5rem 1rem;
+                min-height: auto;
+            }
+        }
+
 
         /* Interactive Showcase Styles */
         .showcase-tab-btn {
