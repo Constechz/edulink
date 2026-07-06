@@ -28,12 +28,18 @@
             --font-body: 'Inter', sans-serif;
         }
 
+        html, body {
+            overflow-x: hidden;
+            width: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
         body {
             font-family: var(--font-body);
             background: linear-gradient(135deg, var(--bg-dark) 0%, #0f172a 100%);
             color: var(--text-primary);
             min-height: 100vh;
-            overflow-x: hidden;
             position: relative;
         }
 
@@ -444,6 +450,17 @@
         @media (max-width: 575.98px) {
             .mock-sidebar {
                 display: none;
+            }
+            .mockup-window-header {
+                padding: 0.5rem 0.75rem;
+            }
+            .window-address {
+                max-width: 130px;
+                padding: 0.2rem 0.5rem;
+            }
+            .mock-status-pill {
+                font-size: 0.55rem;
+                padding: 0.15rem 0.4rem;
             }
         }
 
