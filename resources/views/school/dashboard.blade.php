@@ -16,11 +16,11 @@
         @endphp
         <div class="alert alert-warning border-0 rounded-3 shadow-xs d-flex align-items-center justify-content-between p-3 mb-4" style="background-color: rgba(255, 215, 0, 0.1); border: 1px solid rgba(255, 215, 0, 0.25) !important;">
             <div class="text-dark">
-                <i class="bi bi-clock-history me-2 fs-5 text-warning"></i>
+                <i class="bi bi-info-circle me-2 fs-5 text-warning"></i>
                 @if ($daysLeft > 0)
                     <strong>Free Trial Active:</strong> Your institution has <strong>{{ ceil($daysLeft) }} days</strong> left on your free trial.
                 @else
-                    <strong>Free Trial Expiring today:</strong> Your trial expires at the end of the day.
+                    <strong>Free Trial Plan:</strong> You are on the free trial plan. Upgrade to a paid subscription to unlock premium modules like Student/Parent Portals, SBA Scoring, and the Website Builder.
                 @endif
             </div>
             <a href="{{ route('school.billing.index') }}" class="btn btn-warning btn-sm fw-bold px-3 py-1.5 rounded-3 shadow-xs" style="color: #020617; background-color: #FFD700; border: none;">
