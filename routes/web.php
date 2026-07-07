@@ -77,6 +77,9 @@ Route::middleware(['auth', 'super_admin'])->prefix('super-admin')->name('super-a
     Route::get('/sms-credits', [App\Http\Controllers\SuperAdmin\SuperAdminAnalyticsController::class, 'smsCreditsIndex'])->name('sms-credits');
     Route::get('/access-logs', [App\Http\Controllers\SuperAdmin\SuperAdminAnalyticsController::class, 'accessLogsIndex'])->name('access-logs');
     Route::get('/settings', [App\Http\Controllers\SuperAdmin\SuperAdminAnalyticsController::class, 'settingsIndex'])->name('settings');
+    Route::get('/env-settings', [App\Http\Controllers\SuperAdmin\SuperAdminAnalyticsController::class, 'envSettingsIndex'])->name('env-settings');
+    Route::post('/env-settings/update', [App\Http\Controllers\SuperAdmin\SuperAdminAnalyticsController::class, 'updateEnvSettings'])->name('env-settings.update');
+    Route::post('/env-settings/restore', [App\Http\Controllers\SuperAdmin\SuperAdminAnalyticsController::class, 'restoreEnvSettings'])->name('env-settings.restore');
     Route::post('/schools/{schoolId}/approve', [App\Http\Controllers\SuperAdmin\SuperAdminAnalyticsController::class, 'approveSchool'])->name('schools.approve');
     Route::get('/email-settings', [App\Http\Controllers\SuperAdmin\SuperAdminAnalyticsController::class, 'emailSettingsIndex'])->name('email-settings');
     Route::post('/email-settings/update', [App\Http\Controllers\SuperAdmin\SuperAdminAnalyticsController::class, 'updateEmailSettings'])->name('email-settings.update');
@@ -459,3 +462,4 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/notifications/mark-all-read', [App\Http\Controllers\UserController::class, 'markAllNotificationsAsRead'])->name('notifications.mark-all-read');
     Route::post('/notifications/{id}/mark-read', [App\Http\Controllers\UserController::class, 'markNotificationAsRead'])->name('notifications.mark-read');
 });
+

@@ -470,6 +470,11 @@
                     </a>
                 </li>
                 <li>
+                    <a href="{{ route('super-admin.env-settings') }}" class="sidebar-link {{ request()->routeIs('super-admin.env-settings*') ? 'active' : '' }}">
+                        <i class="bi bi-file-earmark-code"></i>Environment Editor (.env)
+                    </a>
+                </li>
+                <li>
                     <a href="{{ route('super-admin.documentation.index') }}" class="sidebar-link {{ request()->routeIs('super-admin.documentation*') ? 'active' : '' }}">
                         <i class="bi bi-book"></i>Knowledge Base Editor
                     </a>

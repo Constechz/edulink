@@ -20,6 +20,7 @@ class IdentifyTenant
         // Dev environment or direct IP/localhost access
         $appNameLower = strtolower(config('app.name', 'EduLink'));
         if ($host === 'localhost' || $host === '127.0.0.1' || $host === 'edulink.local' || $host === "{$appNameLower}.local" || str_contains($host, 'ngrok')) {
+            $schoolId = null;
             $subdomainParam = $request->route() ? $request->route()->parameter('school_subdomain') : null;
             if ($subdomainParam) {
                 $tenant = \Illuminate\Support\Facades\Cache::remember("school_subdomain_{$subdomainParam}", 3600, function () use ($subdomainParam) {

@@ -589,4 +589,73 @@ class SuperAdminAnalyticsController extends Controller
 
         return redirect()->route('super-admin.dashboard')->with('success', "Impersonation session ended. Returned to Super Admin Panel.");
     }
+
+    /**
+     * Display environment settings dashboard.
+     */
+    public function envSettingsIndex(Request $request)
+    {
+        $envPath = base_path('.env');
+        $envContent = file_exists($envPath) ? file_get_contents($envPath) : '';
+        $backupExists = file_exists(base_path('.env.bak'));
+        $backupTime = $backupExists ? date('Y-m-d H:i:s', filemtime(base_path('.env.bak'))) : null;
+
+        return view('super-admin.env-settings', compact('envContent', 'backupExists', 'backupTime'));
+    }
+
+    /**
+     * Save updated environment settings.
+     */
+    public function updateEnvSettings(Request $request)
+    {
+        $request->validate([
+            'env_content' => 'required|string',
+        ]);
+
+        $envPath = base_path('.env');
+
+        // Backup existing env file
+        if (file_exists($envPath)) {
+            copy($envPath, base_path('.env.bak'));
+        }
+
+        // Save new content
+        file_put_contents($envPath, $request->env_content);
+
+        // Clear Laravel config cache
+        try {
+            \Illuminate\Support\Facades\Artisan::call('config:clear');
+            \Illuminate\Support\Facades\Artisan::call('cache:clear');
+        } catch (\Exception $e) {
+            \Illuminate\Support\Facades\Log::error("Failed to clear configuration cache after updating .env: " . $e->getMessage());
+        }
+
+        return redirect()->back()->with('success', 'Environment settings (.env) updated successfully! Config cache has been cleared and a backup created at .env.bak.');
+    }
+
+    /**
+     * Restore environment settings from backup.
+     */
+    public function restoreEnvSettings()
+    {
+        $backupPath = base_path('.env.bak');
+        $envPath = base_path('.env');
+
+        if (!file_exists($backupPath)) {
+            return redirect()->back()->withErrors(['env' => 'No backup file (.env.bak) found.']);
+        }
+
+        // Restore backup
+        copy($backupPath, $envPath);
+
+        // Clear Laravel config cache
+        try {
+            \Illuminate\Support\Facades\Artisan::call('config:clear');
+            \Illuminate\Support\Facades\Artisan::call('cache:clear');
+        } catch (\Exception $e) {
+            \Illuminate\Support\Facades\Log::error("Failed to clear configuration cache after restoring .env: " . $e->getMessage());
+        }
+
+        return redirect()->back()->with('success', 'Environment settings (.env) restored successfully from .env.bak! Config cache cleared.');
+    }
 }
