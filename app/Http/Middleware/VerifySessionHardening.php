@@ -47,6 +47,24 @@ class VerifySessionHardening
             }
         }
 
+        // Set global fallback school_subdomain parameter to prevent UrlGenerationException in layout view files
+        $subdomain = $request->route() ? $request->route()->parameter('school_subdomain') : null;
+        if (!$subdomain) {
+            $user = Auth::user();
+            if ($user && $user->school_id) {
+                $school = \App\Models\School::find($user->school_id);
+                $subdomain = $school ? $school->subdomain : null;
+            }
+        }
+        if (!$subdomain) {
+            $subdomain = \Illuminate\Support\Facades\Cache::remember('default_school_subdomain', 3600, function () {
+                return \App\Models\School::value('subdomain') ?? 'admin';
+            });
+        }
+        \Illuminate\Support\Facades\URL::defaults([
+            'school_subdomain' => $subdomain
+        ]);
+
         return $next($request);
     }
 }
