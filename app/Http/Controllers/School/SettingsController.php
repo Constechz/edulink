@@ -18,6 +18,12 @@ class SettingsController extends Controller
         $user = $request->user();
         $school = School::with('plan')->findOrFail($user->school_id);
         
+        // Auto-seed default grading scales if none exist for the school
+        $gradingScalesCount = \App\Models\GradingScale::where('school_id', $school->id)->count();
+        if ($gradingScalesCount === 0) {
+            $school->seedDefaultGradingScales();
+        }
+
         $academicYears = AcademicYear::where('school_id', $school->id)->get();
         $gradingScales = \App\Models\GradingScale::where('school_id', $school->id)->with('items')->get();
 
