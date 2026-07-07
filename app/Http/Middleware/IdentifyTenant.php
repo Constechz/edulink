@@ -109,6 +109,12 @@ class IdentifyTenant
                     app('mail.manager')->forgetMailers();
                 }
             }
+        } else {
+            // Fallback for Super Admin or non-tenant pages to prevent UrlGenerationException on layout views
+            $fallbackSubdomain = \App\Models\School::value('subdomain') ?? 'admin';
+            \Illuminate\Support\Facades\URL::defaults([
+                'school_subdomain' => $fallbackSubdomain
+            ]);
         }
 
         return $next($request);
