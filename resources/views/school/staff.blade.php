@@ -416,7 +416,9 @@
                                 <select class="form-select rounded-3 py-2" name="role_id" id="add-staff-role" required>
                                     <option value="">Select Role</option>
                                     @foreach($roles as $role)
-                                        <option value="{{ $role->id }}" data-slug="{{ $role->slug }}">{{ $role->name }}</option>
+                                        @if($role->slug !== 'super-admin')
+                                            <option value="{{ $role->id }}" data-slug="{{ $role->slug }}">{{ $role->name }}</option>
+                                        @endif
                                     @endforeach
                                 </select>
                             </div>
@@ -485,7 +487,9 @@
                                     <label class="form-label fw-bold text-secondary small">System Role</label>
                                     <select class="form-select rounded-3 py-2 edit-staff-role" name="role_id" data-staff-id="{{ $staff->id }}" required>
                                         @foreach($roles as $role)
-                                            <option value="{{ $role->id }}" data-slug="{{ $role->slug }}" {{ ($staff->user->role_id ?? null) == $role->id ? 'selected' : '' }}>{{ $role->name }}</option>
+                                            @if($role->slug !== 'super-admin')
+                                                <option value="{{ $role->id }}" data-slug="{{ $role->slug }}" {{ ($staff->user->role_id ?? null) == $role->id ? 'selected' : '' }}>{{ $role->name }}</option>
+                                            @endif
                                         @endforeach
                                     </select>
                                 </div>
