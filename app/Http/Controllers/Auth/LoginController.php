@@ -162,49 +162,20 @@ class LoginController extends Controller
             $school = \App\Models\School::find($user->school_id);
             if ($school) {
                 $subdomain = $school->subdomain;
-                $host = request()->getHost();
-                $mainUrl = config('app.url'); // e.g., https://edulink.constechz.com
-                
-                $parsedUrl = parse_url($mainUrl);
-                $baseHost = $parsedUrl['host'] ?? 'edulink.constechz.com';
-                $scheme = $parsedUrl['scheme'] ?? 'https';
-                $port = isset($parsedUrl['port']) ? ':' . $parsedUrl['port'] : '';
-                
-                // If the user logged in via the main platform domain, redirect to their tenant subdomain URL
-                if ($host === $baseHost) {
-                    $redirectHost = $subdomain . '.' . $baseHost . $port;
-                    
-                    $path = '/dashboard';
-                    if (!$school->onboarding_completed) {
-                        $path = '/school/onboarding';
-                    } elseif ($user->role) {
-                        if ($user->role->slug === 'student') {
-                            $path = '/school/student-portal/dashboard';
-                        } elseif ($user->role->slug === 'parent') {
-                            $path = '/school/parent-portal/dashboard';
-                        }
+                $path = '/dashboard';
+                if (!$school->onboarding_completed) {
+                    $path = '/school/onboarding';
+                } elseif ($user->role) {
+                    if ($user->role->slug === 'student') {
+                        $path = '/school/student-portal/dashboard';
+                    } elseif ($user->role->slug === 'parent') {
+                        $path = '/school/parent-portal/dashboard';
                     }
-                    
-                    return redirect()->away($scheme . '://' . $redirectHost . $path);
                 }
+                
+                // Redirect directly to the path-based school dashboard (e.g. /school-name/dashboard)
+                return redirect()->to('/' . $subdomain . $path);
             }
-
-            // Normal redirection if already on the subdomain or in local context
-            if ($school && !$school->onboarding_completed) {
-                return redirect('/school/onboarding');
-            }
-
-            // Redirect based on role slug
-            if ($user->role) {
-                if ($user->role->slug === 'student') {
-                    return redirect()->intended('/school/student-portal/dashboard');
-                }
-                if ($user->role->slug === 'parent') {
-                    return redirect()->intended('/school/parent-portal/dashboard');
-                }
-            }
-
-            return redirect()->intended('/dashboard');
         }
         
         return redirect()->intended('/');

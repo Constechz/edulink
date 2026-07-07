@@ -103,7 +103,7 @@ Route::middleware(['auth', 'super_admin'])->prefix('super-admin')->name('super-a
 });
 
 // School/Tenant Onboarding and Settings Routes
-Route::middleware(['auth', 'tenant'])->group(function () {
+Route::middleware(['auth', 'tenant'])->prefix('{school_subdomain}')->group(function () {
     Route::post('/impersonate/stop', [App\Http\Controllers\SuperAdmin\SuperAdminAnalyticsController::class, 'stopImpersonating'])->name('super-admin.schools.impersonate.stop');
     
     Route::get('/help-center', [App\Http\Controllers\School\HelpCenterController::class, 'index'])->name('school.help-center.index');
@@ -424,36 +424,6 @@ Route::middleware(['auth', 'tenant'])->group(function () {
     Route::get('/dashboard', function () {
         $user = Auth::user();
         if ($user) {
-            // Redirect to subdomain if accessing from the main platform domain
-            if ($user->school_id) {
-                $school = \App\Models\School::find($user->school_id);
-                if ($school) {
-                    $subdomain = $school->subdomain;
-                    $host = request()->getHost();
-                    $mainUrl = config('app.url'); // e.g., https://edulink.constechz.com
-                    
-                    $parsedUrl = parse_url($mainUrl);
-                    $baseHost = $parsedUrl['host'] ?? 'edulink.constechz.com';
-                    $scheme = $parsedUrl['scheme'] ?? 'https';
-                    $port = isset($parsedUrl['port']) ? ':' . $parsedUrl['port'] : '';
-                    
-                    if ($host === $baseHost) {
-                        $redirectHost = $subdomain . '.' . $baseHost . $port;
-                        $path = '/dashboard';
-                        if (!$school->onboarding_completed) {
-                            $path = '/school/onboarding';
-                        } elseif ($user->role) {
-                            if ($user->role->slug === 'student') {
-                                $path = '/school/student-portal/dashboard';
-                            } elseif ($user->role->slug === 'parent') {
-                                $path = '/school/parent-portal/dashboard';
-                            }
-                        }
-                        return redirect()->away($scheme . '://' . $redirectHost . $path);
-                    }
-                }
-            }
-
             if ($user->role) {
                 if ($user->role->slug === 'student') {
                     return redirect()->route('school.student-portal.dashboard');
@@ -466,6 +436,28 @@ Route::middleware(['auth', 'tenant'])->group(function () {
         return view('school.dashboard');
     })->name('dashboard');
 });
+
+// Global /dashboard redirect when accessed without a school path prefix
+Route::get('/dashboard', function () {
+    $user = Auth::user();
+    if ($user && $user->school_id) {
+        $school = \App\Models\School::find($user->school_id);
+        if ($school) {
+            $path = '/dashboard';
+            if (!$school->onboarding_completed) {
+                $path = '/school/onboarding';
+            } elseif ($user->role) {
+                if ($user->role->slug === 'student') {
+                    $path = '/school/student-portal/dashboard';
+                } elseif ($user->role->slug === 'parent') {
+                    $path = '/school/parent-portal/dashboard';
+                }
+            }
+            return redirect()->to('/' . $school->subdomain . $path);
+        }
+    }
+    return redirect()->route('login');
+})->middleware(['auth']);
 
 // Public Report Verification (No Auth)
 Route::get('/public/verify-report/{hash}', [ReportCardController::class, 'publicVerify'])->name('public.verify-report');
