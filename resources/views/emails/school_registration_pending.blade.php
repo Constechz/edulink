@@ -38,14 +38,16 @@
             <!-- Workspace Preview -->
             <div style="background-color: #f7fafc; border-radius: 8px; padding: 20px; border: 1px solid #edf2f7; margin-bottom: 30px;">
                 <h4 style="margin-top: 0; margin-bottom: 15px; color: #003366; font-size: 0.95rem; text-transform: uppercase; letter-spacing: 0.02em;">Pending Workspace Details</h4>
-                <table style="width: 100%; border-collapse: collapse; font-size: 0.95rem;">
+                <table style="width: 100%; border-collapse: collapse; font-size: 0.95rem; table-layout: fixed;">
                     <tr>
-                        <td style="padding: 6px 0; color: #718096; width: 35%;">School Name</td>
-                        <td style="padding: 6px 0; color: #2d3748; font-weight: 600;">{{ $school->name }}</td>
+                        <td style="padding: 6px 0; color: #718096; width: 130px; vertical-align: top; font-weight: 500;">School Name</td>
+                        <td style="padding: 6px 0; color: #2d3748; font-weight: 600; word-break: break-word; vertical-align: top;">{{ $school->name }}</td>
                     </tr>
                     <tr>
-                        <td style="padding: 6px 0; color: #718096;">Subdomain Target</td>
-                        <td style="padding: 6px 0; color: #2d3748;"><code>{{ $school->subdomain }}.edulink.local</code></td>
+                        <td style="padding: 6px 0; color: #718096; width: 130px; vertical-align: top; font-weight: 500;">Subdomain Target</td>
+                        <td style="padding: 6px 0; color: #2d3748; vertical-align: top;">
+                            <code style="word-break: break-all; white-space: pre-wrap; font-family: Courier, monospace; background-color: #edf2f7; padding: 2px 6px; border-radius: 4px; font-size: 0.9em;">{{ $school->subdomain }}.edulink.local</code>
+                        </td>
                     </tr>
                 </table>
             </div>

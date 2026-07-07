@@ -31,14 +31,16 @@
                 <span style="font-weight: 700; color: #10b981; text-transform: uppercase; font-size: 0.8rem; letter-spacing: 0.05em; display: block; margin-bottom: 5px;">Workspace Status</span>
                 <span style="font-size: 1.1rem; font-weight: 700; color: #14532d;">Active & Ready</span>
                 
-                <table style="width: 100%; border-collapse: collapse; font-size: 0.95rem; margin-top: 15px; border-top: 1px solid rgba(16, 185, 129, 0.15); padding-top: 15px;">
+                <table style="width: 100%; border-collapse: collapse; font-size: 0.95rem; table-layout: fixed; margin-top: 15px; border-top: 1px solid rgba(16, 185, 129, 0.15); padding-top: 15px;">
                     <tr>
-                        <td style="padding: 6px 0; color: #15803d; width: 35%;">Workspace Code</td>
-                        <td style="padding: 6px 0; color: #14532d; font-weight: 700;">{{ $school->school_code }}</td>
+                        <td style="padding: 6px 0; color: #15803d; width: 130px; vertical-align: top; font-weight: 500;">Workspace Code</td>
+                        <td style="padding: 6px 0; color: #14532d; font-weight: 700; vertical-align: top;">{{ $school->school_code }}</td>
                     </tr>
                     <tr>
-                        <td style="padding: 6px 0; color: #15803d;">Workspace URL</td>
-                        <td style="padding: 6px 0; color: #14532d;"><code>http://{{ $school->subdomain }}.edulink.local/login</code></td>
+                        <td style="padding: 6px 0; color: #15803d; width: 130px; vertical-align: top; font-weight: 500;">Workspace URL</td>
+                        <td style="padding: 6px 0; color: #14532d; vertical-align: top;">
+                            <code style="word-break: break-all; white-space: pre-wrap; font-family: Courier, monospace; background-color: rgba(16, 185, 129, 0.1); padding: 2px 6px; border-radius: 4px; font-size: 0.9em;">http://{{ $school->subdomain }}.edulink.local/login</code>
+                        </td>
                     </tr>
                 </table>
             </div>
