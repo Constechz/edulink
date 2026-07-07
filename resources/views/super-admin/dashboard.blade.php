@@ -33,7 +33,7 @@
                 <ul class="small text-secondary mb-0 ps-3">
                     <li>Go to <a href="{{ route('super-admin.plans.index') }}" class="fw-bold text-primary">Subscription Plans</a> to Create/Edit tiers and select allowed features.</li>
                     <li>Unchecked modules are dynamically paywalled via route-level middleware gatekeepers.</li>
-                    <li>Refer to the <a href="{{ route('school.docs.help') }}" class="fw-bold text-primary">Help & Reference Hub</a> under the <strong>Super Administrator Portal Guide</strong> tab for detailed instructions.</li>
+                    <li>Refer to the <a href="{{ route('school.docs.help', ['school_subdomain' => \App\Models\School::value('subdomain') ?? 'admin']) }}" class="fw-bold text-primary">Help & Reference Hub</a> under the <strong>Super Administrator Portal Guide</strong> tab for detailed instructions.</li>
                 </ul>
             </div>
         </div>
