@@ -4,6 +4,14 @@
 @section('header_title', 'Campus Management Hub')
 
 @section('content')
+<style>
+    @media (max-width: 575.98px) {
+        .btn-responsive {
+            padding: 0.5rem 0.85rem !important;
+            font-size: 0.85rem !important;
+        }
+    }
+</style>
 <div class="container-fluid p-0">
 
     @if(session('success'))
@@ -23,12 +31,12 @@
     @endif
 
     <!-- Actions Bar -->
-    <div class="d-flex justify-content-between align-items-center mb-4">
+    <div class="d-flex flex-column flex-sm-row justify-content-between align-items-start align-items-sm-center gap-3 mb-4">
         <div>
             <h5 class="mb-0 font-weight-bold" style="font-weight: 700;">School Campuses</h5>
             <p class="text-muted mb-0 small">Create, edit, and assign staff members to regional branch campuses.</p>
         </div>
-        <button class="btn btn-primary px-4 py-2" data-bs-toggle="modal" data-bs-target="#addCampusModal" style="border-radius: 10px;">
+        <button class="btn btn-primary px-4 py-2 btn-responsive" data-bs-toggle="modal" data-bs-target="#addCampusModal" style="border-radius: 10px;">
             <i class="bi bi-plus-circle me-2"></i>Register New Campus
         </button>
     </div>
