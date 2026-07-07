@@ -2103,10 +2103,10 @@
                         const value = parseFloat(numericPart);
                         if (value > 0) {
                             if (isAnnual) {
-                                const discountedRate = Math.round(value * 0.8);
+                                const discountedRate = Math.round(value * 0.8 * 3);
                                 item.amountEl.textContent = nonNumericPart + discountedRate;
                                 if (item.durationEl) {
-                                    item.durationEl.textContent = '/term, billed annually';
+                                    item.durationEl.textContent = '/year, billed annually';
                                 }
                             } else {
                                 item.amountEl.textContent = item.originalText;
