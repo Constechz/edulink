@@ -132,38 +132,46 @@ class ScoringConfigurationController extends Controller
     /**
      * Show configuration details.
      */
-    public function show(Request $request, ScoringConfiguration $scoring_config)
+    public function show(Request $request, $scoring_config)
     {
         $schoolId = $request->user()->school_id;
 
-        if ($scoring_config->school_id !== $schoolId) {
+        $config = $scoring_config instanceof ScoringConfiguration 
+            ? $scoring_config 
+            : ScoringConfiguration::findOrFail($scoring_config);
+
+        if ($config->school_id !== $schoolId) {
             abort(403);
         }
 
-        $scoring_config->load(['components', 'subject', 'academicYear']);
+        $config->load(['components', 'subject', 'academicYear']);
 
         return view('school.scoring_configs.show', [
-            'scoringConfig' => $scoring_config
+            'scoringConfig' => $config
         ]);
     }
 
     /**
      * Show edit configuration page.
      */
-    public function edit(Request $request, ScoringConfiguration $scoring_config)
+    public function edit(Request $request, $scoring_config)
     {
         $schoolId = $request->user()->school_id;
 
-        if ($scoring_config->school_id !== $schoolId) {
+        $config = $scoring_config instanceof ScoringConfiguration 
+            ? $scoring_config 
+            : ScoringConfiguration::findOrFail($scoring_config);
+
+        if ($config->school_id !== $schoolId) {
             abort(403);
         }
 
-        $scoring_config->load('components');
+        $config->load('components');
         $academicYears = AcademicYear::where('school_id', $schoolId)->get();
         $subjects = Subject::where('school_id', $schoolId)->get();
 
         return view('school.scoring_configs.edit', [
-            'scoringConfig' => $scoring_config,
+            'scoringConfig' => $config,
             'academicYears' => $academicYears,
             'subjects' => $subjects
         ]);
@@ -172,11 +180,15 @@ class ScoringConfigurationController extends Controller
     /**
      * Update configuration with component preservation.
      */
-    public function update(Request $request, ScoringConfiguration $scoring_config)
+    public function update(Request $request, $scoring_config)
     {
         $schoolId = $request->user()->school_id;
 
-        if ($scoring_config->school_id !== $schoolId) {
+        $config = $scoring_config instanceof ScoringConfiguration 
+            ? $scoring_config 
+            : ScoringConfiguration::findOrFail($scoring_config);
+
+        if ($config->school_id !== $schoolId) {
             abort(403);
         }
 
@@ -217,18 +229,18 @@ class ScoringConfigurationController extends Controller
         }
 
         try {
-            DB::transaction(function () use ($request, $schoolId, $scoring_config, $grandTotal) {
+            DB::transaction(function () use ($request, $schoolId, $config, $grandTotal) {
                 $isDefault = $request->has('is_default') && $request->is_default;
 
                 if ($isDefault) {
                     // Turn off other defaults for this level
                     ScoringConfiguration::where('school_id', $schoolId)
                         ->where('level', $request->level)
-                        ->where('id', '!=', $scoring_config->id)
+                        ->where('id', '!=', $config->id)
                         ->update(['is_default' => false]);
                 }
 
-                $scoring_config->update([
+                $config->update([
                     'level' => $request->level,
                     'subject_id' => $request->subject_id,
                     'academic_year_id' => $request->academic_year_id,
@@ -247,7 +259,7 @@ class ScoringConfigurationController extends Controller
                 $submittedIds = collect($request->components)->pluck('id')->filter()->toArray();
                 
                 // Delete components that are no longer in the request
-                $scoring_config->components()->whereNotIn('id', $submittedIds)->delete();
+                $config->components()->whereNotIn('id', $submittedIds)->delete();
 
                 // Update or create components
                 foreach ($request->components as $index => $comp) {
@@ -255,7 +267,7 @@ class ScoringConfigurationController extends Controller
                     
                     if (!empty($comp['id'])) {
                         ScoreComponent::where('id', $comp['id'])
-                            ->where('scoring_configuration_id', $scoring_config->id)
+                            ->where('scoring_configuration_id', $config->id)
                             ->update([
                                 'name' => $comp['name'],
                                 'max_marks' => $comp['max_marks'],
@@ -266,7 +278,7 @@ class ScoringConfigurationController extends Controller
                     } else {
                         ScoreComponent::create([
                             'school_id' => $schoolId,
-                            'scoring_configuration_id' => $scoring_config->id,
+                            'scoring_configuration_id' => $config->id,
                             'name' => $comp['name'],
                             'max_marks' => $comp['max_marks'],
                             'display_order' => $index + 1,
@@ -287,15 +299,19 @@ class ScoringConfigurationController extends Controller
     /**
      * Destroy a configuration.
      */
-    public function destroy(Request $request, ScoringConfiguration $scoring_config)
+    public function destroy(Request $request, $scoring_config)
     {
         $schoolId = $request->user()->school_id;
 
-        if ($scoring_config->school_id !== $schoolId) {
+        $config = $scoring_config instanceof ScoringConfiguration 
+            ? $scoring_config 
+            : ScoringConfiguration::findOrFail($scoring_config);
+
+        if ($config->school_id !== $schoolId) {
             abort(403);
         }
 
-        $scoring_config->delete();
+        $config->delete();
 
         return redirect()->route('school.scoring-configs.index')->with('success', 'Scoring configuration deleted successfully.');
     }
