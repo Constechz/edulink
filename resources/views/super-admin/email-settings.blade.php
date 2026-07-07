@@ -154,6 +154,57 @@
         border-left: 4px solid var(--primary-color);
         box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
     }
+    
+    /* Dark Mode Theme Overrides for Custom Elements */
+    [data-bs-theme="dark"] .metric-card {
+        background: linear-gradient(135deg, rgba(20, 26, 42, 0.95) 0%, rgba(15, 20, 32, 0.9) 100%) !important;
+        border-color: rgba(255, 255, 255, 0.08) !important;
+    }
+    [data-bs-theme="dark"] .custom-input-group .form-control, 
+    [data-bs-theme="dark"] .custom-input-group .form-select {
+        background-color: rgba(255, 255, 255, 0.05) !important;
+        color: #f1f5f9 !important;
+        border-color: rgba(255, 255, 255, 0.08) !important;
+    }
+    [data-bs-theme="dark"] .custom-input-group .form-control:focus, 
+    [data-bs-theme="dark"] .custom-input-group .form-select:focus {
+        background-color: rgba(255, 255, 255, 0.08) !important;
+        border-color: var(--primary-color) !important;
+    }
+    [data-bs-theme="dark"] .form-label-custom {
+        color: #94a3b8 !important;
+    }
+    [data-bs-theme="dark"] .logs-table tr {
+        background-color: rgba(20, 26, 42, 0.6) !important;
+    }
+    [data-bs-theme="dark"] .logs-table tr:hover {
+        background-color: rgba(20, 26, 42, 0.95) !important;
+    }
+    [data-bs-theme="dark"] .logs-table td {
+        border-color: rgba(255, 255, 255, 0.05) !important;
+    }
+    [data-bs-theme="dark"] .nav-pills .nav-link {
+        background-color: rgba(255, 255, 255, 0.05) !important;
+        color: #94a3b8 !important;
+    }
+    [data-bs-theme="dark"] .nav-pills .nav-link:hover:not(.active) {
+        background-color: rgba(255, 255, 255, 0.08) !important;
+        color: #f1f5f9 !important;
+    }
+    [data-bs-theme="dark"] .btn-action-view {
+        background-color: rgba(255, 255, 255, 0.05) !important;
+        color: #f1f5f9 !important;
+        border-color: rgba(255, 255, 255, 0.08) !important;
+    }
+    [data-bs-theme="dark"] .btn-action-view:hover {
+        background-color: #f1f5f9 !important;
+        color: #0f172a !important;
+        border-color: #f1f5f9 !important;
+    }
+    [data-bs-theme="dark"] .mail-preview-body {
+        background-color: rgba(0, 0, 0, 0.25) !important;
+        color: #cbd5e1 !important;
+    }
 </style>
 @endsection
 
