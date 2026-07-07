@@ -531,6 +531,17 @@
         </div>
     @endforeach
 
+    @php
+        $staffExportData = $staffMembers->map(fn($s) => [
+            'Staff_Number' => $s->staff_number,
+            'Name' => $s->user->name ?? 'N/A',
+            'Email' => $s->user->email ?? 'N/A',
+            'Phone' => $s->user->phone ?? 'N/A',
+            'Designation' => $s->designation,
+            'Campus' => $s->campus->name ?? 'Global'
+        ]);
+    @endphp
+
 </div>
 
 <!-- Vanilla JS client-side filter for sorting staff by role -->
@@ -637,14 +648,7 @@
     });
 
     function exportStaffToCSV() {
-        const staff = @json($staffMembers->map(fn($s) => [
-            'Staff_Number' => $s->staff_number,
-            'Name' => $s->user->name ?? 'N/A',
-            'Email' => $s->user->email ?? 'N/A',
-            'Phone' => $s->user->phone ?? 'N/A',
-            'Designation' => $s->designation,
-            'Campus' => $s->campus->name ?? 'Global'
-        ]));
+        const staff = @json($staffExportData);
         
         if (staff.length === 0) {
             alert("No staff records to export.");
