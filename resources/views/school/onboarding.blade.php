@@ -346,22 +346,23 @@
                     <div class="col-md-6">
                         <label class="form-label" for="primary_color">Primary Brand Color</label>
                         <div class="input-group">
-                            <input type="color" class="form-control form-control-color w-25 border-end-0" id="primary_color_picker" value="#003366">
-                            <input type="text" class="form-control" name="primary_color" id="primary_color" value="#003366" placeholder="#003366" maxlength="7">
+                            <input type="color" class="form-control form-control-color w-25 border-end-0" id="primary_color_picker" value="#000000">
+                            <input type="text" class="form-control" name="primary_color" id="primary_color" value="" placeholder="#003366" maxlength="7">
                         </div>
-                        <div class="color-preview-box" id="primaryPreview" style="background-color: #003366;"></div>
+                        <div class="color-preview-box" id="primaryPreview" style="background-color: transparent;"></div>
                     </div>
                     <div class="col-md-6">
                         <label class="form-label" for="accent_color">Accent / Secondary Color</label>
                         <div class="input-group">
-                            <input type="color" class="form-control form-control-color w-25 border-end-0" id="accent_color_picker" value="#ffd700">
-                            <input type="text" class="form-control" name="accent_color" id="accent_color" value="#ffd700" placeholder="#ffd700" maxlength="7">
+                            <input type="color" class="form-control form-control-color w-25 border-end-0" id="accent_color_picker" value="#000000">
+                            <input type="text" class="form-control" name="accent_color" id="accent_color" value="" placeholder="#ffd700" maxlength="7">
                         </div>
-                        <div class="color-preview-box" id="accentPreview" style="background-color: #ffd700;"></div>
+                        <div class="color-preview-box" id="accentPreview" style="background-color: transparent;"></div>
                     </div>
                     <div class="col-12">
                         <label class="form-label" for="font_family">Portal Font Family</label>
                         <select class="form-select" name="font_family" id="font_family">
+                            <option value="" selected disabled>Select font family...</option>
                             <option value="Outfit">Outfit (Modern Premium)</option>
                             <option value="Inter">Inter (Sleek Professional)</option>
                             <option value="Roboto">Roboto (Classic Clean)</option>
@@ -387,19 +388,19 @@
                 <div class="row g-4">
                     <div class="col-md-6">
                         <label class="form-label" for="academic_year">Academic Year Name</label>
-                        <input type="text" class="form-control" name="academic_year" id="academic_year" placeholder="e.g. 2026/2027" value="2026/2027">
+                        <input type="text" class="form-control" name="academic_year" id="academic_year" placeholder="e.g. 2026/2027" value="">
                     </div>
                     <div class="col-md-6">
                         <label class="form-label" for="term_name">Active Term Name</label>
-                        <input type="text" class="form-control" name="term_name" id="term_name" placeholder="e.g. Term 1" value="Term 1">
+                        <input type="text" class="form-control" name="term_name" id="term_name" placeholder="e.g. Term 1" value="">
                     </div>
                     <div class="col-md-6">
                         <label class="form-label" for="start_date">Term Starts On</label>
-                        <input type="date" class="form-control" name="start_date" id="start_date" value="2026-09-01">
+                        <input type="date" class="form-control" name="start_date" id="start_date" value="">
                     </div>
                     <div class="col-md-6">
                         <label class="form-label" for="end_date">Term Ends On</label>
-                        <input type="date" class="form-control" name="end_date" id="end_date" value="2026-12-15">
+                        <input type="date" class="form-control" name="end_date" id="end_date" value="">
                     </div>
                 </div>
             </div>
@@ -411,15 +412,15 @@
                 <div class="row g-4">
                     <div class="col-12">
                         <label class="form-label" for="admin_name">Administrator Name</label>
-                        <input type="text" class="form-control" name="admin_name" id="admin_name" placeholder="e.g. Mr. Benjamin Mensah" value="Benjamin Mensah">
+                        <input type="text" class="form-control" name="admin_name" id="admin_name" placeholder="e.g. Mr. Benjamin Mensah" value="">
                     </div>
                     <div class="col-md-6">
                         <label class="form-label" for="admin_email">Primary Email Address</label>
-                        <input type="email" class="form-control" name="admin_email" id="admin_email" placeholder="e.g. admin@school.edu.gh" value="admin@demo.edu.gh">
+                        <input type="email" class="form-control" name="admin_email" id="admin_email" placeholder="e.g. admin@school.edu.gh" value="">
                     </div>
                     <div class="col-md-6">
                         <label class="form-label" for="admin_password">Security Password</label>
-                        <input type="password" class="form-control" name="admin_password" id="admin_password" placeholder="Minimum 8 characters" value="password123">
+                        <input type="password" class="form-control" name="admin_password" id="admin_password" placeholder="Minimum 8 characters" value="">
                     </div>
                 </div>
             </div>
@@ -431,12 +432,12 @@
                 <div class="row g-4">
                     <div class="col-md-6">
                         <label class="form-label" for="class_weight">Class / SBA Weight (%)</label>
-                        <input type="number" class="form-control" name="class_weight" id="class_weight" min="0" max="100" value="30">
+                        <input type="number" class="form-control" name="class_weight" id="class_weight" min="0" max="100" value="">
                         <div class="form-text text-muted">Ghana GES standard is 30% Continuous Assessment.</div>
                     </div>
                     <div class="col-md-6">
                         <label class="form-label" for="exam_weight">Terminal Examination Weight (%)</label>
-                        <input type="number" class="form-control" name="exam_weight" id="exam_weight" min="0" max="100" value="70">
+                        <input type="number" class="form-control" name="exam_weight" id="exam_weight" min="0" max="100" value="">
                         <div class="form-text text-muted">Ghana GES standard is 70% Terminal Exams.</div>
                     </div>
                     <div class="col-12">
