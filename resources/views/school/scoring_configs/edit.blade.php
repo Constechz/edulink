@@ -18,7 +18,7 @@
         left: 0;
         right: 0;
         height: 2px;
-        background-color: rgba(0, 0, 0, 0.05);
+        background-color: var(--border-color, rgba(0, 0, 0, 0.05));
         z-index: 1;
         transform: translateY(-50%);
     }
@@ -26,9 +26,9 @@
         width: 38px;
         height: 38px;
         border-radius: 50%;
-        background-color: #ffffff;
-        border: 2px solid #cbd5e1;
-        color: #64748b;
+        background-color: var(--card-bg, #ffffff);
+        border: 2px solid var(--border-color, #cbd5e1);
+        color: var(--text-muted, #64748b);
         display: flex;
         align-items: center;
         justify-content: center;
@@ -55,7 +55,7 @@
         font-size: 0.75rem;
         font-weight: 600;
         white-space: nowrap;
-        color: #64748b;
+        color: var(--text-muted, #64748b);
         left: 50%;
         transform: translateX(-50%);
     }
@@ -71,19 +71,19 @@
         }
         .step-node.active .step-label {
             display: block;
-            background-color: #ffffff;
+            background-color: var(--card-bg, #ffffff);
             padding: 3px 10px;
             border-radius: 20px;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
-            border: 1px solid rgba(0, 0, 0, 0.05);
+            border: 1px solid var(--border-color, rgba(0, 0, 0, 0.05));
             z-index: 10;
             top: 45px;
         }
     }
     .wizard-card {
         border-radius: 20px;
-        background: #ffffff;
-        border: 1px solid rgba(0, 0, 0, 0.05);
+        background: var(--card-bg, #ffffff);
+        border: 1px solid var(--border-color, rgba(0, 0, 0, 0.05));
         box-shadow: 0 10px 30px rgba(0, 0, 0, 0.02);
     }
 </style>

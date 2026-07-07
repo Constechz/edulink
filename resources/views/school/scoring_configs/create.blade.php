@@ -10,82 +10,82 @@
         justify-content: space-between;
         margin-bottom: 2.5rem;
         position: relative;
-    }
-    .wizard-step-header::after {
-        content: '';
-        position: absolute;
-        top: 50%;
-        left: 0;
-        right: 0;
-        height: 2px;
-        background-color: rgba(0, 0, 0, 0.05);
-        z-index: 1;
-        transform: translateY(-50%);
-    }
-    .step-node {
-        width: 38px;
-        height: 38px;
-        border-radius: 50%;
-        background-color: #ffffff;
-        border: 2px solid #cbd5e1;
-        color: #64748b;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-weight: 700;
-        font-size: 0.9rem;
-        position: relative;
-        z-index: 2;
-        transition: all 0.3s ease;
-    }
-    .step-node.active {
-        border-color: var(--primary-color);
-        background-color: var(--primary-color);
-        color: #ffffff;
-        box-shadow: 0 0 0 4px rgba(0, 51, 102, 0.15);
-    }
-    .step-node.completed {
-        border-color: #10b981;
-        background-color: #10b981;
-        color: #ffffff;
-    }
-    .step-label {
-        position: absolute;
-        top: 42px;
-        font-size: 0.75rem;
-        font-weight: 600;
-        white-space: nowrap;
-        color: #64748b;
-        left: 50%;
-        transform: translateX(-50%);
-    }
-    .step-node.active .step-label {
-        color: var(--primary-color);
-    }
-    @media (max-width: 768px) {
-        .wizard-step-header {
-            margin-bottom: 3.5rem;
-        }
-        .step-label {
-            display: none;
-        }
-        .step-node.active .step-label {
-            display: block;
-            background-color: #ffffff;
-            padding: 3px 10px;
-            border-radius: 20px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
-            border: 1px solid rgba(0, 0, 0, 0.05);
-            z-index: 10;
-            top: 45px;
-        }
-    }
-    .wizard-card {
-        border-radius: 20px;
-        background: #ffffff;
-        border: 1px solid rgba(0, 0, 0, 0.05);
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.02);
-    }
+     }
+     .wizard-step-header::after {
+         content: '';
+         position: absolute;
+         top: 50%;
+         left: 0;
+         right: 0;
+         height: 2px;
+         background-color: var(--border-color, rgba(0, 0, 0, 0.05));
+         z-index: 1;
+         transform: translateY(-50%);
+     }
+     .step-node {
+         width: 38px;
+         height: 38px;
+         border-radius: 50%;
+         background-color: var(--card-bg, #ffffff);
+         border: 2px solid var(--border-color, #cbd5e1);
+         color: var(--text-muted, #64748b);
+         display: flex;
+         align-items: center;
+         justify-content: center;
+         font-weight: 700;
+         font-size: 0.9rem;
+         position: relative;
+         z-index: 2;
+         transition: all 0.3s ease;
+     }
+     .step-node.active {
+         border-color: var(--primary-color);
+         background-color: var(--primary-color);
+         color: #ffffff;
+         box-shadow: 0 0 0 4px rgba(0, 51, 102, 0.15);
+     }
+     .step-node.completed {
+         border-color: #10b981;
+         background-color: #10b981;
+         color: #ffffff;
+     }
+     .step-label {
+         position: absolute;
+         top: 42px;
+         font-size: 0.75rem;
+         font-weight: 600;
+         white-space: nowrap;
+         color: var(--text-muted, #64748b);
+         left: 50%;
+         transform: translateX(-50%);
+     }
+     .step-node.active .step-label {
+         color: var(--primary-color);
+     }
+     @media (max-width: 768px) {
+         .wizard-step-header {
+             margin-bottom: 3.5rem;
+         }
+         .step-label {
+             display: none;
+         }
+         .step-node.active .step-label {
+             display: block;
+             background-color: var(--card-bg, #ffffff);
+             padding: 3px 10px;
+             border-radius: 20px;
+             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+             border: 1px solid var(--border-color, rgba(0, 0, 0, 0.05));
+             z-index: 10;
+             top: 45px;
+         }
+     }
+     .wizard-card {
+         border-radius: 20px;
+         background: var(--card-bg, #ffffff);
+         border: 1px solid var(--border-color, rgba(0, 0, 0, 0.05));
+         box-shadow: 0 10px 30px rgba(0, 0, 0, 0.02);
+     }
 </style>
 @endsection
 
