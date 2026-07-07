@@ -233,7 +233,12 @@ Route::middleware(['auth', 'tenant'])->prefix('{school_subdomain}')->group(funct
         Route::get('/school/attendance/reports', [AttendanceController::class, 'reports'])->name('school.attendance.reports');
 
         // Scoring Wizard Configuration (Protected)
-        Route::resource('/school/scoring-configs', ScoringConfigurationController::class)->names('school.scoring-configs')->middleware('permission:configure-scoring');
+        Route::resource('/school/scoring-configs', ScoringConfigurationController::class)
+            ->names('school.scoring-configs')
+            ->parameters([
+                'scoring-configs' => 'scoringConfig',
+            ])
+            ->middleware('permission:configure-scoring');
 
         // Score Entry Spreadsheet (Protected)
         Route::middleware(['permission:enter-scores'])->group(function () {
