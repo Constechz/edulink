@@ -86,6 +86,12 @@
         border: 1px solid var(--border-color, rgba(0, 0, 0, 0.05));
         box-shadow: 0 10px 30px rgba(0, 0, 0, 0.02);
     }
+    @media (max-width: 768px) {
+        .wizard-card #prevBtn, .wizard-card #nextBtn {
+            padding: 0.4rem 0.8rem !important;
+            font-size: 0.8rem !important;
+        }
+    }
 </style>
 @endsection
 
@@ -327,10 +333,10 @@
             <!-- Navigation Buttons -->
             <div class="d-flex justify-content-between mt-5 pt-3 border-top">
                 <button type="button" class="btn btn-outline-secondary px-4 py-2 d-none" id="prevBtn" onclick="navigateStep(-1)">
-                    <i class="bi bi-chevron-left me-1"></i>Previous Step
+                    <i class="bi bi-chevron-left me-1"></i>Previous<span class="d-none d-sm-inline"> Step</span>
                 </button>
                 <button type="button" class="btn btn-primary px-5 py-2 ms-auto" id="nextBtn" onclick="navigateStep(1)">
-                    Next Step<i class="bi bi-chevron-right ms-1"></i>
+                    Next<span class="d-none d-sm-inline"> Step</span><i class="bi bi-chevron-right ms-1"></i>
                 </button>
             </div>
         </form>
@@ -390,11 +396,11 @@
         }
 
         if (currentStep === totalSteps) {
-            nextBtn.innerHTML = '<i class="bi bi-save2 me-1"></i>Update ruleset config';
+            nextBtn.innerHTML = '<i class="bi bi-save2 me-1"></i>Update<span class="d-none d-sm-inline"> ruleset</span>';
             setupPreviewInputs();
             runSimulation();
         } else {
-            nextBtn.innerHTML = 'Next Step<i class="bi bi-chevron-right ms-1"></i>';
+            nextBtn.innerHTML = 'Next<span class="d-none d-sm-inline"> Step</span><i class="bi bi-chevron-right ms-1"></i>';
         }
 
         if (currentStep > totalSteps) {
