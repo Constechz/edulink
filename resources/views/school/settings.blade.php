@@ -8,6 +8,15 @@
     .settings-tab-nav {
         border-bottom: 2px solid rgba(0, 0, 0, 0.05);
         margin-bottom: 2rem;
+        display: flex;
+        overflow-x: auto;
+        overflow-y: hidden;
+        white-space: nowrap;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none; /* Hide scrollbar for Firefox */
+    }
+    .settings-tab-nav::-webkit-scrollbar {
+        display: none; /* Hide scrollbar for Chrome, Safari, and Opera */
     }
     .settings-tab-link {
         font-weight: 600;
@@ -17,6 +26,8 @@
         padding: 1rem 1.5rem;
         position: relative;
         transition: color 0.2s ease;
+        flex: 0 0 auto;
+        white-space: nowrap;
     }
     .settings-tab-link:hover, .settings-tab-link.active {
         color: var(--primary-color);
@@ -56,6 +67,25 @@
         padding: 0.25rem 0.5rem;
         border-radius: 6px;
         text-transform: uppercase;
+    }
+    @media (max-width: 576px) {
+        .feature-card {
+            flex-direction: column;
+            align-items: flex-start !important;
+            gap: 1rem;
+        }
+        .feature-card > div:last-child {
+            align-self: flex-end;
+        }
+    }
+    @media (max-width: 768px) {
+        .modal-body table.table th, 
+        .modal-body table.table td {
+            min-width: 80px;
+        }
+        .modal-body table.table td:nth-child(5) {
+            min-width: 150px; /* Description / Remarks column */
+        }
     }
 </style>
 @endsection
@@ -296,12 +326,12 @@
 
                     <!-- TAB 3: Active Modules -->
                     <div class="tab-pane fade" id="features" role="tabpanel">
-                        <div class="d-flex justify-content-between align-items-center mb-4">
+                        <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center gap-3 mb-4">
                             <div>
                                 <h5 class="m-0 font-weight-bold" style="font-weight: 700;">ERP Active Modules (Feature Flags)</h5>
                                 <p class="text-muted mb-0 small">Toggle ERP features active. Availability is constrained by your current SaaS subscription plan: <strong>{{ $school->plan->name }}</strong>.</p>
                             </div>
-                            <span class="badge bg-primary px-3 py-2 rounded-3 text-uppercase">Plan: {{ $school->plan->name }}</span>
+                            <span class="badge bg-primary px-3 py-2 rounded-3 text-uppercase flex-shrink-0">Plan: {{ $school->plan->name }}</span>
                         </div>
 
                         <form action="{{ route('school.settings.features') }}" method="POST">
