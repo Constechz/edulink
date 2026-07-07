@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-bs-theme="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -249,6 +249,53 @@
             padding: 1rem;
             margin-bottom: 2rem;
             display: none;
+        }
+
+        /* Responsive styling for mobile devices */
+        @media (max-width: 767.98px) {
+            body {
+                padding: 15px 10px;
+            }
+            .glass-card {
+                padding: 1.75rem 1.25rem !important;
+                border-radius: 16px !important;
+            }
+            .brand-logo {
+                font-size: 1.5rem;
+                margin-bottom: 1.5rem;
+            }
+            .wizard-actions {
+                margin-top: 2rem;
+            }
+            .btn-wizard {
+                padding: 0.65rem 1.25rem;
+                font-size: 0.9rem;
+            }
+        }
+
+        @media (max-width: 575.98px) {
+            .step-label {
+                display: none !important;
+            }
+            .steps-nav {
+                margin-bottom: 2.25rem;
+            }
+            .step-indicator {
+                width: auto !important;
+            }
+            .step-circle {
+                width: 34px !important;
+                height: 34px !important;
+                font-size: 0.85rem !important;
+            }
+            .steps-nav::before, .steps-nav-progress {
+                top: 17px !important;
+            }
+        }
+
+        /* Text readability contrast overrides */
+        .text-muted {
+            color: #94a3b8 !important;
         }
     </style>
 </head>
