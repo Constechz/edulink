@@ -117,7 +117,11 @@
                                 <h6 class="fw-bold text-dark mb-2"><i class="bi bi-mortarboard text-purple me-2"></i>2b. Step-by-Step Guide: Configuring a KG to JHS School</h6>
                                 <p class="mb-3 small">For a standard basic school spanning Nursery/KG to Junior High School (JHS), follow this implementation roadmap:</p>
                                 <ol class="mb-0 ps-3 small" style="line-height: 1.6;">
-                                    <li class="mb-2"><strong>Campus & Calendar:</strong> Add your primary campuses under <code>Campuses</code>. Setup the active academic year (e.g. 2026/2027) and terms (Term 1, 2, 3) in settings.</li>
+                                    <li class="mb-2"><strong>Campus & Calendar:</strong> Add your primary campuses under <code>Campuses</code>. Setup the active academic year (e.g. 2026/2027) and terms (Term 1, 2, 3) in settings.
+                                        <div class="text-muted mt-1 small" style="border-left: 2px solid var(--primary-color); padding-left: 8px;">
+                                            <em>Tip: What is a Campus?</em> A campus represents a physical location or compound. If your school has only one location, enter <strong>"Main Campus"</strong> (e.g., code: <code>main</code>). If you have separate compounds (e.g., pre-school on one street, JHS on another), enter them separately (e.g., <strong>"Pre-School Campus"</strong> and <strong>"JHS Campus"</strong>).
+                                        </div>
+                                    </li>
                                     <li class="mb-2"><strong>Departments & Programmes:</strong> Under <code>Programmes</code>, create a general program (e.g. <em>Basic Education</em>) as a container. Create preschool, primary, and JHS departments to organize staff.</li>
                                     <li class="mb-2"><strong>Class Streams Setup:</strong> When creating classes in <code>Classes & Streams</code>, map them to correct level scopes:
                                         <ul class="mb-0 ps-3">
