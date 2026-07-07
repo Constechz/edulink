@@ -590,7 +590,7 @@
             btnNext.disabled = true;
             btnNext.innerHTML = 'Saving <span class="spinner-border spinner-border-sm ms-1" role="status"></span>';
 
-            fetch("{{ url('/school/onboarding') }}", {
+            fetch("{{ route('school.onboarding.store') }}", {
                 method: "POST",
                 body: formData,
                 headers: {
