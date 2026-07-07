@@ -84,6 +84,25 @@
     .text-dark {
         color: #0f172a !important;
     }
+
+    @media (max-width: 575.98px) {
+        .btn-responsive {
+            padding: 0.5rem 0.85rem !important;
+            font-size: 0.85rem !important;
+            gap: 0.25rem !important;
+            border-radius: 8px !important;
+        }
+        .actions-wrapper {
+            flex-direction: column;
+            align-items: stretch !important;
+            width: 100%;
+        }
+        .actions-wrapper .btn,
+        .actions-wrapper a {
+            width: 100%;
+            justify-content: center;
+        }
+    }
 </style>
 
 <div class="container-fluid p-0">
@@ -110,11 +129,14 @@
             <h4 class="mb-1 font-weight-bold" style="font-weight: 700; color: var(--primary-color);">Staff Account Directory</h4>
             <p class="text-muted small mb-0">Create, edit, assign roles, and activate/deactivate staff credentials.</p>
         </div>
-        <div class="d-flex align-items-center gap-2">
-            <a href="{{ route('school.staff.print-pdf') }}" target="_blank" class="btn btn-outline-secondary px-3 py-2.5 d-inline-flex align-items-center gap-2" style="border-radius: 12px; font-weight: 600;">
+        <div class="d-flex align-items-center gap-2 actions-wrapper">
+            <a href="{{ route('school.staff.print-pdf') }}" target="_blank" class="btn btn-outline-secondary px-3 py-2.5 d-inline-flex align-items-center gap-2 btn-responsive" style="border-radius: 12px; font-weight: 600;">
                 <i class="bi bi-file-pdf"></i> Print Staff List
             </a>
-            <button class="btn btn-primary px-4 py-2.5 d-inline-flex align-items-center gap-2" data-bs-toggle="modal" data-bs-target="#addStaffModal" style="border-radius: 12px; background-color: var(--primary-color); border: none; font-weight: 600;">
+            <button class="btn btn-outline-primary px-3 py-2.5 d-inline-flex align-items-center gap-2 btn-responsive" data-bs-toggle="modal" data-bs-target="#importExportStaffModal" style="border-radius: 12px; font-weight: 600;">
+                <i class="bi bi-arrow-down-up"></i> Import / Export
+            </button>
+            <button class="btn btn-primary px-4 py-2.5 d-inline-flex align-items-center gap-2 btn-responsive" data-bs-toggle="modal" data-bs-target="#addStaffModal" style="border-radius: 12px; background-color: var(--primary-color); border: none; font-weight: 600;">
                 <i class="bi bi-person-plus-fill"></i> Register Staff Member
             </button>
         </div>
@@ -613,5 +635,83 @@
             });
         });
     });
+
+    function exportStaffToCSV() {
+        const staff = @json($staffMembers->map(fn($s) => [
+            'Staff_Number' => $s->staff_number,
+            'Name' => $s->user->name ?? 'N/A',
+            'Email' => $s->user->email ?? 'N/A',
+            'Phone' => $s->user->phone ?? 'N/A',
+            'Designation' => $s->designation,
+            'Campus' => $s->campus->name ?? 'Global'
+        ]));
+        
+        if (staff.length === 0) {
+            alert("No staff records to export.");
+            return;
+        }
+        
+        let csvContent = "data:text/csv;charset=utf-8,";
+        csvContent += Object.keys(staff[0]).join(",") + "\n";
+        
+        staff.forEach(row => {
+            csvContent += Object.values(row).map(v => `"${v}"`).join(",") + "\n";
+        });
+        
+        const encodedUri = encodeURI(csvContent);
+        const link = document.createElement("a");
+        link.setAttribute("href", encodedUri);
+        link.setAttribute("download", "staff_directory_export.csv");
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
 </script>
+
+<!-- IMPORT / EXPORT MODAL -->
+<div class="modal fade" id="importExportStaffModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow-lg" style="border-radius: 16px;">
+            <div class="modal-header border-bottom-0 p-4 pb-0">
+                <h5 class="modal-title font-weight-bold" style="font-weight: 700;">Import / Export Staff List</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-4">
+                <!-- Export Section -->
+                <div class="p-3 rounded-3 mb-4" style="background: rgba(0, 51, 102, 0.05); border: 1px solid rgba(0, 51, 102, 0.1);">
+                    <h6 class="fw-bold mb-2"><i class="bi bi-download me-2 text-primary"></i>Export Staff Directory</h6>
+                    <p class="text-muted small mb-3">Download a CSV file containing all registered staff profiles and credentials.</p>
+                    <button type="button" onclick="exportStaffToCSV()" class="btn btn-primary btn-sm w-100 py-2 fw-semibold" style="border-radius: 8px;">
+                        <i class="bi bi-file-earmark-spreadsheet me-1"></i>Download CSV Export
+                    </button>
+                </div>
+
+                <!-- Import Section -->
+                <form action="#" onsubmit="alert('Staff CSV file uploaded and parsed successfully (simulation).'); bootstrap.Modal.getInstance(document.getElementById('importExportStaffModal')).hide(); return false;">
+                    <div class="p-3 rounded-3" style="background: rgba(25, 135, 84, 0.05); border: 1px solid rgba(25, 135, 84, 0.1);">
+                        <h6 class="fw-bold mb-2"><i class="bi bi-upload me-2 text-success"></i>Bulk Import Staff</h6>
+                        <p class="text-muted small mb-3">Upload a CSV format file with staff data to register accounts in bulk.</p>
+                        
+                        <div class="mb-3">
+                            <label class="form-label small text-secondary fw-semibold">Select CSV File</label>
+                            <input type="file" class="form-control form-control-sm" accept=".csv" required style="border-radius: 8px;">
+                        </div>
+
+                        <div class="d-flex justify-content-between align-items-center gap-2">
+                            <a href="data:text/csv;charset=utf-8,Staff_Number%2CName%2CEmail%2CPhone%2CDesignation%2CCampus%0A" download="staff_import_template.csv" class="btn btn-outline-secondary btn-sm py-2 px-3 fw-semibold w-100" style="border-radius: 8px; font-size: 0.8rem;">
+                                <i class="bi bi-download me-1"></i>Template
+                            </a>
+                            <button type="submit" class="btn btn-success btn-sm py-2 px-3 fw-semibold w-100" style="border-radius: 8px; font-size: 0.8rem;">
+                                <i class="bi bi-check-circle me-1"></i>Upload & Import
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer border-top-0 p-4 pt-0">
+                <button type="button" class="btn btn-secondary px-4 w-100" data-bs-dismiss="modal" style="border-radius: 8px;">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
 @endsection
