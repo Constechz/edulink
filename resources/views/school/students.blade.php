@@ -14,6 +14,18 @@
 @endsection
 
 @section('content')
+@php
+    $studentExportData = $students->map(fn($s) => [
+        'ID_Number' => $s->student_id_number,
+        'Name' => ($s->first_name . ' ' . $s->middle_name . ' ' . $s->last_name),
+        'Gender' => $s->gender,
+        'DOB' => $s->date_of_birth ? $s->date_of_birth->format('Y-m-d') : 'N/A',
+        'Class' => $s->currentClass ? $s->currentClass->name : 'N/A',
+        'Stream' => $s->currentStream ? $s->currentStream->name : 'N/A',
+        'Campus' => $s->campus ? $s->campus->name : 'Global',
+        'Status' => $s->status
+    ]);
+@endphp
 <style>
     .btn-filter {
         background-color: #fff;
@@ -1028,18 +1040,7 @@
     }
 </script>
 
-@php
-    $studentExportData = $students->map(fn($s) => [
-        'ID_Number' => $s->student_id_number,
-        'Name' => ($s->first_name . ' ' . $s->middle_name . ' ' . $s->last_name),
-        'Gender' => $s->gender,
-        'DOB' => $s->date_of_birth ? $s->date_of_birth->format('Y-m-d') : 'N/A',
-        'Class' => $s->currentClass ? $s->currentClass->name : 'N/A',
-        'Stream' => $s->currentStream ? $s->currentStream->name : 'N/A',
-        'Campus' => $s->campus ? $s->campus->name : 'Global',
-        'Status' => $s->status
-    ]);
-@endphp
+
 
 <!-- IMPORT / EXPORT MODAL -->
 <div class="modal fade" id="importExportStudentModal" tabindex="-1" aria-hidden="true">
