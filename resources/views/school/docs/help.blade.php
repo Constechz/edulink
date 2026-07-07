@@ -114,6 +114,24 @@
                             </div>
 
                             <div class="card border-0 bg-light p-3 mb-4 rounded-3 shadow-none">
+                                <h6 class="fw-bold text-dark mb-2"><i class="bi bi-mortarboard text-purple me-2"></i>2b. Step-by-Step Guide: Configuring a KG to JHS School</h6>
+                                <p class="mb-3 small">For a standard basic school spanning Nursery/KG to Junior High School (JHS), follow this implementation roadmap:</p>
+                                <ol class="mb-0 ps-3 small" style="line-height: 1.6;">
+                                    <li class="mb-2"><strong>Campus & Calendar:</strong> Add your primary campuses under <code>Campuses</code>. Setup the active academic year (e.g. 2026/2027) and terms (Term 1, 2, 3) in settings.</li>
+                                    <li class="mb-2"><strong>Departments & Programmes:</strong> Under <code>Programmes</code>, create a general program (e.g. <em>Basic Education</em>) as a container. Create preschool, primary, and JHS departments to organize staff.</li>
+                                    <li class="mb-2"><strong>Class Streams Setup:</strong> When creating classes in <code>Classes & Streams</code>, map them to correct level scopes:
+                                        <ul class="mb-0 ps-3">
+                                            <li><strong>KG 1 - KG 2:</strong> Set level scope to <code>KG</code>.</li>
+                                            <li><strong>Class 1 - Class 6:</strong> Set level scope to <code>Primary</code>.</li>
+                                            <li><strong>JHS 1 - JHS 3:</strong> Set level scope to <code>JHS</code>.</li>
+                                        </ul>
+                                    </li>
+                                    <li class="mb-2"><strong>Subjects Roster:</strong> Register NaCCA-compliant subjects under <code>Subjects</code> (e.g. Numeracy for KG, OWOP for Primary, Integrated Science and Computing for JHS) and map them to their respective class rosters.</li>
+                                    <li class="mb-2"><strong>Grading & Promotion Rules:</strong> The system automatically assigns standard GES scales (Standards-Based for KG/Primary, BECE 9-point scale for JHS) to each level. Configure promotions rules under <code>Student Promotions -> Promotion Rules</code>.</li>
+                                </ol>
+                            </div>
+
+                            <div class="card border-0 bg-light p-3 mb-4 rounded-3 shadow-none">
                                 <h6 class="fw-bold text-dark mb-2"><i class="bi bi-sliders text-success me-2"></i>3. Configuring the Dynamic Scoring Engine (Continuous Assessment)</h6>
                                 <p class="mb-2 small">Each school independently configures continuous assessment formulas to match their internal policies or Ghana Education Service (GES) directives:</p>
                                 <ul class="mb-2 ps-3 small">
