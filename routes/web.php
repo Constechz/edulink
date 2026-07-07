@@ -423,12 +423,44 @@ Route::middleware(['auth', 'tenant'])->group(function () {
 
     Route::get('/dashboard', function () {
         $user = Auth::user();
-        if ($user && $user->role) {
-            if ($user->role->slug === 'student') {
-                return redirect()->route('school.student-portal.dashboard');
+        if ($user) {
+            // Redirect to subdomain if accessing from the main platform domain
+            if ($user->school_id) {
+                $school = \App\Models\School::find($user->school_id);
+                if ($school) {
+                    $subdomain = $school->subdomain;
+                    $host = request()->getHost();
+                    $mainUrl = config('app.url'); // e.g., https://edulink.constechz.com
+                    
+                    $parsedUrl = parse_url($mainUrl);
+                    $baseHost = $parsedUrl['host'] ?? 'edulink.constechz.com';
+                    $scheme = $parsedUrl['scheme'] ?? 'https';
+                    $port = isset($parsedUrl['port']) ? ':' . $parsedUrl['port'] : '';
+                    
+                    if ($host === $baseHost) {
+                        $redirectHost = $subdomain . '.' . $baseHost . $port;
+                        $path = '/dashboard';
+                        if (!$school->onboarding_completed) {
+                            $path = '/school/onboarding';
+                        } elseif ($user->role) {
+                            if ($user->role->slug === 'student') {
+                                $path = '/school/student-portal/dashboard';
+                            } elseif ($user->role->slug === 'parent') {
+                                $path = '/school/parent-portal/dashboard';
+                            }
+                        }
+                        return redirect()->away($scheme . '://' . $redirectHost . $path);
+                    }
+                }
             }
-            if ($user->role->slug === 'parent') {
-                return redirect()->route('school.parent-portal.dashboard');
+
+            if ($user->role) {
+                if ($user->role->slug === 'student') {
+                    return redirect()->route('school.student-portal.dashboard');
+                }
+                if ($user->role->slug === 'parent') {
+                    return redirect()->route('school.parent-portal.dashboard');
+                }
             }
         }
         return view('school.dashboard');
