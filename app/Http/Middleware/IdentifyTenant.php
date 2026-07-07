@@ -51,7 +51,10 @@ class IdentifyTenant
             
             if (count($domainParts) > 2) {
                 $subdomain = $domainParts[0];
-                if ($subdomain !== 'www' && $subdomain !== 'admin') {
+                $mainHostParts = explode('.', parse_url(config('app.url'), PHP_URL_HOST));
+                $mainSubdomain = $mainHostParts[0] ?? 'edulink';
+                
+                if ($subdomain !== 'www' && $subdomain !== 'admin' && $subdomain !== $mainSubdomain) {
                     $tenant = \Illuminate\Support\Facades\Cache::remember("school_subdomain_{$subdomain}", 3600, function () use ($subdomain) {
                         return School::where('subdomain', $subdomain)->first();
                     });
