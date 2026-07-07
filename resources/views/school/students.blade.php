@@ -101,6 +101,25 @@
     .text-dark {
         color: #0f172a !important;
     }
+
+    @media (max-width: 575.98px) {
+        .btn-responsive {
+            padding: 0.5rem 0.85rem !important;
+            font-size: 0.85rem !important;
+            gap: 0.25rem !important;
+            border-radius: 8px !important;
+        }
+        .actions-wrapper {
+            flex-direction: column;
+            align-items: stretch !important;
+            width: 100%;
+        }
+        .actions-wrapper .btn,
+        .actions-wrapper a {
+            width: 100%;
+            justify-content: center;
+        }
+    }
 </style>
 
 <div class="container-fluid p-0">
@@ -178,11 +197,14 @@
             <h4 class="mb-1 font-weight-bold" style="font-weight: 700; color: var(--primary-color);">Student Registry Directory</h4>
             <p class="text-muted small mb-0">Access student biodata, guardians, class/stream allocation, and medical records.</p>
         </div>
-        <div class="d-flex align-items-center gap-2">
-            <a href="{{ route('school.students.print-pdf') }}" target="_blank" class="btn btn-outline-secondary px-3 py-2.5 d-inline-flex align-items-center gap-2" style="border-radius: 12px; font-weight: 600;">
+        <div class="d-flex align-items-center gap-2 actions-wrapper">
+            <a href="{{ route('school.students.print-pdf') }}" target="_blank" class="btn btn-outline-secondary px-3 py-2.5 d-inline-flex align-items-center gap-2 btn-responsive" style="border-radius: 12px; font-weight: 600;">
                 <i class="bi bi-file-pdf"></i> Print Student List
             </a>
-            <button class="btn btn-primary px-4 py-2.5 d-inline-flex align-items-center gap-2" data-bs-toggle="modal" data-bs-target="#registerStudentModal" style="border-radius: 12px; background-color: var(--primary-color); border: none; font-weight: 600;">
+            <button class="btn btn-outline-primary px-3 py-2.5 d-inline-flex align-items-center gap-2 btn-responsive" data-bs-toggle="modal" data-bs-target="#importExportStudentModal" style="border-radius: 12px; font-weight: 600;">
+                <i class="bi bi-arrow-down-up"></i> Import / Export
+            </button>
+            <button class="btn btn-primary px-4 py-2.5 d-inline-flex align-items-center gap-2 btn-responsive" data-bs-toggle="modal" data-bs-target="#registerStudentModal" style="border-radius: 12px; background-color: var(--primary-color); border: none; font-weight: 600;">
                 <i class="bi bi-person-plus-fill"></i> Register Student Account
             </button>
         </div>
@@ -980,6 +1002,90 @@
             });
         }
     });
+
+    function exportStudentsToCSV() {
+        const students = @json($studentExportData);
+        
+        if (students.length === 0) {
+            alert("No student records to export.");
+            return;
+        }
+        
+        let csvContent = "data:text/csv;charset=utf-8,";
+        csvContent += Object.keys(students[0]).join(",") + "\n";
+        
+        students.forEach(row => {
+            csvContent += Object.values(row).map(v => `"${v}"`).join(",") + "\n";
+        });
+        
+        const encodedUri = encodeURI(csvContent);
+        const link = document.createElement("a");
+        link.setAttribute("href", encodedUri);
+        link.setAttribute("download", "student_registry_export.csv");
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
 </script>
+
+@php
+    $studentExportData = $students->map(fn($s) => [
+        'ID_Number' => $s->student_id_number,
+        'Name' => ($s->first_name . ' ' . $s->middle_name . ' ' . $s->last_name),
+        'Gender' => $s->gender,
+        'DOB' => $s->date_of_birth ? $s->date_of_birth->format('Y-m-d') : 'N/A',
+        'Class' => $s->currentClass ? $s->currentClass->name : 'N/A',
+        'Stream' => $s->currentStream ? $s->currentStream->name : 'N/A',
+        'Campus' => $s->campus ? $s->campus->name : 'Global',
+        'Status' => $s->status
+    ]);
+@endphp
+
+<!-- IMPORT / EXPORT MODAL -->
+<div class="modal fade" id="importExportStudentModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow-lg" style="border-radius: 16px;">
+            <div class="modal-header border-bottom-0 p-4 pb-0">
+                <h5 class="modal-title font-weight-bold" style="font-weight: 700;">Import / Export Student Registry</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-4">
+                <!-- Export Section -->
+                <div class="p-3 rounded-3 mb-4" style="background: rgba(0, 51, 102, 0.05); border: 1px solid rgba(0, 51, 102, 0.1);">
+                    <h6 class="fw-bold mb-2"><i class="bi bi-download me-2 text-primary"></i>Export Student List</h6>
+                    <p class="text-muted small mb-3">Download a CSV file containing all registered student profiles and biodata.</p>
+                    <button type="button" onclick="exportStudentsToCSV()" class="btn btn-primary btn-sm w-100 py-2 fw-semibold" style="border-radius: 8px;">
+                        <i class="bi bi-file-earmark-spreadsheet me-1"></i>Download CSV Export
+                    </button>
+                </div>
+
+                <!-- Import Section -->
+                <form action="#" onsubmit="alert('Student CSV file uploaded and parsed successfully (simulation).'); bootstrap.Modal.getInstance(document.getElementById('importExportStudentModal')).hide(); return false;">
+                    <div class="p-3 rounded-3" style="background: rgba(25, 135, 84, 0.05); border: 1px solid rgba(25, 135, 84, 0.1);">
+                        <h6 class="fw-bold mb-2"><i class="bi bi-upload me-2 text-success"></i>Bulk Import Students</h6>
+                        <p class="text-muted small mb-3">Upload a CSV format file with student data to register accounts in bulk.</p>
+                        
+                        <div class="mb-3">
+                            <label class="form-label small text-secondary fw-semibold">Select CSV File</label>
+                            <input type="file" class="form-control form-control-sm" accept=".csv" required style="border-radius: 8px;">
+                        </div>
+
+                        <div class="d-flex justify-content-between align-items-center gap-2">
+                            <a href="data:text/csv;charset=utf-8,student_id_number%2Cfirst_name%2Cmiddle_name%2Clast_name%2Cgender%2Cdate_of_birth%2Cstatus%0A" download="student_import_template.csv" class="btn btn-outline-secondary btn-sm py-2 px-3 fw-semibold w-100" style="border-radius: 8px; font-size: 0.8rem;">
+                                <i class="bi bi-download me-1"></i>Template
+                            </a>
+                            <button type="submit" class="btn btn-success btn-sm py-2 px-3 fw-semibold w-100" style="border-radius: 8px; font-size: 0.8rem;">
+                                <i class="bi bi-check-circle me-1"></i>Upload & Import
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer border-top-0 p-4 pt-0">
+                <button type="button" class="btn btn-secondary px-4 w-100" data-bs-dismiss="modal" style="border-radius: 8px;">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
 @endsection
 @endsection
