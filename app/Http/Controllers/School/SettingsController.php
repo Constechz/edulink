@@ -223,11 +223,15 @@ class SettingsController extends Controller
     /**
      * Update grading scale items (min/max scores, points, grades, descriptions)
      */
-    public function updateGradingScale(Request $request, \App\Models\GradingScale $scale)
+    public function updateGradingScale(Request $request, $school_subdomain, $scale = null)
     {
         $schoolId = $request->user()->school_id;
 
-        if ($scale->school_id !== $schoolId) {
+        $scaleInstance = $scale instanceof \App\Models\GradingScale 
+            ? $scale 
+            : \App\Models\GradingScale::findOrFail($scale);
+
+        if ($scaleInstance->school_id !== $schoolId) {
             abort(403);
         }
 
@@ -243,14 +247,14 @@ class SettingsController extends Controller
 
         // Sync items: identify deleted records
         $submittedIds = collect($request->items)->pluck('id')->filter()->toArray();
-        \App\Models\GradingScaleItem::where('grading_scale_id', $scale->id)
+        \App\Models\GradingScaleItem::where('grading_scale_id', $scaleInstance->id)
             ->whereNotIn('id', $submittedIds)
             ->delete();
 
         foreach ($request->items as $itemData) {
             if (!empty($itemData['id'])) {
                 // Update existing item
-                $item = \App\Models\GradingScaleItem::where('grading_scale_id', $scale->id)
+                $item = \App\Models\GradingScaleItem::where('grading_scale_id', $scaleInstance->id)
                     ->where('id', $itemData['id'])
                     ->first();
                 
@@ -266,7 +270,7 @@ class SettingsController extends Controller
             } else {
                 // Create new item
                 \App\Models\GradingScaleItem::create([
-                    'grading_scale_id' => $scale->id,
+                    'grading_scale_id' => $scaleInstance->id,
                     'grade' => $itemData['grade'],
                     'min_score' => $itemData['min_score'],
                     'max_score' => $itemData['max_score'],
