@@ -68,6 +68,25 @@ class IdentifyTenant
             }
         }
 
+        if (!$tenant) {
+            $schoolId = $request->header('X-School-ID') 
+                        ?? $request->get('school_id') 
+                        ?? $request->session()->get('school_id');
+            
+            if (!$schoolId && auth()->check()) {
+                $schoolId = auth()->user()->school_id;
+            }
+
+            if ($schoolId) {
+                $tenant = \Illuminate\Support\Facades\Cache::remember("school_{$schoolId}", 3600, function () use ($schoolId) {
+                    return School::find($schoolId);
+                });
+            }
+        }
+
+        // Always bind 'tenant' to the container (even if null) to avoid BindingResolutionException
+        app()->instance('tenant', $tenant);
+
         if ($tenant) {
             // Automatically mark trial as expired if it has passed
             if ($tenant->subscription_status === 'trial' && $tenant->trial_ends_at && $tenant->trial_ends_at->isPast()) {
@@ -79,7 +98,6 @@ class IdentifyTenant
                 abort(403, 'This school account is suspended.');
             }
 
-            app()->instance('tenant', $tenant);
             $request->session()->put('school_id', $tenant->id);
 
             // Redirect expired tenants to the billing dashboard
