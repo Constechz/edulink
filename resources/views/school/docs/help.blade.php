@@ -173,7 +173,7 @@
                                     <li>HODs/Headteachers review the lists, submit overrides if necessary, and approve to publish the decisions.</li>
                                     <li><strong>Terminal Candidates:</strong> The engine automatically excludes Basic 9 (JHS 3) and SHS 3 students from internal promotions, routing them to BECE/WASSCE placement lists instead.</li>
                                 </ul>
-                                <div class="p-3 bg-white rounded-3 border">
+                                <div class="p-3 rounded-3 border" style="background: var(--card-bg, #ffffff);">
                                     <span class="d-block fw-bold text-dark mb-2 small"><i class="bi bi-gear-fill me-1"></i> Admin Setup Guide: How to Configure Rules</span>
                                     <ol class="small text-muted mb-3 ps-3">
                                         <li class="mb-1">Navigate to <strong>Student Promotions -> Promotion Rules</strong> from the left sidebar.</li>
@@ -239,10 +239,10 @@
                         <!-- Formulas Reference -->
                         <div class="bg-light p-3 rounded border mb-4">
                             <h6 class="fw-bold text-dark"><i class="bi bi-calculator-fill text-primary me-2"></i>Standard Scaling Formula</h6>
-                            <div class="p-2 bg-white rounded border font-monospace small mb-2 text-center text-dark">
+                            <div class="p-2 rounded border font-monospace small mb-2 text-center text-dark" style="background: var(--card-bg, #ffffff);">
                                 {{ $quickRefSba['formula_class'] ?? 'Scaled Class Score = (Raw Class Total ÷ Class Max) × Class Weight' }}
                             </div>
-                            <div class="p-2 bg-white rounded border font-monospace small text-center text-dark">
+                            <div class="p-2 rounded border font-monospace small text-center text-dark" style="background: var(--card-bg, #ffffff);">
                                 {{ $quickRefSba['formula_exam'] ?? 'Scaled Exam Score = (Raw Exam Score ÷ Exam Max) × Exam Weight' }}
                             </div>
                             <p class="small text-muted mt-2 mb-0"><strong>Example:</strong> {{ $quickRefSba['example_text'] ?? '' }}</p>
