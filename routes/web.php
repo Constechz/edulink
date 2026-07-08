@@ -137,6 +137,7 @@ Route::middleware(['auth', 'super_admin'])->prefix('super-admin')->name('super-a
     Route::post('/email-settings/update', [App\Http\Controllers\SuperAdmin\SuperAdminAnalyticsController::class, 'updateEmailSettings'])->name('email-settings.update');
     Route::post('/email-settings/send', [App\Http\Controllers\SuperAdmin\SuperAdminAnalyticsController::class, 'sendCustomEmail'])->name('email-settings.send');
     Route::post('/email-settings/test', [App\Http\Controllers\SuperAdmin\SuperAdminAnalyticsController::class, 'testEmailSettings'])->name('email-settings.test');
+    Route::post('/email-settings/send-notification', [App\Http\Controllers\SuperAdmin\SuperAdminAnalyticsController::class, 'sendSystemNotification'])->name('email-settings.send-notification');
     Route::delete('/email-settings/logs/{id}', [App\Http\Controllers\SuperAdmin\SuperAdminAnalyticsController::class, 'destroyEmailLog'])->name('email-settings.logs.destroy');
     Route::post('/users/{userId}/toggle-status', [DashboardController::class, 'toggleUserStatus'])->name('users.toggle-status');
     Route::post('/schools/{schoolId}/toggle-status', [DashboardController::class, 'toggleSchoolStatus'])->name('schools.toggle-status');

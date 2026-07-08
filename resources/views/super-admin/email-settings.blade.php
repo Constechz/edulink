@@ -301,6 +301,11 @@
                             <i class="bi bi-envelope-plus me-2"></i>Compose Mail
                         </button>
                     </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link fw-bold text-uppercase py-2.5 rounded-3" id="inapp-tab" data-bs-toggle="tab" data-bs-target="#inapp" type="button" role="tab" aria-controls="inapp" aria-selected="false" style="font-size: 0.8rem;">
+                            <i class="bi bi-bell me-2"></i>In-App Blast
+                        </button>
+                    </li>
                 </ul>
 
                 <div class="tab-content" id="emailPortalTabContent">
@@ -453,6 +458,62 @@
 
                             <button type="submit" class="btn btn-success w-100 rounded-3 py-2.5 fw-bold shadow-xs">
                                 <i class="bi bi-send-check-fill me-2"></i>Send Custom Broadcast
+                            </button>
+                        </form>
+                    </div>
+
+                    <!-- Tab 3: Compose In-App Notification Form -->
+                    <div class="tab-pane fade" id="inapp" role="tabpanel" aria-labelledby="inapp-tab">
+                        <div class="d-flex align-items-center mb-3">
+                            <i class="bi bi-bell-fill text-primary fs-5 me-2"></i>
+                            <h6 class="fw-bold text-dark mb-0">Compose In-App Notification</h6>
+                        </div>
+                        <p class="text-muted small mb-4">Send instant database notifications to users. These will display in real-time inside the portal's notification bell icon.</p>
+                        
+                        <form action="{{ route('super-admin.email-settings.send-notification') }}" method="POST">
+                            @csrf
+                            
+                            <div class="mb-3">
+                                <label for="notif_target" class="form-label-custom">Target Audience Group</label>
+                                <div class="custom-input-group">
+                                    <i class="bi bi-people"></i>
+                                    <select class="form-select" id="notif_target" name="notif_target" required>
+                                        <option value="all_admins">All School Administrators</option>
+                                        <option value="all_users">All System Users Globally</option>
+                                        <option value="specific_school">All Users of a Specific Tenant School</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- Specific School Selector for Notifications (Hidden by default) -->
+                            <div class="mb-3 d-none" id="notif_school_selector_group">
+                                <label for="notif_school_id" class="form-label-custom">Select Targeted School</label>
+                                <div class="custom-input-group">
+                                    <i class="bi bi-bank"></i>
+                                    <select class="form-select" id="notif_school_id" name="notif_school_id">
+                                        <option value="">-- Choose Tenant School --</option>
+                                        @foreach($schools as $school)
+                                            <option value="{{ $school->id }}">{{ $school->name }} ({{ $school->school_code }})</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="notif_title" class="form-label-custom">Notification Banner Title</label>
+                                <div class="custom-input-group">
+                                    <i class="bi bi-sticky"></i>
+                                    <input type="text" class="form-control" id="notif_title" name="notif_title" required placeholder="Enter short title (e.g. System Update)">
+                                </div>
+                            </div>
+
+                            <div class="mb-4">
+                                <label for="notif_body" class="form-label-custom">Notification Message Content</label>
+                                <textarea class="form-control rounded-3 shadow-xs p-3 small" id="notif_body" name="notif_body" rows="6" required placeholder="Type your custom notification message here..." style="border-color: var(--border-color); background-color: var(--theme-toggle-bg); color: var(--text-main);"></textarea>
+                            </div>
+
+                            <button type="submit" class="btn btn-primary w-100 rounded-3 py-2.5 fw-bold shadow-xs d-flex align-items-center justify-content-center gap-2">
+                                <i class="bi bi-send-fill"></i> Dispatch In-App Blast
                             </button>
                         </form>
                     </div>
@@ -662,6 +723,24 @@
 
         targetSelect.addEventListener('change', toggleTargetFields);
         toggleTargetFields(); // Run check on page load
+
+        // Notification targeted inputs toggle
+        const notifTargetSelect = document.getElementById('notif_target');
+        const notifSchoolGroup = document.getElementById('notif_school_selector_group');
+        const notifSchoolInput = document.getElementById('notif_school_id');
+
+        function toggleNotifFields() {
+            if (notifTargetSelect.value === 'specific_school') {
+                notifSchoolGroup.classList.remove('d-none');
+                notifSchoolInput.setAttribute('required', 'required');
+            } else {
+                notifSchoolGroup.classList.add('d-none');
+                notifSchoolInput.removeAttribute('required');
+            }
+        }
+
+        notifTargetSelect.addEventListener('change', toggleNotifFields);
+        toggleNotifFields(); // Run check on page load
     });
 </script>
 @endsection

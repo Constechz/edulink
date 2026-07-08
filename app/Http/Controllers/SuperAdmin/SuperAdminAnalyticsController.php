@@ -705,4 +705,56 @@ class SuperAdminAnalyticsController extends Controller
 
         return redirect()->back()->with('success', 'Environment settings (.env) restored successfully from .env.bak! Config cache cleared.');
     }
+
+    /**
+     * Dispatch a system-wide or school-specific in-app notification blast.
+     */
+    public function sendSystemNotification(Request $request)
+    {
+        $request->validate([
+            'notif_target' => 'required|string|in:all_admins,all_users,specific_school',
+            'notif_school_id' => 'nullable|integer|exists:schools,id',
+            'notif_title' => 'required|string|max:150',
+            'notif_body' => 'required|string|max:1000',
+        ]);
+
+        $title = $request->notif_title;
+        $body = $request->notif_body;
+        $target = $request->notif_target;
+
+        // Query active users depending on target
+        $query = \App\Models\User::withoutGlobalScopes()->where('is_active', true);
+
+        if ($target === 'specific_school') {
+            if (!$request->notif_school_id) {
+                return redirect()->back()->withErrors(['notif_school_id' => 'Please select a specific school for the targeted blast.']);
+            }
+            $query->where('school_id', $request->notif_school_id);
+        } elseif ($target === 'all_admins') {
+            // Find school admins by checking role slug
+            $query->whereHas('role', function($q) {
+                $q->where('slug', 'admin');
+            });
+        }
+
+        $users = $query->get();
+
+        if ($users->isEmpty()) {
+            return redirect()->back()->withErrors(['notif_target' => 'No active users match the selected target audience.']);
+        }
+
+        // Loop and dispatch notification logs
+        foreach ($users as $user) {
+            \App\Models\NotificationLog::create([
+                'school_id' => $user->school_id,
+                'user_id' => $user->id,
+                'title' => $title,
+                'body' => $body,
+                'type' => 'system',
+                'is_read' => false,
+            ]);
+        }
+
+        return redirect()->back()->with('success', 'In-app notification blast dispatched successfully to ' . number_format($users->count()) . ' users.');
+    }
 }
