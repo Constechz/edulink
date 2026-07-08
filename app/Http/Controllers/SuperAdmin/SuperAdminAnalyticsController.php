@@ -765,7 +765,7 @@ class SuperAdminAnalyticsController extends Controller
                 'user_id' => $user->id,
                 'title' => $title,
                 'body' => $body,
-                'type' => 'system',
+                'type' => 'push',
                 'is_read' => false,
             ]);
         }
