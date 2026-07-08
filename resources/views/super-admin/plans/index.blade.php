@@ -52,7 +52,7 @@
                                 <th>Yearly Price</th>
                                 <th>Enrollment Quotas</th>
                                 <th>Active Tenants</th>
-                                <th>Storage / SMS Package</th>
+                                <th>SMS Package</th>
                                 <th>Status</th>
                                 <th class="text-center">Actions</th>
                             </tr>
@@ -80,7 +80,6 @@
                                     </td>
                                     <td class="text-muted">
                                         <ul class="list-unstyled mb-0 small">
-                                            <li><i class="bi bi-hdd-fill text-secondary me-1"></i>Storage: <strong>{{ $plan->storage_gb }} GB</strong></li>
                                             <li><i class="bi bi-chat-fill text-secondary me-1"></i>SMS Credits: <strong>{{ number_format($plan->sms_credits_monthly) }}/term</strong></li>
                                         </ul>
                                     </td>

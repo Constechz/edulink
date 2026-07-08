@@ -1899,9 +1899,6 @@
                                     @if($plan->sms_credits_monthly > 0)
                                         <li><i class="bi bi-check-circle-fill text-warning"></i><span>{{ number_format($plan->sms_credits_monthly) }} monthly SMS credits</span></li>
                                     @endif
-                                    @if($plan->storage_gb > 0)
-                                        <li><i class="bi bi-check-circle-fill text-warning"></i><span>{{ $plan->storage_gb }} GB storage space</span></li>
-                                    @endif
                                 </ul>
                                 
                                 <a href="{{ route('register') }}" class="btn-price-{{ $index === 1 ? 'primary' : 'outline' }} w-100 text-decoration-none text-center">

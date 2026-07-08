@@ -83,14 +83,9 @@
                         </div>
 
                         <!-- Storage & SMS Package -->
-                        <div class="col-md-6">
-                            <label class="form-label small fw-bold text-dark">Included Disk Storage (GB)</label>
-                            <div class="input-group">
-                                <input type="number" min="1" name="storage_gb" class="form-control rounded-start-3" value="{{ old('storage_gb', '20') }}" required>
-                                <span class="input-group-text bg-light rounded-end-3">GB Space</span>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
+                        <input type="hidden" name="storage_gb" value="{{ old('storage_gb', '20') }}">
+
+                        <div class="col-12">
                             <label class="form-label small fw-bold text-dark">Termly SMS Credits Bundle</label>
                             <div class="input-group">
                                 <input type="number" min="0" name="sms_credits_monthly" class="form-control rounded-start-3" value="{{ old('sms_credits_monthly', '1000') }}" required>
