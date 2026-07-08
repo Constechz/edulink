@@ -6,9 +6,10 @@
     <title>{{ $page->title }} - {{ $settings->site_name }}</title>
     <meta name="description" content="{{ $page->meta_description ?? $settings->site_tagline }}">
     @if(!empty($settings->favicon_path))
-        <link rel="icon" type="image/x-icon" href="{{ asset('storage/' . $settings->favicon_path) }}">
+        <link rel="icon" type="image/png" href="{{ asset('storage/' . $settings->favicon_path) }}">
     @else
-        <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}">
+        <link rel="icon" type="image/png" href="{{ asset('favicon.png') }}">
+        <link rel="shortcut icon" type="image/x-icon" href="{{ asset('favicon.ico') }}">
     @endif
     
     <!-- Google Fonts dynamically loaded from branding settings -->
