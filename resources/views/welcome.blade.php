@@ -1844,99 +1844,174 @@
             </div>
             
             <div class="row g-4 text-start justify-content-center">
-                <!-- Basic Trial -->
-                <div class="col-md-6 col-lg-4">
-                    <div class="pricing-card">
-                        <h4 class="fw-bold mb-1 text-white">{{ \App\Models\SystemSetting::getVal('welcome_price1_title', 'Starter Trial') }}</h4>
-                        <p class="text-secondary small">{{ \App\Models\SystemSetting::getVal('welcome_price1_sub', 'Evaluate basic capabilities') }}</p>
-                        @php
-                            $priceText1 = \App\Models\SystemSetting::getVal('welcome_price1_price', 'GHS 0/14 days');
-                            $priceVal1 = $priceText1;
-                            $priceUnit1 = '';
-                            if (strpos($priceText1, '/') !== false) {
-                                list($priceVal1, $priceUnit1) = explode('/', $priceText1, 2);
-                            }
-                            $price1Features = explode("\n", trim(\App\Models\SystemSetting::getVal('welcome_price1_features', "Max 50 students\nBasic Student Register\nDaily Attendance logs\nSelf-managed onboarding")));
-                        @endphp
-                        <div class="pricing-price">
-                            <span class="price-amount">{{ $priceVal1 }}</span><span class="price-duration">@if($priceUnit1)/{{ $priceUnit1 }}@endif</span>
-                        </div>
-                        <p class="small text-secondary mb-4">{{ \App\Models\SystemSetting::getVal('welcome_price1_desc', 'Great to test the software features with real data before choosing a subscription plan.') }}</p>
-                        <ul class="pricing-list">
-                            @foreach($price1Features as $feat)
-                                @if(!empty(trim($feat)))
-                                    <li><i class="bi bi-check-circle-fill text-warning"></i><span>{{ trim($feat) }}</span></li>
-                                @endif
-                            @endforeach
-                        </ul>
-                        <a href="{{ route('register') }}" class="btn-price-outline w-100 text-decoration-none text-center">
-                            Start Free Trial
-                        </a>
-                    </div>
-                </div>
+                @php
+                    try {
+                        $plans = \App\Models\Plan::where('is_active', true)->orderBy('price_monthly', 'asc')->get();
+                    } catch (\Exception $e) {
+                        $plans = collect();
+                    }
+                @endphp
 
-                <!-- Standard Package (Popular) -->
-                <div class="col-md-6 col-lg-4">
-                    <div class="pricing-card popular">
-                        <div class="popular-badge">MOST POPULAR</div>
-                        <h4 class="fw-bold mb-1 text-white">{{ \App\Models\SystemSetting::getVal('welcome_price2_title', 'Standard School') }}</h4>
-                        <p class="text-secondary small">{{ \App\Models\SystemSetting::getVal('welcome_price2_sub', 'For single campus primary/secondary') }}</p>
-                        @php
-                            $priceText2 = \App\Models\SystemSetting::getVal('welcome_price2_price', 'GHS 450/month');
-                            $priceVal2 = $priceText2;
-                            $priceUnit2 = '';
-                            if (strpos($priceText2, '/') !== false) {
-                                list($priceVal2, $priceUnit2) = explode('/', $priceText2, 2);
-                            }
-                            $price2Features = explode("\n", trim(\App\Models\SystemSetting::getVal('welcome_price2_features', "Up to 800 students\nSmart Accounting & Bills\nGrading System & Report Cards\nParent & Teacher Portals\nSMS Notifications support")));
-                        @endphp
-                        <div class="pricing-price">
-                            <span class="price-amount">{{ $priceVal2 }}</span><span class="price-duration">@if($priceUnit2)/{{ $priceUnit2 }}@endif</span>
-                        </div>
-                        <p class="small text-secondary mb-4">{{ \App\Models\SystemSetting::getVal('welcome_price2_desc', 'Unlock automated grading and billing. Most chosen by growing private and model institutions.') }}</p>
-                        <ul class="pricing-list">
-                            @foreach($price2Features as $feat)
-                                @if(!empty(trim($feat)))
-                                    <li><i class="bi bi-check-circle-fill text-warning"></i><span>{{ trim($feat) }}</span></li>
+                @if($plans->isNotEmpty())
+                    @foreach($plans as $index => $plan)
+                        <div class="col-md-6 col-lg-4">
+                            <div class="pricing-card {{ $index === 1 ? 'popular' : '' }}">
+                                @if($index === 1)
+                                    <div class="popular-badge">MOST POPULAR</div>
                                 @endif
-                            @endforeach
-                        </ul>
-                        <a href="{{ route('register') }}" class="btn-price-primary w-100 text-decoration-none text-center">
-                            Get Standard Plan
-                        </a>
+                                <h4 class="fw-bold mb-1 text-white">{{ $plan->name }}</h4>
+                                <p class="text-secondary small">
+                                    @if($plan->max_students == -1)
+                                        Unlimited Students
+                                    @else
+                                        Up to {{ $plan->max_students }} students
+                                    @endif
+                                </p>
+                                
+                                <div class="pricing-price">
+                                    @if($plan->price_monthly == 0)
+                                        <span class="price-amount" data-monthly="Free" data-yearly="Free">Free</span>
+                                        <span class="price-duration" data-monthly="" data-yearly=""></span>
+                                    @else
+                                        <span class="price-amount" data-monthly="GHS {{ number_format($plan->price_monthly, 0) }}" data-yearly="GHS {{ number_format($plan->price_yearly, 0) }}">GHS {{ number_format($plan->price_monthly, 0) }}</span>
+                                        <span class="price-duration" data-monthly="/month" data-yearly="/year, billed annually">/month</span>
+                                    @endif
+                                </div>
+                                
+                                <p class="small text-secondary mb-4">
+                                    @if($plan->price_monthly == 0)
+                                        Great to test the software features with real data before choosing a subscription plan.
+                                    @elseif($plan->max_students == -1)
+                                        For school groups with multiple branches, heavy resource operations, or dedicated servers.
+                                    @else
+                                        Unlock automated grading and billing. Most chosen by growing private and model institutions.
+                                    @endif
+                                </p>
+                                
+                                <ul class="pricing-list">
+                                    @if(is_array($plan->features))
+                                        @foreach($plan->features as $feat)
+                                            @if(!empty(trim($feat)))
+                                                <li><i class="bi bi-check-circle-fill text-warning"></i><span>{{ ucwords(str_replace('_', ' ', trim($feat))) }}</span></li>
+                                            @endif
+                                        @endforeach
+                                    @endif
+                                    @if($plan->sms_credits_monthly > 0)
+                                        <li><i class="bi bi-check-circle-fill text-warning"></i><span>{{ number_format($plan->sms_credits_monthly) }} monthly SMS credits</span></li>
+                                    @endif
+                                    @if($plan->storage_gb > 0)
+                                        <li><i class="bi bi-check-circle-fill text-warning"></i><span>{{ $plan->storage_gb }} GB storage space</span></li>
+                                    @endif
+                                </ul>
+                                
+                                <a href="{{ route('register') }}" class="btn-price-{{ $index === 1 ? 'primary' : 'outline' }} w-100 text-decoration-none text-center">
+                                    @if($plan->price_monthly == 0)
+                                        Start Free Trial
+                                    @elseif($plan->max_students == -1)
+                                        Contact Sales
+                                    @else
+                                        Get {{ $plan->name }} Plan
+                                    @endif
+                                </a>
+                            </div>
+                        </div>
+                    @endforeach
+                @else
+                    <!-- Fallback: Static settings pricing cards -->
+                    <!-- Basic Trial -->
+                    <div class="col-md-6 col-lg-4">
+                        <div class="pricing-card">
+                            <h4 class="fw-bold mb-1 text-white">{{ \App\Models\SystemSetting::getVal('welcome_price1_title', 'Starter Trial') }}</h4>
+                            <p class="text-secondary small">{{ \App\Models\SystemSetting::getVal('welcome_price1_sub', 'Evaluate basic capabilities') }}</p>
+                            @php
+                                $priceText1 = \App\Models\SystemSetting::getVal('welcome_price1_price', 'GHS 0/14 days');
+                                $priceVal1 = $priceText1;
+                                $priceUnit1 = '';
+                                if (strpos($priceText1, '/') !== false) {
+                                    list($priceVal1, $priceUnit1) = explode('/', $priceText1, 2);
+                                }
+                                $price1Features = explode("\n", trim(\App\Models\SystemSetting::getVal('welcome_price1_features', "Max 50 students\nBasic Student Register\nDaily Attendance logs\nSelf-managed onboarding")));
+                            @endphp
+                            <div class="pricing-price">
+                                <span class="price-amount">{{ $priceVal1 }}</span><span class="price-duration">@if($priceUnit1)/{{ $priceUnit1 }}@endif</span>
+                            </div>
+                            <p class="small text-secondary mb-4">{{ \App\Models\SystemSetting::getVal('welcome_price1_desc', 'Great to test the software features with real data before choosing a subscription plan.') }}</p>
+                            <ul class="pricing-list">
+                                @foreach($price1Features as $feat)
+                                    @if(!empty(trim($feat)))
+                                        <li><i class="bi bi-check-circle-fill text-warning"></i><span>{{ trim($feat) }}</span></li>
+                                    @endif
+                                @endforeach
+                            </ul>
+                            <a href="{{ route('register') }}" class="btn-price-outline w-100 text-decoration-none text-center">
+                                Start Free Trial
+                            </a>
+                        </div>
                     </div>
-                </div>
 
-                <!-- Enterprise Plan -->
-                <div class="col-md-6 col-lg-4">
-                    <div class="pricing-card">
-                        <h4 class="fw-bold mb-1 text-white">{{ \App\Models\SystemSetting::getVal('welcome_price3_title', 'Institution Enterprise') }}</h4>
-                        <p class="text-secondary small">{{ \App\Models\SystemSetting::getVal('welcome_price3_sub', 'Custom deployments') }}</p>
-                        @php
-                            $priceText3 = \App\Models\SystemSetting::getVal('welcome_price3_price', 'Custom/negotiated');
-                            $priceVal3 = $priceText3;
-                            $priceUnit3 = '';
-                            if (strpos($priceText3, '/') !== false) {
-                                list($priceVal3, $priceUnit3) = explode('/', $priceText3, 2);
-                            }
-                            $price3Features = explode("\n", trim(\App\Models\SystemSetting::getVal('welcome_price3_features', "Unlimited Students\nCustom Branding & Subdomain\nDedicated DB Instance\nPremium 24/7 SLA Support\nAPI Access & Integrations")));
-                        @endphp
-                        <div class="pricing-price">
-                            <span class="price-amount">{{ $priceVal3 }}</span><span class="price-duration">@if($priceUnit3)/{{ $priceUnit3 }}@endif</span>
+                    <!-- Standard Package (Popular) -->
+                    <div class="col-md-6 col-lg-4">
+                        <div class="pricing-card popular">
+                            <div class="popular-badge">MOST POPULAR</div>
+                            <h4 class="fw-bold mb-1 text-white">{{ \App\Models\SystemSetting::getVal('welcome_price2_title', 'Standard School') }}</h4>
+                            <p class="text-secondary small">{{ \App\Models\SystemSetting::getVal('welcome_price2_sub', 'For single campus primary/secondary') }}</p>
+                            @php
+                                $priceText2 = \App\Models\SystemSetting::getVal('welcome_price2_price', 'GHS 450/month');
+                                $priceVal2 = $priceText2;
+                                $priceUnit2 = '';
+                                if (strpos($priceText2, '/') !== false) {
+                                    list($priceVal2, $priceUnit2) = explode('/', $priceText2, 2);
+                                }
+                                $price2Features = explode("\n", trim(\App\Models\SystemSetting::getVal('welcome_price2_features', "Up to 800 students\nSmart Accounting & Bills\nGrading System & Report Cards\nParent & Teacher Portals\nSMS Notifications support")));
+                            @endphp
+                            <div class="pricing-price">
+                                <span class="price-amount">{{ $priceVal2 }}</span><span class="price-duration">@if($priceUnit2)/{{ $priceUnit2 }}@endif</span>
+                            </div>
+                            <p class="small text-secondary mb-4">{{ \App\Models\SystemSetting::getVal('welcome_price2_desc', 'Unlock automated grading and billing. Most chosen by growing private and model institutions.') }}</p>
+                            <ul class="pricing-list">
+                                @foreach($price2Features as $feat)
+                                    @if(!empty(trim($feat)))
+                                        <li><i class="bi bi-check-circle-fill text-warning"></i><span>{{ trim($feat) }}</span></li>
+                                    @endif
+                                @endforeach
+                            </ul>
+                            <a href="{{ route('register') }}" class="btn-price-primary w-100 text-decoration-none text-center">
+                                Get Standard Plan
+                            </a>
                         </div>
-                        <p class="small text-secondary mb-4">{{ \App\Models\SystemSetting::getVal('welcome_price3_desc', 'For school groups with multiple branches, heavy resource operations, or dedicated servers.') }}</p>
-                        <ul class="pricing-list">
-                            @foreach($price3Features as $feat)
-                                @if(!empty(trim($feat)))
-                                    <li><i class="bi bi-check-circle-fill text-warning"></i><span>{{ trim($feat) }}</span></li>
-                                @endif
-                            @endforeach
-                        </ul>
-                        <a href="{{ route('register') }}" class="btn-price-outline w-100 text-decoration-none text-center">
-                            Contact Sales
-                        </a>
                     </div>
-                </div>
+
+                    <!-- Enterprise Plan -->
+                    <div class="col-md-6 col-lg-4">
+                        <div class="pricing-card">
+                            <h4 class="fw-bold mb-1 text-white">{{ \App\Models\SystemSetting::getVal('welcome_price3_title', 'Institution Enterprise') }}</h4>
+                            <p class="text-secondary small">{{ \App\Models\SystemSetting::getVal('welcome_price3_sub', 'Custom deployments') }}</p>
+                            @php
+                                $priceText3 = \App\Models\SystemSetting::getVal('welcome_price3_price', 'Custom/negotiated');
+                                $priceVal3 = $priceText3;
+                                $priceUnit3 = '';
+                                if (strpos($priceText3, '/') !== false) {
+                                    list($priceVal3, $priceUnit3) = explode('/', $priceText3, 2);
+                                }
+                                $price3Features = explode("\n", trim(\App\Models\SystemSetting::getVal('welcome_price3_features', "Unlimited Students\nCustom Branding & Subdomain\nDedicated DB Instance\nPremium 24/7 SLA Support\nAPI Access & Integrations")));
+                            @endphp
+                            <div class="pricing-price">
+                                <span class="price-amount">{{ $priceVal3 }}</span><span class="price-duration">@if($priceUnit3)/{{ $priceUnit3 }}@endif</span>
+                            </div>
+                            <p class="small text-secondary mb-4">{{ \App\Models\SystemSetting::getVal('welcome_price3_desc', 'For school groups with multiple branches, heavy resource operations, or dedicated servers.') }}</p>
+                            <ul class="pricing-list">
+                                @foreach($price3Features as $feat)
+                                    @if(!empty(trim($feat)))
+                                        <li><i class="bi bi-check-circle-fill text-warning"></i><span>{{ trim($feat) }}</span></li>
+                                    @endif
+                                @endforeach
+                            </ul>
+                            <a href="{{ route('register') }}" class="btn-price-outline w-100 text-decoration-none text-center">
+                                Contact Sales
+                            </a>
+                        </div>
+                    </div>
+                @endif
             </div>
         </div>
     </section>
@@ -2097,18 +2172,37 @@
                 }
                 
                 originalPrices.forEach(item => {
-                    const text = item.originalText;
-                    const numericPart = text.replace(/[^0-9.]/g, '');
-                    const nonNumericPart = text.replace(/[0-9.]/g, '').trim(); // e.g. "GHS "
-                    
-                    if (numericPart) {
-                        const value = parseFloat(numericPart);
-                        if (value > 0) {
-                            if (isAnnual) {
-                                const discountedRate = Math.round(value * 0.8 * 3);
-                                item.amountEl.textContent = nonNumericPart + discountedRate;
-                                if (item.durationEl) {
-                                    item.durationEl.textContent = '/year, billed annually';
+                    if (item.amountEl.hasAttribute('data-monthly')) {
+                        if (isAnnual) {
+                            item.amountEl.textContent = item.amountEl.getAttribute('data-yearly');
+                            if (item.durationEl) {
+                                item.durationEl.textContent = '/year, billed annually';
+                            }
+                        } else {
+                            item.amountEl.textContent = item.amountEl.getAttribute('data-monthly');
+                            if (item.durationEl) {
+                                item.durationEl.textContent = '/month';
+                            }
+                        }
+                    } else {
+                        const text = item.originalText;
+                        const numericPart = text.replace(/[^0-9.]/g, '');
+                        const nonNumericPart = text.replace(/[0-9.]/g, '').trim(); // e.g. "GHS "
+                        
+                        if (numericPart) {
+                            const value = parseFloat(numericPart);
+                            if (value > 0) {
+                                if (isAnnual) {
+                                    const discountedRate = Math.round(value * 0.8 * 3);
+                                    item.amountEl.textContent = nonNumericPart + discountedRate;
+                                    if (item.durationEl) {
+                                        item.durationEl.textContent = '/year, billed annually';
+                                    }
+                                } else {
+                                    item.amountEl.textContent = item.originalText;
+                                    if (item.durationEl) {
+                                        item.durationEl.textContent = item.originalDuration;
+                                    }
                                 }
                             } else {
                                 item.amountEl.textContent = item.originalText;
@@ -2121,11 +2215,6 @@
                             if (item.durationEl) {
                                 item.durationEl.textContent = item.originalDuration;
                             }
-                        }
-                    } else {
-                        item.amountEl.textContent = item.originalText;
-                        if (item.durationEl) {
-                            item.durationEl.textContent = item.originalDuration;
                         }
                     }
                 });
