@@ -52,7 +52,7 @@
 
                         <!-- Pricing Tiers -->
                         <div class="col-md-6">
-                            <label class="form-label small fw-bold text-dark">Monthly Pricing (GHS)</label>
+                            <label class="form-label small fw-bold text-dark">Termly Pricing (GHS)</label>
                             <div class="input-group">
                                 <span class="input-group-text bg-light rounded-start-3">GHS</span>
                                 <input type="number" step="0.01" min="0" name="price_monthly" class="form-control rounded-end-3" value="{{ old('price_monthly', $plan->price_monthly) }}" required>
@@ -92,10 +92,10 @@
                             </div>
                         </div>
                         <div class="col-md-6">
-                            <label class="form-label small fw-bold text-dark">Monthly SMS Credits Bundle</label>
+                            <label class="form-label small fw-bold text-dark">Termly SMS Credits Bundle</label>
                             <div class="input-group">
                                 <input type="number" min="0" name="sms_credits_monthly" class="form-control rounded-start-3" value="{{ old('sms_credits_monthly', $plan->sms_credits_monthly) }}" required>
-                                <span class="input-group-text bg-light rounded-end-3">SMS/mo</span>
+                                <span class="input-group-text bg-light rounded-end-3">SMS/term</span>
                             </div>
                         </div>
 

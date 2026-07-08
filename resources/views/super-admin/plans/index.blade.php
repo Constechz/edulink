@@ -48,7 +48,7 @@
                             <tr>
                                 <th>Plan ID</th>
                                 <th>Plan Name</th>
-                                <th>Monthly Price</th>
+                                <th>Termly Price</th>
                                 <th>Yearly Price</th>
                                 <th>Enrollment Quotas</th>
                                 <th>Active Tenants</th>
@@ -64,7 +64,7 @@
                                     <td>
                                         <span class="fw-bold text-dark fs-6">{{ $plan->name }}</span>
                                     </td>
-                                    <td class="fw-bold text-primary">GHS {{ number_format($plan->price_monthly, 2) }}</td>
+                                    <td class="fw-bold" style="color: var(--primary-color) !important;">GHS {{ number_format($plan->price_monthly, 2) }}</td>
                                     <td class="fw-bold text-success">GHS {{ number_format($plan->price_yearly, 2) }}</td>
                                     <td class="text-muted text-wrap">
                                         <ul class="list-unstyled mb-0 small">
@@ -81,7 +81,7 @@
                                     <td class="text-muted">
                                         <ul class="list-unstyled mb-0 small">
                                             <li><i class="bi bi-hdd-fill text-secondary me-1"></i>Storage: <strong>{{ $plan->storage_gb }} GB</strong></li>
-                                            <li><i class="bi bi-chat-fill text-secondary me-1"></i>SMS Credits: <strong>{{ number_format($plan->sms_credits_monthly) }}/mo</strong></li>
+                                            <li><i class="bi bi-chat-fill text-secondary me-1"></i>SMS Credits: <strong>{{ number_format($plan->sms_credits_monthly) }}/term</strong></li>
                                         </ul>
                                     </td>
                                     <td>
@@ -93,7 +93,7 @@
                                     </td>
                                     <td class="text-center">
                                         <div class="d-flex justify-content-center gap-2">
-                                            <a href="{{ route('super-admin.plans.edit', $plan->id) }}" class="btn btn-sm btn-outline-dark rounded-3 px-3.5 py-1.5" title="Edit Plan Details">
+                                            <a href="{{ route('super-admin.plans.edit', $plan->id) }}" class="btn btn-sm btn-outline-secondary rounded-3 px-3.5 py-1.5" title="Edit Plan Details">
                                                 <i class="bi bi-pencil-square me-1"></i>Edit
                                             </a>
                                             <form action="{{ route('super-admin.plans.destroy', $plan->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this subscription plan?')">
