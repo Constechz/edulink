@@ -116,34 +116,42 @@
             <!-- Report Card Print Credits Card -->
             <div class="glass-card p-4 mt-4">
                 <h5 class="fw-bold text-dark mb-3"><i class="bi bi-file-earmark-pdf-fill text-success me-2"></i>Report Print Credits</h5>
-                <div class="p-3 bg-light rounded-4 mb-4 text-center">
-                    <span class="text-muted small d-block mb-1">Current Credits Balance</span>
-                    <h3 class="fw-extrabold text-success mb-0">{{ $reportCredits }} <span style="font-size: 1rem;" class="text-muted fw-normal">credits</span></h3>
-                    <span class="text-muted small d-block mt-1">Rate: GHS {{ number_format($reportCardPrice, 2) }} / student card</span>
-                </div>
-                
-                <p class="text-muted small mb-4">
-                    Generate and download official PDF report cards for your students. Generating a student's card for the first time in a term consumes 1 credit. Subsequent downloads/prints are free.
-                </p>
+                @if(\App\Models\SystemSetting::getVal('report_card_payment_enabled', '1') == '0')
+                    <div class="p-4 bg-success bg-opacity-10 text-success rounded-4 text-center">
+                        <i class="bi bi-gift-fill fs-1 mb-3 d-block text-success"></i>
+                        <span class="fw-bold d-block fs-5 mb-1">Free Printing Active</span>
+                        <span class="small d-block text-muted">Report card printing payment has been deactivated by the platform admin. You can download and print report cards for free!</span>
+                    </div>
+                @else
+                    <div class="p-3 bg-light rounded-4 mb-4 text-center">
+                        <span class="text-muted small d-block mb-1">Current Credits Balance</span>
+                        <h3 class="fw-extrabold text-success mb-0">{{ $reportCredits }} <span style="font-size: 1rem;" class="text-muted fw-normal">credits</span></h3>
+                        <span class="text-muted small d-block mt-1">Rate: GHS {{ number_format($reportCardPrice, 2) }} / student card</span>
+                    </div>
+                    
+                    <p class="text-muted small mb-4">
+                        Generate and download official PDF report cards for your students. Generating a student's card for the first time in a term consumes 1 credit. Subsequent downloads/prints are free.
+                    </p>
 
-                <form action="{{ route('school.billing.checkout') }}" method="POST">
-                    @csrf
-                    <input type="hidden" name="type" value="report_credits_purchase">
-                    <div class="mb-3">
-                        <label for="credits" class="form-label fw-semibold small text-secondary">Number of Credits</label>
-                        <input type="number" class="form-control rounded-3 py-2 border shadow-xs" id="credits" name="credits" min="1" required value="50" placeholder="e.g. 50">
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label fw-semibold small text-secondary">Choose Payment Gateway</label>
-                        <select class="form-select rounded-3 py-2" name="gateway">
-                            <option value="paystack">Paystack Gateway</option>
-                            <option value="flutterwave">Flutterwave Gateway</option>
-                        </select>
-                    </div>
-                    <button type="submit" class="btn btn-success w-100 rounded-3 py-2 fw-bold">
-                        <i class="bi bi-cart-plus-fill me-2"></i>Buy Print Credits
-                    </button>
-                </form>
+                    <form action="{{ route('school.billing.checkout') }}" method="POST">
+                        @csrf
+                        <input type="hidden" name="type" value="report_credits_purchase">
+                        <div class="mb-3">
+                            <label for="credits" class="form-label fw-semibold small text-secondary">Number of Credits</label>
+                            <input type="number" class="form-control rounded-3 py-2 border shadow-xs" id="credits" name="credits" min="1" required value="50" placeholder="e.g. 50">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold small text-secondary">Choose Payment Gateway</label>
+                            <select class="form-select rounded-3 py-2" name="gateway">
+                                <option value="paystack">Paystack Gateway</option>
+                                <option value="flutterwave">Flutterwave Gateway</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-success w-100 rounded-3 py-2 fw-bold">
+                            <i class="bi bi-cart-plus-fill me-2"></i>Buy Print Credits
+                        </button>
+                    </form>
+                @endif
             </div>
         </div>
 

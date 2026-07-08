@@ -30,6 +30,12 @@
                     </div>
 
                     <div class="mb-4">
+                        <label for="super_admin_notification_email" class="form-label fw-semibold text-secondary small">Super Admin Notification Email</label>
+                        <input type="email" class="form-control rounded-3 py-2 border shadow-xs" id="super_admin_notification_email" name="super_admin_notification_email" required value="{{ $superAdminNotificationEmail }}" placeholder="admin@edulink.com">
+                        <span class="text-muted small d-block mt-2">The email address where platform alerts (such as new school registrations) will be sent.</span>
+                    </div>
+
+                    <div class="mb-4">
                         <label for="website_builder_unlock_price" class="form-label fw-semibold text-secondary small">Custom Website Unlock Price (GHS)</label>
                         <div class="input-group">
                             <span class="input-group-text border-light bg-light fw-bold text-secondary">GHS</span>
@@ -63,6 +69,12 @@
                         <input class="form-check-input" type="checkbox" id="self_registration_enabled" name="self_registration_enabled" value="1" {{ $selfRegistration == '1' ? 'checked' : '' }}>
                         <label class="form-check-label fw-semibold text-dark small ms-2" for="self_registration_enabled">Enable School Self-Registration</label>
                         <span class="text-muted small d-block">When disabled, guest signup routes will be disabled and new school tenants can only be manually added by a platform administrator.</span>
+                    </div>
+
+                    <div class="form-check form-switch mb-3">
+                        <input class="form-check-input" type="checkbox" id="report_card_payment_enabled" name="report_card_payment_enabled" value="1" {{ $reportCardPaymentEnabled == '1' ? 'checked' : '' }}>
+                        <label class="form-check-label fw-semibold text-dark small ms-2" for="report_card_payment_enabled">Enable Report Card Printing Payment</label>
+                        <span class="text-muted small d-block">When enabled, schools must purchase credits to download/print report cards. When disabled, report card printing is free for all schools.</span>
                     </div>
 
                     <div class="form-check form-switch mb-4">

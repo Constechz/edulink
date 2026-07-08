@@ -178,7 +178,9 @@ class ReportCardController extends Controller
         $unlockedReports = $settings['unlocked_reports'] ?? [];
         $isReportUnlocked = isset($unlockedReports[$yearId][$termId][$student->id]) && $unlockedReports[$yearId][$termId][$student->id] == true;
 
-        if (!$isReportUnlocked) {
+        $paymentEnabled = \App\Models\SystemSetting::getVal('report_card_payment_enabled', '1') == '1';
+
+        if ($paymentEnabled && !$isReportUnlocked) {
             $remainingCredits = isset($settings['report_credits']) ? intval($settings['report_credits']) : 0;
             if ($remainingCredits < 1) {
                 return redirect()->route('school.billing.gateway', [
@@ -520,16 +522,20 @@ class ReportCardController extends Controller
         $settings = $school->settings ?: [];
         $unlockedReports = $settings['unlocked_reports'] ?? [];
 
+        $paymentEnabled = \App\Models\SystemSetting::getVal('report_card_payment_enabled', '1') == '1';
+
         // Count locked students
         $lockedCount = 0;
-        foreach ($students as $student) {
-            $isReportUnlocked = isset($unlockedReports[$yearId][$termId][$student->id]) && $unlockedReports[$yearId][$termId][$student->id] == true;
-            if (!$isReportUnlocked) {
-                $lockedCount++;
+        if ($paymentEnabled) {
+            foreach ($students as $student) {
+                $isReportUnlocked = isset($unlockedReports[$yearId][$termId][$student->id]) && $unlockedReports[$yearId][$termId][$student->id] == true;
+                if (!$isReportUnlocked) {
+                    $lockedCount++;
+                }
             }
         }
 
-        if ($lockedCount > 0) {
+        if ($paymentEnabled && $lockedCount > 0) {
             $remainingCredits = isset($settings['report_credits']) ? intval($settings['report_credits']) : 0;
             if ($remainingCredits < $lockedCount) {
                 $needed = $lockedCount - $remainingCredits;

@@ -155,6 +155,8 @@ class SuperAdminAnalyticsController extends Controller
             'sms_gateway_sender_id' => 'required|string|max:11',
             'report_card_price' => 'required|numeric|min:0',
             'portal_unlock_price' => 'required|numeric|min:0',
+            'super_admin_notification_email' => 'required|email|max:255',
+            'report_card_payment_enabled' => 'nullable|boolean',
         ]);
 
         SystemSetting::setVal('website_builder_unlock_price', $request->website_builder_unlock_price);
@@ -183,6 +185,9 @@ class SuperAdminAnalyticsController extends Controller
 
         SystemSetting::setVal('report_card_price', $request->report_card_price);
         SystemSetting::setVal('portal_unlock_price', $request->portal_unlock_price);
+
+        SystemSetting::setVal('super_admin_notification_email', $request->super_admin_notification_email);
+        SystemSetting::setVal('report_card_payment_enabled', $request->has('report_card_payment_enabled') ? '1' : '0');
 
         return redirect()->back()->with('success', "Platform configuration updated successfully.");
     }
@@ -248,13 +253,16 @@ class SuperAdminAnalyticsController extends Controller
         $reportCardPrice = SystemSetting::getVal('report_card_price', '0.20');
         $portalUnlockPrice = SystemSetting::getVal('portal_unlock_price', '200.00');
 
+        $superAdminNotificationEmail = SystemSetting::getVal('super_admin_notification_email', 'admin@' . strtolower(config('app.name', 'edulink')) . '.com');
+        $reportCardPaymentEnabled = SystemSetting::getVal('report_card_payment_enabled', '1');
+
         return view('super-admin.settings', compact(
             'websiteUnlockPrice', 'maintenanceMode', 'selfRegistration',
             'paystackPublicKey', 'paystackSecretKey', 'paystackEnabled',
             'flutterwavePublicKey', 'flutterwaveSecretKey', 'flutterwaveEnabled',
             'paidOnlyModules', 'schoolRegistrationSmsTemplate', 'whatsappChannelUrl',
             'platformName', 'smsGatewayProvider', 'smsGatewayApiKey', 'smsGatewaySenderId',
-            'reportCardPrice', 'portalUnlockPrice'
+            'reportCardPrice', 'portalUnlockPrice', 'superAdminNotificationEmail', 'reportCardPaymentEnabled'
         ));
     }
 

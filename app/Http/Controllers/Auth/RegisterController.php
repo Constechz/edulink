@@ -36,6 +36,7 @@ class RegisterController extends Controller
                 'regex:/^[a-z0-9\-]+$/i',
                 'unique:schools,subdomain',
             ],
+            'region' => 'required|string|max:100',
             'admin_name' => 'required|string|max:255',
             'admin_email' => 'required|string|email|max:255|unique:users,email',
             'admin_phone' => 'required|string|min:9|max:20',
@@ -69,6 +70,7 @@ class RegisterController extends Controller
                 $school = School::create([
                     'name' => $request->school_name,
                     'school_code' => $code,
+                    'region' => $request->region,
                     'subdomain' => strtolower($request->subdomain),
                     'plan_id' => $plan->id,
                     'subscription_status' => 'trial',
@@ -106,7 +108,8 @@ class RegisterController extends Controller
 
                 // Send email to Super Admin
                 try {
-                    \Illuminate\Support\Facades\Mail::to('admin@' . strtolower(config('app.name', 'edulink')) . '.com')->send(new \App\Mail\SchoolRegisteredSuperAdminMail($school));
+                    $superAdminEmail = \App\Models\SystemSetting::getVal('super_admin_notification_email', 'admin@' . strtolower(config('app.name', 'edulink')) . '.com');
+                    \Illuminate\Support\Facades\Mail::to($superAdminEmail)->send(new \App\Mail\SchoolRegisteredSuperAdminMail($school));
                 } catch (\Exception $e) {
                     // Log or handle mail sending failures gracefully
                 }

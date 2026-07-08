@@ -52,8 +52,10 @@ class SchoolRegistrationTest extends TestCase
         $response = $this->post('/register', [
             'school_name' => 'Legacy High School',
             'subdomain' => 'legacyhigh',
+            'region' => 'Greater Accra',
             'admin_name' => 'Principal Asante',
             'admin_email' => 'principal@legacy.edu.gh',
+            'admin_phone' => '0241234567',
             'admin_password' => 'password123',
             'admin_password_confirmation' => 'password123',
         ]);
@@ -68,6 +70,7 @@ class SchoolRegistrationTest extends TestCase
         $this->assertDatabaseHas('schools', [
             'name' => 'Legacy High School',
             'subdomain' => 'legacyhigh',
+            'region' => 'Greater Accra',
             'plan_id' => $this->plan->id,
             'subscription_status' => 'trial',
             'onboarding_completed' => false,
@@ -101,8 +104,10 @@ class SchoolRegistrationTest extends TestCase
         $response = $this->post('/register', [
             'school_name' => 'Legacy High School',
             'subdomain' => 'legacyhigh',
+            'region' => 'Greater Accra',
             'admin_name' => 'Principal Asante',
             'admin_email' => 'principal@legacy.edu.gh',
+            'admin_phone' => '0241234567',
             'admin_password' => 'password123',
             'admin_password_confirmation' => 'password123',
         ]);
@@ -116,8 +121,10 @@ class SchoolRegistrationTest extends TestCase
         $response = $this->post('/register', [
             'school_name' => 'Legacy High School',
             'subdomain' => 'legacy_high!',
+            'region' => 'Greater Accra',
             'admin_name' => 'Principal Asante',
             'admin_email' => 'principal@legacy.edu.gh',
+            'admin_phone' => '0241234567',
             'admin_password' => 'password123',
             'admin_password_confirmation' => 'password123',
         ]);
@@ -131,8 +138,10 @@ class SchoolRegistrationTest extends TestCase
         $response = $this->post('/register', [
             'school_name' => 'Legacy High School',
             'subdomain' => 'legacyhigh',
+            'region' => 'Greater Accra',
             'admin_name' => 'Principal Asante',
             'admin_email' => 'principal@legacy.edu.gh',
+            'admin_phone' => '0241234567',
             'admin_password' => 'password123',
             'admin_password_confirmation' => 'differentpassword',
         ]);

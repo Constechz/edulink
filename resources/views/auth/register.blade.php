@@ -80,6 +80,11 @@
             color: #ffffff;
         }
 
+        .form-select option {
+            background: #1e293b;
+            color: #ffffff;
+        }
+
         .btn-primary {
             background: #FFD700;
             border: none;
@@ -145,6 +150,20 @@
                     <span class="input-group-text">{{ $domainSuffix }}</span>
                 </div>
                 <div id="subdomainHelp" class="form-text text-muted" style="font-size: 0.75rem;">Your workspace: <strong class="text-light" id="previewSub">your-subdomain{{ $domainSuffix }}</strong></div>
+            </div>
+
+            <div class="mb-3">
+                <label for="region" class="form-label" style="font-size: 0.85rem; font-weight: 500;">School Region</label>
+                <select class="form-select form-control" id="region" name="region" required>
+                    <option value="" disabled {{ old('region') ? '' : 'selected' }}>Select School Region</option>
+                    @foreach([
+                        'Greater Accra', 'Ashanti', 'Western', 'Eastern', 'Central', 
+                        'Northern', 'Upper East', 'Upper West', 'Volta', 'Savannah', 
+                        'North East', 'Bono', 'Bono East', 'Ahafo', 'Oti', 'Western North'
+                    ] as $reg)
+                        <option value="{{ $reg }}" {{ old('region') == $reg ? 'selected' : '' }}>{{ $reg }}</option>
+                    @endforeach
+                </select>
             </div>
 
             <h5 class="border-bottom border-secondary pb-2 mt-4 mb-3" style="font-size: 0.95rem; font-weight: 600; color: #FFD700;">2. Administrator Account</h5>
