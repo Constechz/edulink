@@ -1,2 +1,11 @@
 User-agent: *
-Disallow:
+Disallow: /super-admin/
+Disallow: /school/
+Disallow: /login
+Disallow: /register
+Disallow: /password/
+Disallow: /api/
+Disallow: /admin/
+
+# Sitemaps
+Sitemap: https://edulink.constechz.com/sitemap.xml

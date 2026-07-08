@@ -125,6 +125,53 @@
                         </div>
                     @endforeach
                 </div>
+
+                <!-- SEO & Search Engine Indexing -->
+                <div class="glass-card p-4 mt-4 shadow-sm">
+                    <h5 class="fw-bold text-dark mb-4"><i class="bi bi-globe text-primary me-2"></i>SEO & Search Engine Indexing</h5>
+                    <p class="text-muted small mb-4">Optimize your platform's visibility on Google, search engines, and social media platforms.</p>
+
+                    <div class="mb-4">
+                        <label for="seo_meta_title" class="form-label fw-semibold text-secondary small">SEO Meta Title</label>
+                        <input type="text" class="form-control rounded-3 py-2 border shadow-xs" id="seo_meta_title" name="seo_meta_title" value="{{ $seoMetaTitle }}" placeholder="e.g. EduLink | Premium School Management System">
+                        <span class="text-muted small d-block mt-2">The title shown in search engine results and browser tabs.</span>
+                    </div>
+
+                    <div class="mb-4">
+                        <label for="seo_meta_description" class="form-label fw-semibold text-secondary small">SEO Meta Description</label>
+                        <textarea class="form-control rounded-3 py-2 border shadow-xs" id="seo_meta_description" name="seo_meta_description" rows="3" placeholder="A brief description of your platform for search engine snippets">{{ $seoMetaDescription }}</textarea>
+                        <span class="text-muted small d-block mt-2">Recommended length: 150-160 characters.</span>
+                    </div>
+
+                    <div class="mb-4">
+                        <label for="seo_meta_keywords" class="form-label fw-semibold text-secondary small">SEO Meta Keywords</label>
+                        <input type="text" class="form-control rounded-3 py-2 border shadow-xs" id="seo_meta_keywords" name="seo_meta_keywords" value="{{ $seoMetaKeywords }}" placeholder="school software, school management, etc.">
+                        <span class="text-muted small d-block mt-2">Comma-separated list of keywords representing your SaaS portal.</span>
+                    </div>
+
+                    <div class="mb-4">
+                        <label for="seo_social_image" class="form-label fw-semibold text-secondary small">Social Share Preview Image (OG:Image)</label>
+                        <div class="d-flex align-items-center gap-3">
+                            <div class="border rounded p-2 bg-light d-flex align-items-center justify-content-center" style="width: 80px; height: 48px;">
+                                <img src="{{ file_exists(public_path('seo_social.png')) ? asset('seo_social.png') . '?v=' . time() : 'https://placehold.co/600x315/003366/FFF?text=EduLink' }}" alt="Social Share Preview" style="max-width: 100%; max-height: 100%; object-fit: contain;">
+                            </div>
+                            <input type="file" class="form-control rounded-3 py-2 border shadow-xs" id="seo_social_image" name="seo_social_image" accept="image/png, image/jpeg, image/jpg">
+                        </div>
+                        <span class="text-muted small d-block mt-2">Upload a social sharing banner (PNG/JPG, 1200x630px recommended) shown when sharing on social media.</span>
+                    </div>
+
+                    <div class="row g-3 mb-2">
+                        <div class="col-md-6">
+                            <label for="seo_google_analytics" class="form-label fw-semibold text-secondary small">Google Analytics ID</label>
+                            <input type="text" class="form-control rounded-3 py-2 border shadow-xs" id="seo_google_analytics" name="seo_google_analytics" value="{{ $seoGoogleAnalytics }}" placeholder="e.g. G-XXXXXXXXXX">
+                        </div>
+                        <div class="col-md-6">
+                            <label for="seo_search_console" class="form-label fw-semibold text-secondary small">Google Search Console Tag</label>
+                            <input type="text" class="form-control rounded-3 py-2 border shadow-xs" id="seo_search_console" name="seo_search_console" value="{{ $seoSearchConsole }}" placeholder="e.g. key-code-string">
+                        </div>
+                    </div>
+                    <span class="text-muted small d-block mt-2">Verification code from Google Search Console html meta tag (content attribute).</span>
+                </div>
             </div>
 
             <!-- Right: Platform Payment Gateways -->

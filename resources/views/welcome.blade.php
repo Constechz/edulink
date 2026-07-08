@@ -3,8 +3,51 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="{{ config('app.name', 'EduLink') }} Ghana ERP is a next-generation school management system empowering administrators, teachers, parents, and students with smart automation.">
-    <title>{{ config('app.name', 'EduLink') }} | Next-Gen School Management ERP</title>
+    
+    @php
+        $seoTitle = \App\Models\SystemSetting::getVal('seo_meta_title', 'EduLink | Next-Gen School Management ERP');
+        $seoDesc = \App\Models\SystemSetting::getVal('seo_meta_description', 'EduLink Ghana ERP is a next-generation school management system empowering administrators, teachers, parents, and students with smart automation.');
+        $seoKeys = \App\Models\SystemSetting::getVal('seo_meta_keywords', 'school software, school management, Ghana ERP, report cards');
+        $googleAnalytics = \App\Models\SystemSetting::getVal('seo_google_analytics', '');
+        $googleSearchConsole = \App\Models\SystemSetting::getVal('seo_search_console', '');
+        $socialImage = file_exists(public_path('seo_social.png')) ? asset('seo_social.png') : 'https://placehold.co/1200x630/003366/FFF?text=EduLink';
+    @endphp
+
+    <title>{{ $seoTitle }}</title>
+    <meta name="description" content="{{ $seoDesc }}">
+    @if(!empty($seoKeys))
+        <meta name="keywords" content="{{ $seoKeys }}">
+    @endif
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="{{ url()->current() }}">
+    <meta property="og:title" content="{{ $seoTitle }}">
+    <meta property="og:description" content="{{ $seoDesc }}">
+    <meta property="og:image" content="{{ $socialImage }}">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="{{ url()->current() }}">
+    <meta property="twitter:title" content="{{ $seoTitle }}">
+    <meta property="twitter:description" content="{{ $seoDesc }}">
+    <meta property="twitter:image" content="{{ $socialImage }}">
+
+    @if(!empty($googleSearchConsole))
+        <meta name="google-site-verification" content="{{ $googleSearchConsole }}">
+    @endif
+
+    @if(!empty($googleAnalytics))
+        <!-- Global site tag (gtag.js) - Google Analytics -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id={{ $googleAnalytics }}"></script>
+        <script>
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', '{{ $googleAnalytics }}');
+        </script>
+    @endif
+
     <link rel="icon" type="image/png" href="{{ asset('favicon.png') }}">
     <link rel="shortcut icon" type="image/x-icon" href="{{ asset('favicon.ico') }}">
     <!-- Google Fonts: Outfit -->

@@ -41,6 +41,58 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+// Dynamic XML Sitemap Route for SEO crawlers
+Route::get('/sitemap.xml', function () {
+    $now = now()->toAtomString();
+    
+    $xml = '<?xml version="1.0" encoding="UTF-8"?>';
+    $xml .= '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">';
+    
+    // Homepage
+    $xml .= '<url>';
+    $xml .= '<loc>' . url('/') . '</loc>';
+    $xml .= '<lastmod>' . $now . '</lastmod>';
+    $xml .= '<changefreq>daily</changefreq>';
+    $xml .= '<priority>1.0</priority>';
+    $xml .= '</url>';
+    
+    // Login page
+    $xml .= '<url>';
+    $xml .= '<loc>' . url('/login') . '</loc>';
+    $xml .= '<lastmod>' . $now . '</lastmod>';
+    $xml .= '<changefreq>monthly</changefreq>';
+    $xml .= '<priority>0.8</priority>';
+    $xml .= '</url>';
+    
+    // Register page
+    $xml .= '<url>';
+    $xml .= '<loc>' . url('/register') . '</loc>';
+    $xml .= '<lastmod>' . $now . '</lastmod>';
+    $xml .= '<changefreq>monthly</changefreq>';
+    $xml .= '<priority>0.8</priority>';
+    $xml .= '</url>';
+    
+    // Add active tenant school websites automatically
+    try {
+        $schools = \App\Models\School::where('is_active', true)->get();
+        foreach ($schools as $school) {
+            $domain = $school->domain ?: ($school->subdomain . '.' . parse_url(config('app.url'), PHP_URL_HOST));
+            $xml .= '<url>';
+            $xml .= '<loc>https://' . $domain . '</loc>';
+            $xml .= '<lastmod>' . $now . '</lastmod>';
+            $xml .= '<changefreq>weekly</changefreq>';
+            $xml .= '<priority>0.7</priority>';
+            $xml .= '</url>';
+        }
+    } catch (\Exception $e) {
+        // Fallback silently if DB not ready
+    }
+    
+    $xml .= '</urlset>';
+    
+    return response($xml, 200, ['Content-Type' => 'application/xml']);
+});
+
 // Public Admissions Application Route
 Route::get('/admissions/apply', [AdmissionsController::class, 'publicForm'])->name('school.admissions.apply');
 Route::post('/admissions/apply', [AdmissionsController::class, 'submitForm'])->name('school.admissions.submit');

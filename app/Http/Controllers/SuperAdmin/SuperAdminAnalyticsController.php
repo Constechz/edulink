@@ -158,6 +158,12 @@ class SuperAdminAnalyticsController extends Controller
             'super_admin_notification_email' => 'required|email|max:255',
             'report_card_payment_enabled' => 'nullable|boolean',
             'favicon' => 'nullable|image|max:2048',
+            'seo_meta_title' => 'nullable|string|max:200',
+            'seo_meta_description' => 'nullable|string|max:500',
+            'seo_meta_keywords' => 'nullable|string|max:500',
+            'seo_google_analytics' => 'nullable|string|max:100',
+            'seo_search_console' => 'nullable|string|max:200',
+            'seo_social_image' => 'nullable|image|max:2048',
         ]);
 
         if ($request->hasFile('favicon')) {
@@ -167,6 +173,15 @@ class SuperAdminAnalyticsController extends Controller
                 copy(public_path('favicon.png'), public_path('favicon.ico'));
             } catch (\Exception $e) {
                 return redirect()->back()->withErrors(['favicon' => 'Failed to upload favicon: ' . $e->getMessage()]);
+            }
+        }
+
+        if ($request->hasFile('seo_social_image')) {
+            try {
+                $file = $request->file('seo_social_image');
+                $file->move(public_path(), 'seo_social.png');
+            } catch (\Exception $e) {
+                return redirect()->back()->withErrors(['seo_social_image' => 'Failed to upload SEO social share image: ' . $e->getMessage()]);
             }
         }
 
@@ -199,6 +214,12 @@ class SuperAdminAnalyticsController extends Controller
 
         SystemSetting::setVal('super_admin_notification_email', $request->super_admin_notification_email);
         SystemSetting::setVal('report_card_payment_enabled', $request->has('report_card_payment_enabled') ? '1' : '0');
+
+        SystemSetting::setVal('seo_meta_title', $request->seo_meta_title ?? '');
+        SystemSetting::setVal('seo_meta_description', $request->seo_meta_description ?? '');
+        SystemSetting::setVal('seo_meta_keywords', $request->seo_meta_keywords ?? '');
+        SystemSetting::setVal('seo_google_analytics', $request->seo_google_analytics ?? '');
+        SystemSetting::setVal('seo_search_console', $request->seo_search_console ?? '');
 
         return redirect()->back()->with('success', "Platform configuration updated successfully.");
     }
@@ -267,13 +288,20 @@ class SuperAdminAnalyticsController extends Controller
         $superAdminNotificationEmail = SystemSetting::getVal('super_admin_notification_email', 'admin@' . strtolower(config('app.name', 'edulink')) . '.com');
         $reportCardPaymentEnabled = SystemSetting::getVal('report_card_payment_enabled', '1');
 
+        $seoMetaTitle = SystemSetting::getVal('seo_meta_title', 'EduLink | Premium School Management System & ERP');
+        $seoMetaDescription = SystemSetting::getVal('seo_meta_description', 'All-in-one school ERP system to manage grading, invoicing, attendance, parent portals, and SMS alerts.');
+        $seoMetaKeywords = SystemSetting::getVal('seo_meta_keywords', 'school management system, school ERP, school software Ghana, report card builder');
+        $seoGoogleAnalytics = SystemSetting::getVal('seo_google_analytics', '');
+        $seoSearchConsole = SystemSetting::getVal('seo_search_console', '');
+
         return view('super-admin.settings', compact(
             'websiteUnlockPrice', 'maintenanceMode', 'selfRegistration',
             'paystackPublicKey', 'paystackSecretKey', 'paystackEnabled',
             'flutterwavePublicKey', 'flutterwaveSecretKey', 'flutterwaveEnabled',
             'paidOnlyModules', 'schoolRegistrationSmsTemplate', 'whatsappChannelUrl',
             'platformName', 'smsGatewayProvider', 'smsGatewayApiKey', 'smsGatewaySenderId',
-            'reportCardPrice', 'portalUnlockPrice', 'superAdminNotificationEmail', 'reportCardPaymentEnabled'
+            'reportCardPrice', 'portalUnlockPrice', 'superAdminNotificationEmail', 'reportCardPaymentEnabled',
+            'seoMetaTitle', 'seoMetaDescription', 'seoMetaKeywords', 'seoGoogleAnalytics', 'seoSearchConsole'
         ));
     }
 
