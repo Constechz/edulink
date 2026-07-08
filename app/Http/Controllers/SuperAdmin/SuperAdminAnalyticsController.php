@@ -715,7 +715,7 @@ class SuperAdminAnalyticsController extends Controller
             'notif_target' => 'required|string|in:all_admins,all_users,specific_school,all_staff,all_parents,all_students',
             'notif_school_id' => 'nullable|integer|exists:schools,id',
             'notif_title' => 'required|string|max:150',
-            'notif_body' => 'required|string|max:1000',
+            'notif_body' => 'required|string|max:10000',
         ]);
 
         $title = $request->notif_title;
