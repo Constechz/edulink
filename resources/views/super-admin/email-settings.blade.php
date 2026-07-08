@@ -166,6 +166,21 @@
         box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
         color: var(--text-main);
     }
+    
+    /* Enforce dynamic theme colors on all common text utility classes inside dark mode */
+    [data-bs-theme="dark"] .text-dark {
+        color: var(--text-main) !important;
+    }
+    [data-bs-theme="dark"] .text-muted {
+        color: var(--text-muted) !important;
+    }
+    [data-bs-theme="dark"] .text-secondary {
+        color: var(--text-muted) !important;
+    }
+    [data-bs-theme="dark"] select.form-select option {
+        background-color: #0f172a !important;
+        color: #f1f5f9 !important;
+    }
 </style>
 @endsection
 
