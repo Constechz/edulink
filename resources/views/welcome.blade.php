@@ -1874,7 +1874,7 @@
                                         <span class="price-duration" data-monthly="" data-yearly=""></span>
                                     @else
                                         <span class="price-amount" data-monthly="GHS {{ number_format($plan->price_monthly, 0) }}" data-yearly="GHS {{ number_format($plan->price_yearly, 0) }}">GHS {{ number_format($plan->price_monthly, 0) }}</span>
-                                        <span class="price-duration" data-monthly="/month" data-yearly="/year, billed annually">/month</span>
+                                        <span class="price-duration" data-monthly="/term" data-yearly="/year, billed annually">/term</span>
                                     @endif
                                 </div>
                                 
@@ -1956,7 +1956,7 @@
                             <h4 class="fw-bold mb-1 text-white">{{ \App\Models\SystemSetting::getVal('welcome_price2_title', 'Standard School') }}</h4>
                             <p class="text-secondary small">{{ \App\Models\SystemSetting::getVal('welcome_price2_sub', 'For single campus primary/secondary') }}</p>
                             @php
-                                $priceText2 = \App\Models\SystemSetting::getVal('welcome_price2_price', 'GHS 450/month');
+                                $priceText2 = \App\Models\SystemSetting::getVal('welcome_price2_price', 'GHS 450/term');
                                 $priceVal2 = $priceText2;
                                 $priceUnit2 = '';
                                 if (strpos($priceText2, '/') !== false) {
@@ -2181,7 +2181,7 @@
                         } else {
                             item.amountEl.textContent = item.amountEl.getAttribute('data-monthly');
                             if (item.durationEl) {
-                                item.durationEl.textContent = '/month';
+                                item.durationEl.textContent = '/term';
                             }
                         }
                     } else {
