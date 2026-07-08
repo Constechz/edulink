@@ -5,18 +5,18 @@
 
 @section('styles')
 <style>
-    /* Premium UI Custom CSS overrides */
+    /* Premium UI Custom CSS overrides using app theme variables */
     .metric-card {
-        background: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(248, 250, 252, 0.8) 100%);
-        border: 1px solid rgba(255, 255, 255, 0.5);
+        background: var(--card-bg);
+        border: 1px solid var(--border-color);
         border-radius: 20px;
         transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.02), 0 8px 10px -6px rgba(0, 0, 0, 0.02);
+        box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.01), 0 8px 10px -6px rgba(0, 0, 0, 0.01);
     }
     .metric-card:hover {
-        transform: translateY(-4px);
-        box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.05), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-        border-color: rgba(0, 51, 102, 0.15);
+        transform: translateY(-3px);
+        box-shadow: 0 15px 30px -5px rgba(0, 0, 0, 0.05), 0 8px 15px -5px rgba(0, 0, 0, 0.03);
+        border-color: var(--primary-color);
     }
     .pulse-indicator {
         width: 10px;
@@ -34,7 +34,7 @@
     }
     .status-badge-sent {
         background: rgba(16, 185, 129, 0.1) !important;
-        color: #065f46 !important;
+        color: #10b981 !important;
         border: 1px solid rgba(16, 185, 129, 0.2);
         box-shadow: 0 0 8px rgba(16, 185, 129, 0.05);
         font-weight: 600;
@@ -42,7 +42,7 @@
     }
     .status-badge-failed {
         background: rgba(239, 68, 68, 0.1) !important;
-        color: #991b1b !important;
+        color: #ef4444 !important;
         border: 1px solid rgba(239, 68, 68, 0.2);
         box-shadow: 0 0 8px rgba(239, 68, 68, 0.05);
         font-weight: 600;
@@ -63,22 +63,24 @@
     }
     .custom-input-group .form-control, .custom-input-group .form-select {
         padding-left: 42px;
-        border: 1px solid rgba(0, 0, 0, 0.08);
+        border: 1px solid var(--border-color);
         border-radius: 12px;
         transition: all 0.2s ease;
-        background-color: #fafbfc;
+        background-color: var(--theme-toggle-bg);
+        color: var(--text-main);
     }
     .custom-input-group .form-control:focus, .custom-input-group .form-select:focus {
         border-color: var(--primary-color);
         box-shadow: 0 0 0 3px rgba(0, 51, 102, 0.08);
-        background-color: #ffffff;
+        background-color: var(--card-bg);
+        color: var(--text-main);
     }
     .custom-input-group:focus-within i {
         color: var(--primary-color);
     }
     .form-label-custom {
         font-weight: 600;
-        color: #475569;
+        color: var(--text-main);
         font-size: 0.85rem;
         margin-bottom: 0.4rem;
         display: inline-block;
@@ -88,33 +90,34 @@
         border-spacing: 0 8px;
     }
     .logs-table tr {
-        background-color: rgba(255, 255, 255, 0.6);
+        background-color: var(--card-bg);
         border-radius: 12px;
         transition: all 0.2s ease;
     }
     .logs-table tr:hover {
-        background-color: #ffffff !important;
+        background-color: var(--card-bg) !important;
         transform: scale(1.002);
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.015);
     }
     .logs-table td {
-        border-top: 1px solid rgba(0, 0, 0, 0.02) !important;
-        border-bottom: 1px solid rgba(0, 0, 0, 0.02) !important;
+        border-top: 1px solid var(--border-color) !important;
+        border-bottom: 1px solid var(--border-color) !important;
         padding: 0.85rem 1rem !important;
+        color: var(--text-main);
     }
     .logs-table td:first-child {
-        border-left: 1px solid rgba(0, 0, 0, 0.02) !important;
+        border-left: 1px solid var(--border-color) !important;
         border-top-left-radius: 12px;
         border-bottom-left-radius: 12px;
     }
     .logs-table td:last-child {
-        border-right: 1px solid rgba(0, 0, 0, 0.02) !important;
+        border-right: 1px solid var(--border-color) !important;
         border-top-right-radius: 12px;
         border-bottom-right-radius: 12px;
     }
     .nav-pills .nav-link {
-        background-color: #f1f5f9;
-        color: #475569;
+        background-color: var(--theme-toggle-bg);
+        color: var(--text-muted);
         border: 1px solid transparent;
         transition: all 0.25s ease;
     }
@@ -123,25 +126,33 @@
         color: #ffffff !important;
         box-shadow: 0 4px 12px rgba(0, 51, 102, 0.15);
     }
+    [data-bs-theme="dark"] .nav-pills .nav-link.active {
+        background: linear-gradient(135deg, #1e293b 0%, #0b0f19 100%) !important;
+        color: #ffffff !important;
+        border-color: var(--border-color) !important;
+    }
     .nav-pills .nav-link:hover:not(.active) {
-        background-color: #e2e8f0;
-        color: #0f172a;
+        background-color: var(--theme-toggle-bg-hover);
+        color: var(--theme-toggle-color-hover);
     }
     .btn-action-view {
-        background-color: #f8fafc;
-        border: 1px solid rgba(0,0,0,0.06);
-        color: #334155;
+        background-color: var(--theme-toggle-bg);
+        border: 1px solid var(--border-color);
+        color: var(--text-main);
         transition: all 0.2s ease;
     }
     .btn-action-view:hover {
-        background-color: #0f172a;
-        color: #ffffff;
-        border-color: #0f172a;
+        background-color: var(--text-main);
+        color: var(--bg-color);
+        border-color: var(--text-main);
         transform: translateY(-1px);
     }
     /* Modal premium overlays */
     .custom-modal-header {
-        background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+        background: linear-gradient(135deg, #002244 0%, #003366 100%);
+    }
+    [data-bs-theme="dark"] .custom-modal-header {
+        background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%) !important;
     }
     .custom-modal-close-btn {
         filter: invert(1) grayscale(100%) brightness(200%);
@@ -150,69 +161,27 @@
         font-family: 'Inter', sans-serif;
         line-height: 1.6;
         font-size: 0.95rem;
-        background: #fafbfc;
+        background: var(--bg-color);
         border-left: 4px solid var(--primary-color);
         box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
-    }
-    
-    /* Dark Mode Theme Overrides for Custom Elements */
-    [data-bs-theme="dark"] .metric-card {
-        background: linear-gradient(135deg, rgba(20, 26, 42, 0.95) 0%, rgba(15, 20, 32, 0.9) 100%) !important;
-        border-color: rgba(255, 255, 255, 0.08) !important;
-    }
-    [data-bs-theme="dark"] .custom-input-group .form-control, 
-    [data-bs-theme="dark"] .custom-input-group .form-select {
-        background-color: rgba(255, 255, 255, 0.05) !important;
-        color: #f1f5f9 !important;
-        border-color: rgba(255, 255, 255, 0.08) !important;
-    }
-    [data-bs-theme="dark"] .custom-input-group .form-control:focus, 
-    [data-bs-theme="dark"] .custom-input-group .form-select:focus {
-        background-color: rgba(255, 255, 255, 0.08) !important;
-        border-color: var(--primary-color) !important;
-    }
-    [data-bs-theme="dark"] .form-label-custom {
-        color: #94a3b8 !important;
-    }
-    [data-bs-theme="dark"] .logs-table tr {
-        background-color: rgba(20, 26, 42, 0.6) !important;
-    }
-    [data-bs-theme="dark"] .logs-table tr:hover {
-        background-color: rgba(20, 26, 42, 0.95) !important;
-    }
-    [data-bs-theme="dark"] .logs-table td {
-        border-color: rgba(255, 255, 255, 0.05) !important;
-    }
-    [data-bs-theme="dark"] .nav-pills .nav-link {
-        background-color: rgba(255, 255, 255, 0.05) !important;
-        color: #94a3b8 !important;
-    }
-    [data-bs-theme="dark"] .nav-pills .nav-link:hover:not(.active) {
-        background-color: rgba(255, 255, 255, 0.08) !important;
-        color: #f1f5f9 !important;
-    }
-    [data-bs-theme="dark"] .btn-action-view {
-        background-color: rgba(255, 255, 255, 0.05) !important;
-        color: #f1f5f9 !important;
-        border-color: rgba(255, 255, 255, 0.08) !important;
-    }
-    [data-bs-theme="dark"] .btn-action-view:hover {
-        background-color: #f1f5f9 !important;
-        color: #0f172a !important;
-        border-color: #f1f5f9 !important;
-    }
-    [data-bs-theme="dark"] .mail-preview-body {
-        background-color: rgba(0, 0, 0, 0.25) !important;
-        color: #cbd5e1 !important;
+        color: var(--text-main);
     }
 </style>
 @endsection
 
 @section('content')
 <div class="container-fluid p-0">
+    <!-- Header Section -->
+    <div class="row mb-4 align-items-center">
+        <div class="col-sm-12">
+            <h5 class="fw-bold mb-1 text-dark">Email Gateway Configuration</h5>
+            <p class="text-muted small mb-0">Manage outbound SMTP settings and monitor broadcast transmission logs.</p>
+        </div>
+    </div>
+
     <!-- Session Messages -->
     @if(session('success'))
-        <div class="alert alert-success alert-dismissible fade show border-0 rounded-4 shadow-sm p-3 mb-4 d-flex align-items-center" role="alert" style="background-color: #ecfdf5;">
+        <div class="alert alert-success alert-dismissible fade show border-0 rounded-4 shadow-sm p-3 mb-4 d-flex align-items-center" role="alert" style="background-color: rgba(16, 185, 129, 0.08);">
             <i class="bi bi-check-circle-fill me-2 fs-5 text-success"></i>
             <div class="text-success fw-semibold">{{ session('success') }}</div>
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
@@ -220,7 +189,7 @@
     @endif
 
     @if($errors->any())
-        <div class="alert alert-danger alert-dismissible fade show border-0 rounded-4 shadow-sm p-3 mb-4" role="alert" style="background-color: #fef2f2;">
+        <div class="alert alert-danger alert-dismissible fade show border-0 rounded-4 shadow-sm p-3 mb-4" role="alert" style="background-color: rgba(239, 68, 68, 0.08);">
             <div class="d-flex align-items-center mb-2">
                 <i class="bi bi-exclamation-triangle-fill me-2 fs-5 text-danger"></i>
                 <div class="text-danger fw-bold">Please correct the following errors:</div>
@@ -245,7 +214,7 @@
                         <span class="pulse-indicator"></span> Active (SMTP)
                     </span>
                 </div>
-                <div class="bg-light p-2.5 rounded-4 border border-light">
+                <div class="p-2.5 rounded-4 border" style="background: rgba(16, 185, 129, 0.08); border-color: rgba(16, 185, 129, 0.15) !important;">
                     <i class="bi bi-shield-check text-success fs-4"></i>
                 </div>
             </div>
@@ -260,8 +229,8 @@
                         {{ number_format($totalEmails) }}
                     </span>
                 </div>
-                <div class="bg-light p-2.5 rounded-4 border border-light">
-                    <i class="bi bi-send-fill text-primary fs-4"></i>
+                <div class="p-2.5 rounded-4 border" style="background: rgba(0, 80, 160, 0.08); border-color: var(--border-color) !important;">
+                    <i class="bi bi-send-fill fs-4" style="color: var(--primary-color) !important;"></i>
                 </div>
             </div>
         </div>
@@ -275,7 +244,7 @@
                         {{ $successRate }}%
                     </span>
                 </div>
-                <div class="bg-light p-2.5 rounded-4 border border-light">
+                <div class="p-2.5 rounded-4 border" style="background: rgba(16, 185, 129, 0.08); border-color: var(--border-color) !important;">
                     <span class="badge bg-success-subtle text-success px-2 py-1.5 rounded-3 fw-bold small border" style="font-size: 0.75rem;">
                         <i class="bi bi-arrow-up-right me-0.5"></i>{{ number_format($sentEmails) }}
                     </span>
@@ -292,7 +261,7 @@
                         {{ $failedRate }}%
                     </span>
                 </div>
-                <div class="bg-light p-2.5 rounded-4 border border-light">
+                <div class="p-2.5 rounded-4 border" style="background: rgba(239, 68, 68, 0.08); border-color: var(--border-color) !important;">
                     <span class="badge bg-danger-subtle text-danger px-2 py-1.5 rounded-3 fw-bold small border" style="font-size: 0.75rem;">
                         <i class="bi bi-exclamation-octagon me-0.5"></i>{{ number_format($failedEmails) }}
                     </span>
@@ -305,7 +274,7 @@
     <div class="row g-4">
         <!-- Left: Gateway Configurations & Mail Composer -->
         <div class="col-lg-5">
-            <div class="glass-card p-4 shadow-sm border border-light">
+            <div class="glass-card p-4 shadow-sm">
                 <ul class="nav nav-pills nav-fill mb-4" id="emailPortalTab" role="tablist">
                     <li class="nav-item" role="presentation">
                         <button class="nav-link active fw-bold text-uppercase py-2.5 rounded-3" id="gateway-tab" data-bs-toggle="tab" data-bs-target="#gateway" type="button" role="tab" aria-controls="gateway" aria-selected="true" style="font-size: 0.8rem;">
@@ -464,7 +433,7 @@
 
                             <div class="mb-4">
                                 <label for="body" class="form-label-custom">Message Body Content</label>
-                                <textarea class="form-control rounded-3 border-light shadow-xs p-3 small" id="body" name="body" rows="6" required placeholder="Type your custom broadcast text here..."></textarea>
+                                <textarea class="form-control rounded-3 shadow-xs p-3 small" id="body" name="body" rows="6" required placeholder="Type your custom broadcast text here..." style="border-color: var(--border-color); background-color: var(--theme-toggle-bg); color: var(--text-main);"></textarea>
                             </div>
 
                             <button type="submit" class="btn btn-success w-100 rounded-3 py-2.5 fw-bold shadow-xs">
@@ -478,7 +447,7 @@
 
         <!-- Right: Outgoing Mail Logs Table -->
         <div class="col-lg-7">
-            <div class="glass-card p-4 shadow-sm border border-light">
+            <div class="glass-card p-4 shadow-sm">
                 <div class="d-flex align-items-center justify-content-between mb-4 border-bottom pb-2">
                     <h5 class="fw-bold text-dark mb-0">
                         <i class="bi bi-activity text-secondary me-2"></i>Email Transmission History
@@ -511,7 +480,7 @@
                                     <tr>
                                         <td class="ps-3">
                                             <div class="d-flex align-items-center">
-                                                <div class="bg-light p-2 rounded-circle me-2.5 border text-muted">
+                                                <div class="p-2 rounded-circle me-2.5 border text-muted" style="background-color: var(--theme-toggle-bg); border-color: var(--border-color) !important;">
                                                     <i class="bi bi-person" style="font-size: 0.85rem;"></i>
                                                 </div>
                                                 <span class="fw-semibold text-dark">{{ $log->recipient_email }}</span>
@@ -583,9 +552,9 @@
                     </div>
                     
                     <!-- Modal Body -->
-                    <div class="modal-body bg-light p-4">
+                    <div class="modal-body p-4" style="background-color: var(--bg-color);">
                         <!-- Recipient details bar -->
-                        <div class="p-3 rounded-4 mb-3 border bg-white shadow-xs d-flex flex-wrap gap-3 align-items-center justify-content-between text-muted small">
+                        <div class="p-3 rounded-4 mb-3 border shadow-xs d-flex flex-wrap gap-3 align-items-center justify-content-between text-muted small" style="background-color: var(--card-bg); border-color: var(--border-color) !important;">
                             <div>
                                 <i class="bi bi-person-fill text-secondary me-1"></i>To: <strong class="text-dark">{{ $log->recipient_email }}</strong>
                             </div>
@@ -595,7 +564,7 @@
                         </div>
 
                         <!-- Mail HTML Body -->
-                        <div class="p-4 bg-white border rounded-4 mail-preview-body overflow-auto" style="max-height: 400px; color: #334155;">
+                        <div class="p-4 border rounded-4 mail-preview-body overflow-auto" style="max-height: 400px; border-color: var(--border-color) !important;">
                             {!! $log->body !!}
                         </div>
                     </div>
@@ -621,7 +590,7 @@
             
             <form action="{{ route('super-admin.email-settings.test') }}" method="POST">
                 @csrf
-                <div class="modal-body bg-light p-4">
+                <div class="modal-body p-4" style="background-color: var(--bg-color);">
                     <p class="text-muted small mb-4">
                         Please save any unsaved configurations before testing. A diagnostic test message will be sent using your current database parameters.
                     </p>
@@ -635,7 +604,7 @@
                         <div class="form-text text-muted">Defaults to your administrator email address.</div>
                     </div>
                 </div>
-                <div class="modal-footer bg-white border-top p-3 justify-content-between">
+                <div class="modal-footer border-top p-3 justify-content-between" style="background-color: var(--card-bg); border-color: var(--border-color) !important;">
                     <button type="button" class="btn btn-light rounded-3 px-3 py-2 fw-semibold" data-bs-dismiss="modal">Cancel</button>
                     <button type="submit" class="btn btn-primary rounded-3 px-4 py-2 fw-bold">
                         <i class="bi bi-send-fill me-1"></i>Send Test Email
