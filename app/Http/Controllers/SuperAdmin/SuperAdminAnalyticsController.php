@@ -457,27 +457,41 @@ class SuperAdminAnalyticsController extends Controller
         $sentCount = 0;
         $failedCount = 0;
 
-        foreach ($recipients as $email) {
-            try {
-                \Illuminate\Support\Facades\Mail::to($email)
-                    ->send(new \App\Mail\SuperAdminCustomMail($request->subject, $request->body));
+        try {
+            // Send single email via BCC to all recipients for maximum speed
+            \Illuminate\Support\Facades\Mail::bcc($recipients)
+                ->send(new \App\Mail\SuperAdminCustomMail($request->subject, $request->body));
+
+            // Log successful emails and trigger in-app portal notifications
+            foreach ($recipients as $email) {
                 $sentCount++;
 
-                // Trigger portal notification
+                // Create successful email log
+                \App\Models\EmailLog::create([
+                    'recipient_email' => $email,
+                    'subject' => $request->subject,
+                    'body' => $request->body,
+                    'status' => 'sent',
+                ]);
+
+                // Trigger in-app portal notification
                 $user = User::withoutGlobalScopes()->where('email', $email)->first();
                 if ($user) {
-                    NotificationLog::create([
+                    \App\Models\NotificationLog::create([
                         'school_id' => $user->school_id,
                         'user_id' => $user->id,
                         'title' => $request->subject,
                         'body' => strip_tags($request->body),
-                        'type' => 'broadcast',
+                        'type' => 'push', // Fixed invalid broadcast string to valid push enum
                         'is_read' => false,
                     ]);
                 }
-            } catch (\Exception $e) {
+            }
+        } catch (\Exception $e) {
+            // Handle failure logs for all recipients
+            foreach ($recipients as $email) {
                 $failedCount++;
-                EmailLog::create([
+                \App\Models\EmailLog::create([
                     'recipient_email' => $email,
                     'subject' => $request->subject,
                     'body' => $request->body,
@@ -488,7 +502,7 @@ class SuperAdminAnalyticsController extends Controller
         }
 
         if ($failedCount > 0) {
-            return redirect()->back()->with('success', "Emails sent successfully to {$sentCount} recipient(s). Fails: {$failedCount}.");
+            return redirect()->back()->with('success', "Failed to dispatch email broadcast. Fails: {$failedCount}. Error: " . $e->getMessage());
         }
 
         return redirect()->back()->with('success', "Emails sent successfully to {$sentCount} recipient(s).");
