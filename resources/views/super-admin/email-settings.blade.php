@@ -479,6 +479,9 @@
                                     <i class="bi bi-people"></i>
                                     <select class="form-select" id="notif_target" name="notif_target" required>
                                         <option value="all_admins">All School Administrators</option>
+                                        <option value="all_staff">All Teachers & Staff Members</option>
+                                        <option value="all_parents">All Registered Parents</option>
+                                        <option value="all_students">All Registered Students</option>
                                         <option value="all_users">All System Users Globally</option>
                                         <option value="specific_school">All Users of a Specific Tenant School</option>
                                     </select>

@@ -712,7 +712,7 @@ class SuperAdminAnalyticsController extends Controller
     public function sendSystemNotification(Request $request)
     {
         $request->validate([
-            'notif_target' => 'required|string|in:all_admins,all_users,specific_school',
+            'notif_target' => 'required|string|in:all_admins,all_users,specific_school,all_staff,all_parents,all_students',
             'notif_school_id' => 'nullable|integer|exists:schools,id',
             'notif_title' => 'required|string|max:150',
             'notif_body' => 'required|string|max:1000',
@@ -731,9 +731,24 @@ class SuperAdminAnalyticsController extends Controller
             }
             $query->where('school_id', $request->notif_school_id);
         } elseif ($target === 'all_admins') {
-            // Find school admins by checking role slug
+            // Find school admins by checking role slug 'school-admin'
             $query->whereHas('role', function($q) {
-                $q->where('slug', 'admin');
+                $q->where('slug', 'school-admin');
+            });
+        } elseif ($target === 'all_staff') {
+            // Find school staff (teachers, HODs, headteachers)
+            $query->whereHas('role', function($q) {
+                $q->whereIn('slug', ['teacher', 'hod', 'headteacher', 'staff']);
+            });
+        } elseif ($target === 'all_parents') {
+            // Find parents
+            $query->whereHas('role', function($q) {
+                $q->where('slug', 'parent');
+            });
+        } elseif ($target === 'all_students') {
+            // Find students
+            $query->whereHas('role', function($q) {
+                $q->where('slug', 'student');
             });
         }
 
