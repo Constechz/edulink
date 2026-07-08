@@ -140,8 +140,8 @@
 
         body {
             font-family: 'Outfit', 'Inter', sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-main);
+            background-color: var(--bg-color) !important;
+            color: var(--text-main) !important;
             overflow-x: hidden;
         }
 
