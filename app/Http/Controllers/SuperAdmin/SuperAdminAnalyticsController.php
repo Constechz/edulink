@@ -157,7 +157,18 @@ class SuperAdminAnalyticsController extends Controller
             'portal_unlock_price' => 'required|numeric|min:0',
             'super_admin_notification_email' => 'required|email|max:255',
             'report_card_payment_enabled' => 'nullable|boolean',
+            'favicon' => 'nullable|image|max:2048',
         ]);
+
+        if ($request->hasFile('favicon')) {
+            try {
+                $file = $request->file('favicon');
+                $file->move(public_path(), 'favicon.png');
+                copy(public_path('favicon.png'), public_path('favicon.ico'));
+            } catch (\Exception $e) {
+                return redirect()->back()->withErrors(['favicon' => 'Failed to upload favicon: ' . $e->getMessage()]);
+            }
+        }
 
         SystemSetting::setVal('website_builder_unlock_price', $request->website_builder_unlock_price);
         SystemSetting::setVal('maintenance_mode', $request->has('maintenance_mode') ? '1' : '0');

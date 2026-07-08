@@ -13,7 +13,19 @@
         </div>
     @endif
 
-    <form action="{{ route('super-admin.settings.update') }}" method="POST">
+    @if($errors->any())
+        <div class="alert alert-danger alert-dismissible fade show mb-4 rounded-4 shadow-sm" role="alert">
+            <i class="bi bi-exclamation-triangle-fill me-2 text-danger"></i>
+            <ul class="mb-0 ps-3">
+                @foreach($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    @endif
+
+    <form action="{{ route('super-admin.settings.update') }}" method="POST" enctype="multipart/form-data">
         @csrf
         
         <div class="row g-4">
@@ -27,6 +39,17 @@
                         <label for="platform_name" class="form-label fw-semibold text-secondary small">Platform Branding Name</label>
                         <input type="text" class="form-control rounded-3 py-2 border shadow-xs" id="platform_name" name="platform_name" required value="{{ $platformName }}" placeholder="e.g. {{ config('app.name', 'EduLink') }}">
                         <span class="text-muted small d-block mt-2">The system-wide name used across headers, login logos, and titles.</span>
+                    </div>
+
+                    <div class="mb-4">
+                        <label for="favicon" class="form-label fw-semibold text-secondary small">Platform Favicon (PNG/ICO)</label>
+                        <div class="d-flex align-items-center gap-3">
+                            <div class="border rounded p-2 bg-light d-flex align-items-center justify-content-center" style="width: 48px; height: 48px;">
+                                <img src="{{ asset('favicon.png') }}?v={{ time() }}" alt="Favicon" style="max-width: 100%; max-height: 100%; object-fit: contain;">
+                            </div>
+                            <input type="file" class="form-control rounded-3 py-2 border shadow-xs" id="favicon" name="favicon" accept="image/png, image/x-icon, image/vnd.microsoft.icon">
+                        </div>
+                        <span class="text-muted small d-block mt-2">Upload a custom square image (PNG or ICO format, max 2MB) to override the platform favicon.</span>
                     </div>
 
                     <div class="mb-4">
