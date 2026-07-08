@@ -5,6 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ $page->title }} - {{ $settings->site_name }}</title>
     <meta name="description" content="{{ $page->meta_description ?? $settings->site_tagline }}">
+    @if(!empty($settings->favicon_path))
+        <link rel="icon" type="image/x-icon" href="{{ asset('storage/' . $settings->favicon_path) }}">
+    @else
+        <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}">
+    @endif
     
     <!-- Google Fonts dynamically loaded from branding settings -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
