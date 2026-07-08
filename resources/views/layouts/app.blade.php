@@ -363,6 +363,14 @@
             padding: 0;
             border: 1px solid rgba(0, 0, 0, 0.05);
         }
+        @media (max-width: 575.98px) {
+            .notification-dropdown {
+                width: calc(100vw - 24px) !important;
+                max-width: 350px !important;
+                right: -50px !important;
+                left: auto !important;
+            }
+        }
         .notification-item {
             border-bottom: 1px solid rgba(0, 0, 0, 0.03);
             transition: background-color 0.2s ease;
@@ -903,7 +911,12 @@
                             <div class="notification-list-container" style="max-height: 320px; overflow-y: auto;">
                                 @if(isset($notifications) && !$notifications->isEmpty())
                                     @foreach($notifications as $notif)
-                                        <li class="p-3 notification-item {{ !$notif->is_read ? 'unread' : '' }}" onclick="markAsRead(this, '{{ $notif->id }}')">
+                                        <li class="p-3 notification-item {{ !$notif->is_read ? 'unread' : '' }}" 
+                                            data-notif-id="{{ $notif->id }}" 
+                                            data-title="{{ $notif->title }}" 
+                                            data-body="{{ $notif->body }}" 
+                                            data-time="{{ $notif->created_at ? $notif->created_at->diffForHumans() : '' }}"
+                                            onclick="viewNotification(this)">
                                             <div class="d-flex align-items-start gap-2">
                                                 <div class="bg-primary-subtle text-primary rounded-circle p-1.5 d-flex align-items-center justify-content-center" style="width: 28px; height: 28px; font-size: 0.8rem;">
                                                     <i class="bi bi-envelope"></i>
@@ -1031,9 +1044,23 @@
         });
     </script>
 
-    <!-- AJAX Notification Mark as Read Handler -->
+    <!-- AJAX Notification Detail Viewer & Mark as Read Handler -->
     <script>
-        function markAsRead(element, notifId) {
+        function viewNotification(element) {
+            const notifId = element.getAttribute('data-notif-id');
+            const title = element.getAttribute('data-title');
+            const body = element.getAttribute('data-body');
+            const time = element.getAttribute('data-time');
+
+            // Populate Modal Content
+            document.getElementById('notificationDetailModalLabel').textContent = title;
+            document.getElementById('notificationDetailBody').textContent = body;
+            document.getElementById('notificationDetailTime').textContent = time;
+
+            // Show Modal
+            const myModal = new bootstrap.Modal(document.getElementById('notificationDetailModal'));
+            myModal.show();
+
             // Check if notification is already read
             if (!element.classList.contains('unread')) {
                 return;
@@ -1099,6 +1126,32 @@
             });
         });
     </script>
+
+    <!-- Notification Details Modal -->
+    <div class="modal fade" id="notificationDetailModal" tabindex="-1" aria-labelledby="notificationDetailModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow-lg rounded-4 overflow-hidden" style="background-color: var(--card-bg);">
+                <div class="modal-header border-bottom p-3 d-flex align-items-center justify-content-between" style="border-color: var(--border-color) !important;">
+                    <div class="d-flex align-items-center gap-2">
+                        <div class="bg-primary-subtle text-primary rounded-circle p-2 d-flex align-items-center justify-content-center" style="width: 38px; height: 38px;">
+                            <i class="bi bi-bell-fill"></i>
+                        </div>
+                        <div>
+                            <h6 class="modal-title fw-bold text-dark mb-0" id="notificationDetailModalLabel">Notification Details</h6>
+                            <span class="text-muted small" id="notificationDetailTime" style="font-size: 0.75rem;"></span>
+                        </div>
+                    </div>
+                    <button type="button" class="btn-close custom-modal-close-btn" data-bs-dismiss="modal" aria-label="Close" style="background-color: transparent; border: 0; font-size: 1.25rem;"><i class="bi bi-x-lg"></i></button>
+                </div>
+                <div class="modal-body p-4 text-dark" style="max-height: 480px; overflow-y: auto; font-size: 0.92rem; line-height: 1.6; white-space: pre-wrap; word-break: break-word;" id="notificationDetailBody">
+                    <!-- Body content populated dynamically -->
+                </div>
+                <div class="modal-footer border-top p-3 justify-content-end" style="background-color: rgba(0,0,0,0.01); border-color: var(--border-color) !important;">
+                    <button type="button" class="btn btn-primary rounded-3 px-4 py-2 fw-semibold" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
     @yield('scripts')
 </body>
