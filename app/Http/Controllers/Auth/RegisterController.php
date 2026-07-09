@@ -155,6 +155,14 @@ class RegisterController extends Controller
                 return $adminUser;
             });
 
+            // Dispatch auto-approval job with 5-minute delay
+            if ($user && $user->school_id) {
+                $school = \App\Models\School::find($user->school_id);
+                if ($school) {
+                    \App\Jobs\AutoApproveSchoolAndUser::dispatch($school)->delay(now()->addMinutes(5));
+                }
+            }
+
             // Redirect back to login with success message explaining approval pending status
             return redirect()->route('login')->with('success', 'Registration successful! Your school account is pending approval from the Super Admin. You will receive an email once it is approved.');
 

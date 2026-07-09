@@ -49,6 +49,8 @@ class SchoolRegistrationTest extends TestCase
 
     public function test_school_registration_success(): void
     {
+        \Illuminate\Support\Facades\Queue::fake();
+
         $response = $this->post('/register', [
             'school_name' => 'Legacy High School',
             'subdomain' => 'legacyhigh',
@@ -149,4 +151,72 @@ class SchoolRegistrationTest extends TestCase
         $response->assertSessionHasErrors('admin_password');
         $this->assertFalse(Auth::check());
     }
+
+    public function test_school_registration_dispatches_auto_approval_job(): void
+    {
+        \Illuminate\Support\Facades\Queue::fake();
+
+        $response = $this->post('/register', [
+            'school_name' => 'Legacy High School',
+            'subdomain' => 'legacyhigh',
+            'region' => 'Greater Accra',
+            'admin_name' => 'Principal Asante',
+            'admin_email' => 'principal@legacy.edu.gh',
+            'admin_phone' => '0241234567',
+            'admin_password' => 'password123',
+            'admin_password_confirmation' => 'password123',
+        ]);
+
+        $response->assertRedirect(route('login'));
+        
+        \Illuminate\Support\Facades\Queue::assertPushed(\App\Jobs\AutoApproveSchoolAndUser::class, function ($job) {
+            return $job->school->name === 'Legacy High School' && $job->delay !== null;
+        });
+    }
+
+    public function test_auto_approve_job_activates_school_and_user_and_sends_email(): void
+    {
+        \Illuminate\Support\Facades\Mail::fake();
+
+        // Create an inactive school and admin user
+        $school = School::create([
+            'name' => 'Pending School',
+            'school_code' => 'PEND1',
+            'subdomain' => 'pendingschool',
+            'plan_id' => $this->plan->id,
+            'subscription_status' => 'trial',
+            'owner_name' => 'Owner Name',
+            'owner_email' => 'owner@pending.edu.gh',
+            'is_active' => false,
+            'onboarding_completed' => false,
+        ]);
+
+        $user = User::create([
+            'school_id' => $school->id,
+            'name' => 'Owner Name',
+            'email' => 'owner@pending.edu.gh',
+            'password' => \Illuminate\Support\Facades\Hash::make('password123'),
+            'role_id' => $this->role->id,
+            'is_active' => false,
+        ]);
+
+        $job = new \App\Jobs\AutoApproveSchoolAndUser($school);
+        $job->handle();
+
+        // Assert school is activated
+        $school->refresh();
+        $this->assertTrue($school->is_active);
+        $this->assertEquals('active', $school->subscription_status);
+        $this->assertNull($school->trial_ends_at);
+
+        // Assert user is activated
+        $user->refresh();
+        $this->assertTrue($user->is_active);
+
+        // Assert email is sent
+        \Illuminate\Support\Facades\Mail::assertSent(\App\Mail\SchoolApprovedMail::class, function ($mail) use ($school) {
+            return $mail->hasTo($school->owner_email) && $mail->school->id === $school->id;
+        });
+    }
 }
+
