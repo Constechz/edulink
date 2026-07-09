@@ -1384,7 +1384,7 @@
                     </p>
                     <div class="d-flex flex-column flex-sm-row justify-content-center justify-content-lg-start gap-3">
                         <a href="{{ route('register') }}" class="btn-hero-primary text-decoration-none text-center d-inline-flex justify-content-center align-items-center">
-                            Start 14-Day Free Trial
+                            Register Now
                         </a>
                         <a href="{{ route('login') }}" class="btn-hero-secondary text-decoration-none text-center d-inline-flex justify-content-center align-items-center">
                             Explore Client Login <i class="bi bi-arrow-right ms-1"></i>
@@ -1948,7 +1948,7 @@
                                 
                                 <a href="{{ route('register') }}" class="btn-price-{{ $index === 1 ? 'primary' : 'outline' }} w-100 text-decoration-none text-center">
                                     @if($plan->price_monthly == 0)
-                                        Start Free Trial
+                                        Register Now
                                     @elseif($plan->max_students == -1)
                                         Contact Sales
                                     @else
@@ -1986,7 +1986,7 @@
                                 @endforeach
                             </ul>
                             <a href="{{ route('register') }}" class="btn-price-outline w-100 text-decoration-none text-center">
-                                Start Free Trial
+                                Register Now
                             </a>
                         </div>
                     </div>
@@ -2068,7 +2068,7 @@
                         Everything you need to know about setting up and running your institution workspace on the {{ config('app.name', 'EduLink') }} platform.
                     </p>
                     <a href="{{ route('register') }}" class="btn-hero-primary text-decoration-none">
-                        Start Trial & Discover
+                        Register Now
                     </a>
                 </div>
                 
