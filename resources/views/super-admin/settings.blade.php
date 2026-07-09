@@ -31,7 +31,7 @@
         <div class="row g-4">
             <!-- Left: Pricing & Controls -->
             <div class="col-lg-6">
-                <div class="glass-card p-4 h-100 shadow-sm">
+                <div class="glass-card p-4 shadow-sm">
                     <h5 class="fw-bold text-dark mb-4"><i class="bi bi-sliders2-vertical text-primary me-2"></i>Monetization & Controls</h5>
                     <p class="text-muted small mb-4">Manage monetization variables and core platform status control flags.</p>
                     
@@ -176,7 +176,7 @@
 
             <!-- Right: Platform Payment Gateways -->
             <div class="col-lg-6">
-                <div class="glass-card p-4 h-100 shadow-sm">
+                <div class="glass-card p-4 shadow-sm">
                     <h5 class="fw-bold text-dark mb-4"><i class="bi bi-credit-card text-success me-2"></i>Payment Gateways (SaaS Subscriptions)</h5>
                     <p class="text-muted small mb-4">Configure API keys for the platform-level merchant accounts used to collect subscription fees from schools.</p>
 
