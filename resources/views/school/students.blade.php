@@ -446,7 +446,13 @@
                             </div>
                             <div class="col-md-4">
                                 <label class="form-label fw-bold text-secondary small">Religion</label>
-                                <input type="text" class="form-control rounded-3 py-2" name="religion" placeholder="e.g. Christian / Muslim">
+                                <select class="form-select rounded-3 py-2" name="religion">
+                                    <option value="">Select Religion</option>
+                                    <option value="Christianity">Christianity</option>
+                                    <option value="Islam">Islam</option>
+                                    <option value="Traditional Religion">Traditional Religion</option>
+                                    <option value="Other / No Religion">Other / No Religion</option>
+                                </select>
                             </div>
 
                             <div class="col-12">
@@ -456,7 +462,25 @@
 
                             <div class="col-md-6">
                                 <label class="form-label fw-bold text-secondary small">Region</label>
-                                <input type="text" class="form-control rounded-3 py-2" name="region" placeholder="e.g. Greater Accra">
+                                <select class="form-select rounded-3 py-2" name="region">
+                                    <option value="">Select Region</option>
+                                    <option value="Greater Accra">Greater Accra</option>
+                                    <option value="Ashanti">Ashanti</option>
+                                    <option value="Eastern">Eastern</option>
+                                    <option value="Western">Western</option>
+                                    <option value="Northern">Northern</option>
+                                    <option value="Volta">Volta</option>
+                                    <option value="Central">Central</option>
+                                    <option value="Upper East">Upper East</option>
+                                    <option value="Upper West">Upper West</option>
+                                    <option value="Bono">Bono</option>
+                                    <option value="Bono East">Bono East</option>
+                                    <option value="Ahafo">Ahafo</option>
+                                    <option value="Savannah">Savannah</option>
+                                    <option value="North East">North East</option>
+                                    <option value="Oti">Oti</option>
+                                    <option value="Western North">Western North</option>
+                                </select>
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label fw-bold text-secondary small">District</label>
@@ -623,7 +647,13 @@
                                 </div>
                                 <div class="col-md-4">
                                     <label class="form-label fw-bold text-secondary small">Religion</label>
-                                    <input type="text" class="form-control rounded-3 py-2" name="religion" value="{{ $student->religion }}" placeholder="e.g. Christian / Muslim">
+                                    <select class="form-select rounded-3 py-2" name="religion">
+                                        <option value="">Select Religion</option>
+                                        <option value="Christianity" {{ $student->religion == 'Christianity' ? 'selected' : '' }}>Christianity</option>
+                                        <option value="Islam" {{ $student->religion == 'Islam' ? 'selected' : '' }}>Islam</option>
+                                        <option value="Traditional Religion" {{ $student->religion == 'Traditional Religion' ? 'selected' : '' }}>Traditional Religion</option>
+                                        <option value="Other / No Religion" {{ $student->religion == 'Other / No Religion' ? 'selected' : '' }}>Other / No Religion</option>
+                                    </select>
                                 </div>
 
                                 <div class="col-12">
@@ -633,7 +663,15 @@
 
                                 <div class="col-md-6">
                                     <label class="form-label fw-bold text-secondary small">Region</label>
-                                    <input type="text" class="form-control rounded-3 py-2" name="region" value="{{ $student->region }}" placeholder="e.g. Greater Accra">
+                                    <select class="form-select rounded-3 py-2" name="region">
+                                        <option value="">Select Region</option>
+                                        @php
+                                            $regions = ['Greater Accra', 'Ashanti', 'Eastern', 'Western', 'Northern', 'Volta', 'Central', 'Upper East', 'Upper West', 'Bono', 'Bono East', 'Ahafo', 'Savannah', 'North East', 'Oti', 'Western North'];
+                                        @endphp
+                                        @foreach($regions as $reg)
+                                            <option value="{{ $reg }}" {{ $student->region == $reg ? 'selected' : '' }}>{{ $reg }}</option>
+                                        @endforeach
+                                    </select>
                                 </div>
                                 <div class="col-md-6">
                                     <label class="form-label fw-bold text-secondary small">District</label>
