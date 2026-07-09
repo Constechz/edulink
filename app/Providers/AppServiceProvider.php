@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Event;
 use Illuminate\Mail\Events\MessageSent;
 use App\Models\EmailLog;
 use App\Models\NotificationLog;
+use Illuminate\Pagination\Paginator;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -100,5 +101,8 @@ class AppServiceProvider extends ServiceProvider
                 $view->with(compact('notifications', 'unreadCount'));
             }
         });
+
+        // Use Bootstrap 5 styling for pagination
+        Paginator::useBootstrapFive();
     }
 }
