@@ -418,6 +418,20 @@
     @yield('styles')
 </head>
 <body>
+    <!-- Top-of-screen elegant progress bar -->
+    <div id="topProgressBar" style="
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 0%;
+        height: 3px;
+        background: linear-gradient(90deg, #FFD700, #ffb300, #3b82f6);
+        z-index: 100000;
+        box-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+        transition: width 0.3s ease, opacity 0.3s ease;
+        opacity: 0;
+        pointer-events: none;
+    "></div>
 
     <!-- Sidebar Overlay -->
     <div class="sidebar-overlay" id="sidebarOverlay"></div>
@@ -1152,6 +1166,73 @@
             </div>
         </div>
     </div>
+
+    <!-- Progress Bar Script -->
+    <script>
+    (function() {
+        var progressBar = document.getElementById('topProgressBar');
+        if (progressBar) {
+            var startProgress = function() {
+                progressBar.style.width = '0%';
+                progressBar.style.opacity = '1';
+                progressBar.style.transition = 'width 0.3s ease, opacity 0.3s ease';
+                
+                var width = 0;
+                var interval = setInterval(function() {
+                    if (width >= 90) {
+                        clearInterval(interval);
+                    } else {
+                        width += Math.random() * 15;
+                        if (width > 90) width = 90;
+                        progressBar.style.width = width + '%';
+                    }
+                }, 150);
+                
+                progressBar.dataset.intervalId = interval;
+            };
+
+            var finishProgress = function() {
+                var intervalId = progressBar.dataset.intervalId;
+                if (intervalId) {
+                    clearInterval(intervalId);
+                }
+                progressBar.style.transition = 'width 0.2s ease, opacity 0.2s ease';
+                progressBar.style.width = '100%';
+                setTimeout(function() {
+                    progressBar.style.opacity = '0';
+                    setTimeout(function() {
+                        progressBar.style.width = '0%';
+                    }, 300);
+                }, 200);
+            };
+
+            // Start progress bar animation on page load
+            startProgress();
+            if (document.readyState === 'complete') {
+                finishProgress();
+            } else {
+                window.addEventListener('load', finishProgress);
+            }
+
+            // Trigger progress bar when user clicks links (internal only)
+            document.addEventListener('click', function(event) {
+                var target = event.target.closest('a');
+                if (target && target.href && 
+                    !target.getAttribute('target') && 
+                    !target.href.startsWith('javascript:') && 
+                    !target.href.includes('#') && 
+                    target.host === window.location.host) {
+                    startProgress();
+                }
+            });
+
+            // Trigger progress bar on form submission
+            document.addEventListener('submit', function() {
+                startProgress();
+            });
+        }
+    })();
+    </script>
 
     @yield('scripts')
 </body>

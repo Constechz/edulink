@@ -151,6 +151,7 @@
     </style>
 </head>
 <body>
+    @include('partials.preloader')
 
 <div class="mfa-container">
     <div class="glass-card">

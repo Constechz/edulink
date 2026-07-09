@@ -91,6 +91,7 @@
     </style>
 </head>
 <body>
+    @include('partials.preloader')
 
     <div class="login-card">
         <div class="brand-logo">

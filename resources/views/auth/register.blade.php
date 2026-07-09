@@ -114,6 +114,7 @@
     </style>
 </head>
 <body>
+    @include('partials.preloader')
 
     <div class="register-card">
         <div class="brand-logo">

@@ -87,6 +87,7 @@
     </style>
 </head>
 <body>
+    @include('partials.preloader')
 
     <div class="forgot-card">
         <div class="brand-logo">

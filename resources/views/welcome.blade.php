@@ -1322,6 +1322,7 @@
     </style>
 </head>
 <body>
+    @include('partials.preloader')
 
     <!-- Glow Backdrops -->
     <div class="glow-blur-1"></div>
