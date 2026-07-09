@@ -179,6 +179,7 @@
                                         
                                         <form action="{{ route('school.billing.checkout') }}" method="POST">
                                             @csrf
+                                            <input type="hidden" name="type" value="subscription">
                                             <input type="hidden" name="plan_id" value="{{ $plan->id }}">
                                             <input type="hidden" name="cycle" value="monthly">
                                             
