@@ -1332,7 +1332,7 @@
     <!-- Navigation Header -->
     <nav class="navbar navbar-expand-lg fixed-top" id="mainNavbar">
         <div class="container">
-            <a class="navbar-brand d-flex align-items-center" href="#">
+            <a class="navbar-brand d-flex align-items-center" href="{{ url('/') }}">
                 <div class="logo-icon-wrapper me-2">
                     <i class="bi bi-globe-europe-africa text-warning"></i>
                 </div>
@@ -1865,7 +1865,9 @@
                 </div>
             </div>
         </div>
-    </section>\n\n    <!-- Pricing Section -->
+    </section>
+
+    <!-- Pricing Section -->
     <section class="py-6" id="pricing">
         <div class="container text-center">
             <h2 class="section-title">Transparent School Plans</h2>
@@ -2110,7 +2112,7 @@
         <div class="container">
             <div class="row g-4 mb-5">
                 <div class="col-lg-4">
-                    <a href="#" class="navbar-brand d-flex align-items-center mb-3 text-decoration-none">
+                    <a href="{{ url('/') }}" class="navbar-brand d-flex align-items-center mb-3 text-decoration-none">
                         <div class="logo-icon-wrapper me-2">
                             <i class="bi bi-globe-europe-africa text-warning"></i>
                         </div>
