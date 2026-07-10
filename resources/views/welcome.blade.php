@@ -1132,6 +1132,11 @@
                 padding: 1.5rem;
                 margin-top: 1rem;
                 border: 1px solid var(--border-color);
+                text-align: center;
+            }
+            .navbar-nav {
+                align-items: center;
+                margin-bottom: 1.25rem;
             }
             .navbar-collapse .d-flex {
                 flex-direction: column;
