@@ -2048,12 +2048,6 @@
                             <i class="bi bi-rocket-takeoff-fill"></i>
                             <span>Register School Free</span>
                         </a>
-                        <div class="text-center mt-2 pt-2 border-top">
-                            <span class="text-muted d-inline-flex align-items-center gap-1.5" style="font-size: 0.72rem;">
-                                <i class="bi bi-patch-check-fill text-success"></i>
-                                <span>GES SBA Standard Compliant &bull; Instant Activation</span>
-                            </span>
-                        </div>
                     </div>
                 </div>
 
