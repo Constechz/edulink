@@ -39,7 +39,7 @@
         <div class="col-md-3">
             <div class="glass-card p-4 text-center">
                 <span class="text-muted small uppercase font-weight-bold" style="font-weight: 600; letter-spacing: 0.5px;">INTERVIEW SCHEDULED</span>
-                <h2 class="card-metric mt-2 mb-0 text-info">{{ $applications->where('status', 'interview')->count() }}</h2>
+                <h2 class="card-metric mt-2 mb-0 text-primary">{{ $applications->where('status', 'interview')->count() }}</h2>
             </div>
         </div>
         <div class="col-md-3">

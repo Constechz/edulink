@@ -55,11 +55,11 @@
         <!-- Transport Card -->
         <div class="col-md-4">
             <div class="glass-card p-4 h-100 d-flex flex-column">
-                <div class="fs-2 text-info mb-3"><i class="bi bi-bus-front"></i></div>
+                <div class="fs-2 text-primary mb-3"><i class="bi bi-bus-front"></i></div>
                 <h5 class="fw-bold text-dark mb-2">Transport Services</h5>
                 <p class="text-muted small mb-4">Manage school bus routes, driver rosters, vehicle allocations, and schedules.</p>
                 <div class="mt-auto text-end">
-                    <a href="{{ route('school.operations.transport.index') }}" class="btn btn-sm btn-info text-white rounded-3 px-3">Manage</a>
+                    <a href="{{ route('school.operations.transport.index') }}" class="btn btn-sm btn-primary rounded-3 px-3">Manage</a>
                 </div>
             </div>
         </div>

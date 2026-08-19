@@ -473,7 +473,7 @@
                                 <div class="col-md-6">
                                     <div class="p-3 bg-light rounded-4 border">
                                         <div class="d-flex justify-content-between align-items-center mb-3">
-                                            <span class="fw-bold text-dark small"><i class="bi bi-wallet2 text-info me-2"></i>Flutterwave Settings</span>
+                                            <span class="fw-bold text-dark small"><i class="bi bi-wallet2 text-warning me-2"></i>Flutterwave Settings</span>
                                             <div class="form-check form-switch m-0">
                                                 <input class="form-check-input" type="checkbox" id="flutterwave_enabled" name="flutterwave_enabled" value="1" {{ ($flutterwave['enabled'] ?? '0') == '1' ? 'checked' : '' }}>
                                                 <label class="form-check-label small fw-semibold text-muted ms-1" for="flutterwave_enabled">Active</label>

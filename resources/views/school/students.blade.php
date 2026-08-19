@@ -322,7 +322,7 @@
                                 </td>
                                 <td class="text-end">
                                     <div class="d-flex justify-content-end gap-1.5 align-items-center">
-                                        <button class="btn btn-sm btn-outline-info d-inline-flex align-items-center gap-1 px-2 py-1.5 rounded-3 shadow-xs fw-bold" style="font-size: 0.75rem;" data-bs-toggle="modal" data-bs-target="#admissionSlipModal{{ $student->id }}" title="Print Admission/Login Slip">
+                                        <button class="btn btn-sm btn-outline-primary d-inline-flex align-items-center gap-1 px-2 py-1.5 rounded-3 shadow-xs fw-bold" style="font-size: 0.75rem;" data-bs-toggle="modal" data-bs-target="#admissionSlipModal{{ $student->id }}" title="Print Admission/Login Slip">
                                             <i class="bi bi-printer"></i> Slip
                                         </button>
                                         <button class="btn btn-sm btn-outline-primary d-inline-flex align-items-center gap-1 px-2 py-1.5 rounded-3 shadow-xs fw-bold" style="font-size: 0.75rem;" data-bs-toggle="modal" data-bs-target="#editStudentModal{{ $student->id }}">

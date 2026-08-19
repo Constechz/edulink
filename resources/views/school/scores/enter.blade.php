@@ -246,8 +246,8 @@
                                     <span class="key-indicator bg-primary"></span>Submitted to HOD
                                 </span>
                             @elseif($sheetStatus === 'hod_verified')
-                                <span class="badge bg-info bg-opacity-10 text-info border border-info border-opacity-25 px-3 py-2 fw-bold" style="border-radius: 10px; font-size: 0.85rem;">
-                                    <span class="key-indicator bg-info"></span>HOD Verified
+                                <span class="badge bg-primary-subtle text-primary border border-primary border-opacity-25 px-3 py-2 fw-bold" style="border-radius: 10px; font-size: 0.85rem;">
+                                    <span class="key-indicator bg-primary"></span>HOD Verified
                                 </span>
                             @elseif($sheetStatus === 'approved' || $sheetStatus === 'published')
                                 <span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25 px-3 py-2 fw-bold" style="border-radius: 10px; font-size: 0.85rem;">
@@ -455,7 +455,7 @@
                 @if(count($students) > 0)
                     @if(!$isEditable)
                         <!-- Sheet Locked Notice -->
-                        <div class="alert alert-info border-0 shadow-sm d-flex align-items-center mb-4" style="border-radius: 10px; background-color: rgba(13, 202, 240, 0.1); color: #087990;">
+                        <div class="alert alert-primary border-0 shadow-sm d-flex align-items-center mb-4" style="border-radius: 10px; background-color: rgba(0, 51, 102, 0.08); color: var(--primary-color);">
                             <i class="bi bi-info-circle-fill fs-5 me-2"></i>
                             <div>
                                 @if($sheetStatus !== 'draft')

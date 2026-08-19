@@ -54,7 +54,7 @@
         </div>
         <div class="col-6 col-md-3">
             <div class="glass-card p-3 d-flex align-items-center gap-3">
-                <div class="bg-info bg-opacity-10 text-info rounded-4 p-3">
+                <div class="bg-primary bg-opacity-10 text-primary rounded-4 p-3">
                     <i class="bi bi-chat-left-text-fill fs-3"></i>
                 </div>
                 <div>

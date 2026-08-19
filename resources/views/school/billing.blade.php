@@ -79,7 +79,7 @@
 
             <!-- Portals Activation Add-on Card -->
             <div class="glass-card p-4 mt-4">
-                <h5 class="fw-bold text-dark mb-3"><i class="bi bi-shield-lock-fill text-info me-2"></i>Portals Activation</h5>
+                <h5 class="fw-bold text-dark mb-3"><i class="bi bi-shield-lock-fill text-primary me-2"></i>Portals Activation</h5>
                 @if($portalsUnlocked)
                     <div class="p-3 bg-success bg-opacity-10 text-success rounded-4 text-center mb-2">
                         <i class="bi bi-patch-check-fill fs-2 mb-2 d-block"></i>
@@ -106,7 +106,7 @@
                                 <option value="flutterwave">Flutterwave Gateway</option>
                             </select>
                         </div>
-                        <button type="submit" class="btn btn-info text-white w-100 rounded-3 py-2 fw-bold">
+                        <button type="submit" class="btn btn-primary w-100 rounded-3 py-2 fw-bold">
                             <i class="bi bi-unlock-fill me-2"></i>Unlock Portal Access
                         </button>
                     </form>

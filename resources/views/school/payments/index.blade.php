@@ -130,7 +130,7 @@
                                                 @elseif($payment->method == 'bank_transfer')
                                                     <i class="bi bi-bank me-1 text-primary"></i> Bank
                                                 @else
-                                                    <i class="bi bi-credit-card me-1 text-info"></i> {{ $payment->method }}
+                                                    <i class="bi bi-credit-card me-1 text-primary"></i> {{ $payment->method }}
                                                 @endif
                                             </span>
                                         </td>

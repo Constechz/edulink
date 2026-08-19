@@ -40,7 +40,7 @@
                 <p class="text-muted mb-0">
                     Staff Number: <strong>{{ $staff->staff_number }}</strong> | Designation: <strong>{{ $staff->designation }}</strong>
                 </p>
-                <span class="badge bg-info mt-2 px-2.5 py-1.5 rounded-3">Employment Type: {{ ucfirst($staff->employment_type) }}</span>
+                <span class="badge bg-primary-subtle text-primary mt-2 px-2.5 py-1.5 rounded-3 fw-semibold">Employment Type: {{ ucfirst($staff->employment_type) }}</span>
             </div>
         </div>
     </div>

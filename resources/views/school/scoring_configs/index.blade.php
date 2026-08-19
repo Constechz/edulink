@@ -46,7 +46,7 @@
         100% { transform: scale(1); opacity: 0.8; }
     }
 
-    /* Text Visibility and High-Contrast Overrides */
+    /* Text Visibility and High-Contrast */
     .text-muted {
         color: #64748b !important;
     }
@@ -55,6 +55,25 @@
     }
     .text-dark {
         color: #0f172a !important;
+    }
+
+    [data-bs-theme="dark"] .btn-filter {
+        background-color: rgba(255, 255, 255, 0.05);
+        border-color: rgba(255, 255, 255, 0.1);
+        color: #cbd5e1;
+    }
+    [data-bs-theme="dark"] .btn-filter:hover {
+        background-color: rgba(255, 255, 255, 0.1);
+        color: #ffffff;
+    }
+    [data-bs-theme="dark"] .text-dark {
+        color: #f8fafc !important;
+    }
+    [data-bs-theme="dark"] .text-muted {
+        color: #94a3b8 !important;
+    }
+    [data-bs-theme="dark"] .text-secondary {
+        color: #cbd5e1 !important;
     }
 </style>
 

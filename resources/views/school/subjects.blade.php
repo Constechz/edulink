@@ -49,7 +49,7 @@
         padding: 0.25rem 0.5rem;
     }
 
-    /* Text Visibility and High-Contrast Overrides */
+    /* Text Visibility and High-Contrast */
     .text-muted {
         color: #64748b !important;
     }
@@ -58,6 +58,30 @@
     }
     .text-dark {
         color: #0f172a !important;
+    }
+
+    [data-bs-theme="dark"] .btn-filter {
+        background-color: rgba(255, 255, 255, 0.05);
+        border-color: rgba(255, 255, 255, 0.1);
+        color: #cbd5e1;
+    }
+    [data-bs-theme="dark"] .btn-filter:hover {
+        background-color: rgba(255, 255, 255, 0.1);
+        color: #ffffff;
+    }
+    [data-bs-theme="dark"] .code-badge {
+        background-color: rgba(255, 255, 255, 0.08);
+        color: #FFD700;
+        border-color: rgba(255, 255, 255, 0.15);
+    }
+    [data-bs-theme="dark"] .text-dark {
+        color: #f8fafc !important;
+    }
+    [data-bs-theme="dark"] .text-muted {
+        color: #94a3b8 !important;
+    }
+    [data-bs-theme="dark"] .text-secondary {
+        color: #cbd5e1 !important;
     }
 </style>
 
@@ -170,7 +194,7 @@
                                         @if($subj->is_core)
                                             <span class="badge bg-primary bg-opacity-10 text-primary px-2 py-1" style="border-radius: 6px; font-size: 0.72rem;">Core</span>
                                         @else
-                                            <span class="badge bg-info bg-opacity-10 text-info px-2 py-1" style="border-radius: 6px; font-size: 0.72rem;">Elective</span>
+                                            <span class="badge bg-warning-subtle px-2 py-1 fw-semibold" style="border-radius: 6px; font-size: 0.72rem;">Elective</span>
                                         @endif
                                     </td>
                                     <td>

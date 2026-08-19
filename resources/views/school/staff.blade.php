@@ -293,7 +293,7 @@
                                     </form>
 
                                     <!-- HR details button -->
-                                    <a href="{{ route('school.staff-hr.show', $staff->id) }}" class="btn btn-sm btn-outline-info d-inline-flex align-items-center gap-1 px-2.5 py-1.5 rounded-3 shadow-xs fw-bold" style="font-size: 0.76rem; border-color: rgba(13,202,240,0.5);" title="HR profile & qualifications">
+                                    <a href="{{ route('school.staff-hr.show', $staff->id) }}" class="btn btn-sm btn-outline-primary d-inline-flex align-items-center gap-1 px-2.5 py-1.5 rounded-3 shadow-xs fw-bold" style="font-size: 0.76rem;" title="HR profile & qualifications">
                                         <i class="bi bi-file-earmark-person"></i> HR Profile
                                     </a>
                                 </div>

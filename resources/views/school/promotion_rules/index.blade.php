@@ -116,7 +116,7 @@
                                         <td class="py-3">
                                             <span class="d-block fw-bold text-dark text-capitalize mb-0">{{ $config->level }}</span>
                                             @if($config->class)
-                                                <span class="badge bg-info-subtle text-info badge-scope">Class: {{ $config->class->name }}</span>
+                                                <span class="badge bg-primary-subtle text-primary badge-scope">Class: {{ $config->class->name }}</span>
                                             @else
                                                 <span class="badge bg-secondary-subtle text-secondary badge-scope">Level-Wide</span>
                                             @endif
