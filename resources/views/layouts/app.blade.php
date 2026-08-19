@@ -98,6 +98,23 @@
             border-color: rgba(255, 255, 255, 0.08) !important;
         }
 
+        ::placeholder,
+        .form-control::placeholder,
+        input::placeholder,
+        textarea::placeholder {
+            color: #94a3b8 !important;
+            opacity: 0.45 !important;
+            font-weight: 400;
+        }
+
+        [data-bs-theme="dark"] ::placeholder,
+        [data-bs-theme="dark"] .form-control::placeholder,
+        [data-bs-theme="dark"] input::placeholder,
+        [data-bs-theme="dark"] textarea::placeholder {
+            color: #64748b !important;
+            opacity: 0.4 !important;
+        }
+
         /* Override general list items and slot cards that have bg-white class in dark mode */
         [data-bs-theme="dark"] .list-group.bg-white,
         [data-bs-theme="dark"] .list-group-item.bg-white {

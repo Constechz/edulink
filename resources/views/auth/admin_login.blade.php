@@ -193,6 +193,13 @@
             transition: all 0.2s ease;
         }
 
+        .form-control-custom::placeholder,
+        input::placeholder {
+            color: #94a3b8 !important;
+            opacity: 0.45 !important;
+            font-weight: 400;
+        }
+
         .form-control-custom:focus {
             background-color: var(--bg-card);
             border-color: var(--primary-navy);
@@ -203,6 +210,12 @@
             background-color: #0c1427;
             border-color: rgba(255, 255, 255, 0.1);
             color: #f8fafc;
+        }
+
+        [data-bs-theme="dark"] .form-control-custom::placeholder,
+        [data-bs-theme="dark"] input::placeholder {
+            color: #64748b !important;
+            opacity: 0.4 !important;
         }
 
         .btn-brand-submit {
@@ -357,7 +370,7 @@
 
                     <div class="mb-3">
                         <label for="password" class="form-label-custom">Master Password <span class="text-danger">*</span></label>
-                        <input type="password" class="form-control form-control-custom" id="password" name="password" placeholder="••••••••" required autocomplete="current-password">
+                        <input type="password" class="form-control form-control-custom" id="password" name="password" placeholder="Enter master password" required autocomplete="current-password">
                     </div>
 
                     <div class="mb-4 form-check">

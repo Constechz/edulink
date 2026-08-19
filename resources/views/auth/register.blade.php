@@ -438,6 +438,21 @@
             transition: all 0.2s ease;
         }
 
+        .form-control-custom::placeholder,
+        .form-select-custom::placeholder,
+        input::placeholder {
+            color: #94a3b8 !important;
+            opacity: 0.45 !important;
+            font-weight: 400;
+        }
+
+        [data-bs-theme="dark"] .form-control-custom::placeholder,
+        [data-bs-theme="dark"] .form-select-custom::placeholder,
+        [data-bs-theme="dark"] input::placeholder {
+            color: #64748b !important;
+            opacity: 0.4 !important;
+        }
+
         .form-control-custom:focus, .form-select-custom:focus {
             background-color: var(--bg-card);
             border-color: var(--primary-navy);
