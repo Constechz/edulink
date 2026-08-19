@@ -1871,6 +1871,25 @@
             .nav-link-custom {
                 font-size: 0.9rem !important;
             }
+            .browser-url-bar {
+                padding: 0.2rem 0.5rem;
+                font-size: 0.65rem;
+                max-width: 170px;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+            }
+            .browser-url-bar span {
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+            }
+            .erp-mockup-topbar .badge {
+                display: none;
+            }
+            .erp-mockup-body {
+                height: 290px;
+            }
         }
     </style>
 </head>

@@ -278,6 +278,76 @@
             font-size: 0.82rem;
             color: var(--text-muted);
         }
+
+        /* Mobile Responsive Adjustments */
+        @media (max-width: 576px) {
+            .auth-top-header {
+                padding: 0.65rem 0;
+            }
+            .brand-title {
+                font-size: 1.15rem;
+            }
+            .logo-box {
+                width: 32px;
+                height: 32px;
+                font-size: 1.05rem;
+                border-radius: 8px;
+            }
+            .theme-toggle-btn {
+                width: 32px;
+                height: 32px;
+                font-size: 0.9rem;
+                border-radius: 8px;
+            }
+            .btn-brand-outline-sm {
+                padding: 0.32rem 0.65rem;
+                font-size: 0.78rem;
+                border-radius: 7px;
+                white-space: nowrap;
+            }
+            main.py-5 {
+                padding-top: 1.5rem !important;
+                padding-bottom: 1.5rem !important;
+            }
+            .auth-card {
+                padding: 1.65rem 1.25rem !important;
+                border-radius: 16px !important;
+                margin: 0 auto;
+                box-shadow: var(--shadow-md) !important;
+            }
+            .auth-card .logo-box {
+                width: 42px !important;
+                height: 42px !important;
+                font-size: 1.3rem !important;
+                margin-bottom: 0.75rem !important;
+            }
+            .auth-card h3 {
+                font-size: 1.25rem !important;
+                line-height: 1.3 !important;
+            }
+            .auth-card p.text-muted {
+                font-size: 0.82rem !important;
+                line-height: 1.45 !important;
+            }
+            .form-label-custom {
+                font-size: 0.82rem !important;
+                margin-bottom: 0.25rem !important;
+            }
+            .form-control-custom {
+                font-size: 0.88rem !important;
+                padding: 0.58rem 0.85rem !important;
+                border-radius: 8px !important;
+            }
+            .btn-brand-submit {
+                font-size: 0.92rem !important;
+                padding: 0.65rem 1rem !important;
+                border-radius: 10px !important;
+            }
+            .auth-footer {
+                padding: 0.85rem 0;
+                font-size: 0.75rem;
+            }
+        }
     </style>
 </head>
 <body>
@@ -287,7 +357,7 @@
     <header class="auth-top-header">
         <div class="container d-flex justify-content-between align-items-center">
             <a class="d-flex align-items-center text-decoration-none" href="{{ url('/') }}">
-                <div class="logo-box me-2.5">
+                <div class="logo-box me-2">
                     <i class="bi bi-mortarboard-fill"></i>
                 </div>
                 <span class="brand-title">
@@ -295,15 +365,15 @@
                 </span>
             </a>
 
-            <div class="d-flex align-items-center gap-3">
+            <div class="d-flex align-items-center gap-2">
                 <button class="theme-toggle-btn" id="themeToggleBtn" type="button" aria-label="Toggle dark/light theme" title="Toggle theme">
                     <i class="bi bi-moon-stars-fill" id="themeIcon"></i>
                 </button>
-                <a href="{{ url('/') }}" class="text-decoration-none text-muted small fw-semibold d-none d-sm-inline-flex align-items-center">
+                <a href="{{ url('/') }}" class="text-decoration-none text-muted small fw-semibold d-none d-md-inline-flex align-items-center me-1">
                     <i class="bi bi-arrow-left me-1"></i>Home
                 </a>
-                <a href="{{ route('register') }}" class="btn-brand-outline-sm">
-                    <i class="bi bi-rocket-takeoff-fill"></i>Register School
+                <a href="{{ route('register') }}" class="btn-brand-outline-sm text-nowrap">
+                    <i class="bi bi-rocket-takeoff-fill"></i><span class="d-none d-sm-inline">Register School</span><span class="d-sm-none">Register</span>
                 </a>
             </div>
         </div>

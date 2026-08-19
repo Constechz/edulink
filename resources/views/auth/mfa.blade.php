@@ -148,6 +148,32 @@
             margin-bottom: 1.5rem;
             text-align: left;
         }
+
+        @media (max-width: 576px) {
+            .glass-card {
+                padding: 1.75rem 1.25rem !important;
+                border-radius: 16px !important;
+            }
+            .brand-logo {
+                font-size: 1.45rem !important;
+                margin-bottom: 1rem !important;
+            }
+            .instruction-text {
+                font-size: 0.85rem !important;
+                margin-bottom: 1.25rem !important;
+            }
+            .otp-field {
+                width: 42px !important;
+                height: 48px !important;
+                font-size: 1.25rem !important;
+                border-radius: 8px !important;
+            }
+            .btn-verify {
+                padding: 0.65rem 1rem !important;
+                font-size: 0.92rem !important;
+                border-radius: 10px !important;
+            }
+        }
     </style>
 </head>
 <body>
