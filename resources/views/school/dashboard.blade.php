@@ -29,10 +29,27 @@
         </div>
     @endif
 
-    <!-- Greeting Section -->
-    <div class="glass-card p-4 mb-4" style="background: linear-gradient(135deg, rgba(0, 51, 102, 0.05) 0%, rgba(255, 215, 0, 0.05) 100%);">
-        <h3 class="font-weight-bold mb-1" style="font-weight: 700; color: var(--primary-color);">Welcome to {{ \App\Models\SystemSetting::getVal('platform_name', 'EduLink') }} Ghana</h3>
-        <p class="text-muted mb-0">Hello, <strong>{{ Auth::user()->name }}</strong>. You are currently logged in as a <strong>{{ Auth::user()->role ? Auth::user()->role->name : 'Staff Member' }}</strong>.</p>
+    <!-- Executive Header Banner -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="p-4 text-white rounded-4 shadow-sm position-relative overflow-hidden" style="background: linear-gradient(135deg, #002244 0%, #003366 60%, #0f4c81 100%); border: 1px solid rgba(255, 215, 0, 0.15);">
+                <div class="row align-items-center g-3">
+                    <div class="col-lg-8">
+                        <h2 class="fw-bold mb-1" style="font-size: 1.75rem; letter-spacing: -0.5px;">
+                            {{ $tenant ? $tenant->name : \App\Models\SystemSetting::getVal('platform_name', 'EduLink') . ' Ghana' }}
+                        </h2>
+                        <p class="text-white-50 mb-0" style="font-size: 0.9rem;">
+                            Logged in as <strong class="text-white">{{ Auth::user()->name }}</strong> &bull; <span style="color: var(--accent-color, #FFD700);">{{ Auth::user()->role ? Auth::user()->role->name : 'Administrator' }}</span>
+                        </p>
+                    </div>
+                    <div class="col-lg-4 text-lg-end">
+                        <a href="{{ route('school.billing.index') }}" class="btn btn-warning rounded-3 px-3 py-2 fw-bold text-decoration-none shadow-sm">
+                            <i class="bi bi-credit-card me-1"></i>Subscription &amp; Invoices
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
     <!-- Quick Action Shortcut Cards -->

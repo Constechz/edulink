@@ -21,8 +21,13 @@ class SuperAdminAnalyticsController extends Controller
      */
     public function index(Request $request)
     {
-        $schools = School::with('plan')->get();
-        $plans = Plan::all();
+        $schools = School::select('id', 'name', 'school_code', 'plan_id', 'subscription_status', 'trial_ends_at', 'created_at')
+            ->with(['plan' => function($q) {
+                $q->select('id', 'name', 'price_monthly');
+            }])
+            ->get();
+            
+        $plans = Plan::select('id', 'name', 'price_monthly', 'price_yearly')->get();
 
         // Calculate SaaS revenue metrics
         $totalSchools = $schools->count();
@@ -32,7 +37,6 @@ class SuperAdminAnalyticsController extends Controller
         $mrr = 0.0;
         foreach ($schools as $school) {
             if ($school->subscription_status === 'active' && $school->plan) {
-                // If school is active, add its plan's monthly price to MRR
                 $mrr += (float) $school->plan->price_monthly;
             }
         }
@@ -42,8 +46,10 @@ class SuperAdminAnalyticsController extends Controller
         $totalSmsPurchased = SmsCreditLedger::where('type', 'purchase')->sum('credits');
         $totalSmsUsed = SmsCreditLedger::where('type', 'deduction')->sum('credits');
         
-        // Latest purchases
-        $transactions = SmsCreditLedger::with('school')
+        // Latest purchases with optimized relations
+        $transactions = SmsCreditLedger::with(['school' => function($q) {
+                $q->select('id', 'name', 'school_code');
+            }])
             ->orderBy('created_at', 'desc')
             ->limit(10)
             ->get();
@@ -229,11 +235,13 @@ class SuperAdminAnalyticsController extends Controller
      */
     public function smsCreditsIndex(Request $request)
     {
-        $schools = School::all();
+        $schools = School::select('id', 'name', 'school_code')->orderBy('name', 'asc')->get();
         $totalSmsPurchased = SmsCreditLedger::where('type', 'purchase')->sum('credits');
         $totalSmsUsed = SmsCreditLedger::where('type', 'deduction')->sum('credits');
         
-        $transactions = SmsCreditLedger::with('school')
+        $transactions = SmsCreditLedger::with(['school' => function($q) {
+                $q->select('id', 'name', 'school_code');
+            }])
             ->orderBy('created_at', 'desc')
             ->paginate(15);
 
@@ -245,7 +253,14 @@ class SuperAdminAnalyticsController extends Controller
      */
     public function accessLogsIndex(Request $request)
     {
-        $logs = AuditLog::with(['school', 'user'])
+        $logs = AuditLog::with([
+                'school' => function($q) {
+                    $q->select('id', 'name', 'school_code');
+                },
+                'user' => function($q) {
+                    $q->select('id', 'name', 'email');
+                }
+            ])
             ->orderBy('created_at', 'desc')
             ->paginate(20);
 

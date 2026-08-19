@@ -9,6 +9,69 @@ use Illuminate\Http\Request;
 class LandingPageController extends Controller
 {
     /**
+     * Show the public welcome landing page.
+     */
+    public function index()
+    {
+        return view('welcome');
+    }
+
+    /**
+     * Generate dynamic XML sitemap for SEO crawlers.
+     */
+    public function sitemap()
+    {
+        $now = now()->toAtomString();
+        
+        $xml = '<?xml version="1.0" encoding="UTF-8"?>';
+        $xml .= '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">';
+        
+        // Homepage
+        $xml .= '<url>';
+        $xml .= '<loc>' . url('/') . '</loc>';
+        $xml .= '<lastmod>' . $now . '</lastmod>';
+        $xml .= '<changefreq>daily</changefreq>';
+        $xml .= '<priority>1.0</priority>';
+        $xml .= '</url>';
+        
+        // Login page
+        $xml .= '<url>';
+        $xml .= '<loc>' . url('/login') . '</loc>';
+        $xml .= '<lastmod>' . $now . '</lastmod>';
+        $xml .= '<changefreq>monthly</changefreq>';
+        $xml .= '<priority>0.8</priority>';
+        $xml .= '</url>';
+        
+        // Register page
+        $xml .= '<url>';
+        $xml .= '<loc>' . url('/register') . '</loc>';
+        $xml .= '<lastmod>' . $now . '</lastmod>';
+        $xml .= '<changefreq>monthly</changefreq>';
+        $xml .= '<priority>0.8</priority>';
+        $xml .= '</url>';
+        
+        // Add active tenant school websites automatically
+        try {
+            $schools = \App\Models\School::where('is_active', true)->get();
+            foreach ($schools as $school) {
+                $domain = $school->custom_domain ?: ($school->subdomain . '.' . parse_url(config('app.url'), PHP_URL_HOST));
+                $xml .= '<url>';
+                $xml .= '<loc>' . url('/' . $school->subdomain) . '</loc>';
+                $xml .= '<lastmod>' . $school->updated_at->toAtomString() . '</lastmod>';
+                $xml .= '<changefreq>weekly</changefreq>';
+                $xml .= '<priority>0.7</priority>';
+                $xml .= '</url>';
+            }
+        } catch (\Throwable $e) {
+            // gracefully fallback
+        }
+        
+        $xml .= '</urlset>';
+        
+        return response($xml, 200)->header('Content-Type', 'text/xml');
+    }
+
+    /**
      * Show the landing page editor.
      */
     public function edit()

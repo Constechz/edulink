@@ -13,10 +13,10 @@ class SuperAdminHelpSettingsController extends Controller
      */
     public function index()
     {
-        $manuals = json_decode(SystemSetting::getVal('help_role_manuals', '[]'), true);
-        $quickRefSba = json_decode(SystemSetting::getVal('help_quick_ref_sba', '[]'), true);
-        $roadmap = json_decode(SystemSetting::getVal('help_roadmap', '[]'), true);
-        $trainingVideos = json_decode(SystemSetting::getVal('help_training_videos', '[]'), true);
+        $manuals = json_decode(SystemSetting::getVal('help_role_manuals', '[]'), true) ?: [];
+        $quickRefSba = json_decode(SystemSetting::getVal('help_quick_ref_sba', '[]'), true) ?: [];
+        $roadmap = json_decode(SystemSetting::getVal('help_roadmap', '[]'), true) ?: [];
+        $trainingVideos = json_decode(SystemSetting::getVal('help_training_videos', '[]'), true) ?: [];
 
         return view('super-admin.help-settings.index', compact('manuals', 'quickRefSba', 'roadmap', 'trainingVideos'));
     }

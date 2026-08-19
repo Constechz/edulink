@@ -3,147 +3,414 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login | {{ config('app.name', 'EduLink') }} Ghana ERP</title>
-    <!-- Google Fonts: Outfit -->
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Theme Initializer (Prevent Theme Flash) -->
+    <script>
+        (function() {
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            document.documentElement.setAttribute('data-bs-theme', savedTheme);
+        })();
+    </script>
+
+    @php
+        $appName = config('app.name', 'EduLink');
+    @endphp
+
+    <title>Sign In | {{ $appName }} Ghana ERP</title>
+    
+    <link rel="icon" type="image/png" href="{{ asset('favicon.png') }}">
+    <link rel="shortcut icon" type="image/x-icon" href="{{ asset('favicon.ico') }}">
+    
+    <!-- Google Fonts: Outfit & Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
     <!-- Bootstrap 5 CSS CDN -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Bootstrap Icons -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+    
     <style>
-        body {
-            font-family: 'Outfit', sans-serif;
-            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+        :root {
+            /* Brand Colors */
+            --primary-navy: #003366;       /* Official EduLink GES Navy */
+            --primary-dark: #002244;       /* Deep Navy */
+            --primary-deep: #07182d;       /* Dark Canvas Slate */
+            --primary-light: #0f4c81;      /* Mid-Navy */
+            --primary-subtle: #eef4fb;     /* Soft Blue Tint */
+            
+            --accent-gold: #FFD700;        /* Warm Gold */
+            --accent-gold-dark: #d99b00;   /* Deep Gold */
+            --accent-amber: #f59e0b;       /* Amber */
+            
+            --bg-canvas: #f8fafc;          /* Light Canvas */
+            --bg-card: #ffffff;            /* White Surface */
+            --bg-light-tint: #f1f5f9;      /* Tint Section */
+            
+            --text-heading: #0f172a;       /* Dark Text */
+            --text-body: #334155;          /* Body Text */
+            --text-muted: #64748b;         /* Muted Text */
+            
+            --border-subtle: #e2e8f0;      /* Subtle Border */
+            
+            --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 14px -2px rgba(0, 51, 102, 0.08);
+            --shadow-lg: 0 12px 30px -4px rgba(0, 51, 102, 0.12);
+            --shadow-xl: 0 20px 40px -8px rgba(0, 51, 102, 0.16);
+
+            --font-heading: 'Outfit', sans-serif;
+            --font-body: 'Inter', sans-serif;
+        }
+
+        /* Dark Mode Theme Tokens */
+        [data-bs-theme="dark"] {
+            --bg-canvas: #090f1d;
+            --bg-card: #111a2e;
+            --bg-light-tint: #0c1427;
+            
+            --text-heading: #f8fafc;
+            --text-body: #cbd5e1;
+            --text-muted: #94a3b8;
+            
+            --border-subtle: rgba(255, 255, 255, 0.08);
+            --primary-subtle: rgba(0, 51, 102, 0.45);
+            
+            --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.3);
+            --shadow-md: 0 4px 14px -2px rgba(0, 0, 0, 0.4);
+            --shadow-lg: 0 12px 30px -4px rgba(0, 0, 0, 0.5);
+            --shadow-xl: 0 20px 40px -8px rgba(0, 0, 0, 0.6);
+        }
+
+        html, body {
+            overflow-x: hidden;
+            width: 100%;
+            margin: 0;
+            padding: 0;
             min-height: 100vh;
+        }
+
+        body {
+            font-family: var(--font-body);
+            background-color: var(--bg-canvas);
+            color: var(--text-body);
+            line-height: 1.6;
+            transition: background-color 0.3s ease, color 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: var(--font-heading);
+            color: var(--text-heading);
+            font-weight: 700;
+        }
+
+        /* Global Header */
+        .auth-top-header {
+            background: var(--bg-card);
+            border-bottom: 1px solid var(--border-subtle);
+            padding: 0.85rem 0;
+            transition: background-color 0.3s ease, border-color 0.3s ease;
+        }
+
+        .logo-box {
+            width: 38px;
+            height: 38px;
+            background: linear-gradient(135deg, var(--primary-navy) 0%, var(--primary-light) 100%);
+            border-radius: 10px;
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 2rem;
-            color: #f8fafc;
+            color: var(--accent-gold);
+            font-size: 1.25rem;
+            box-shadow: 0 2px 8px rgba(0, 51, 102, 0.2);
         }
 
-        .login-card {
-            background: rgba(30, 41, 59, 0.7);
-            backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 24px;
-            width: 100%;
-            max-width: 440px;
-            padding: 2.5rem;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
-        }
-
-        .brand-logo {
-            font-size: 2rem;
+        .brand-title {
+            font-size: 1.35rem;
             font-weight: 800;
-            text-align: center;
-            margin-bottom: 2rem;
+            color: var(--primary-navy);
+            letter-spacing: -0.5px;
+        }
+
+        .brand-title span.gold-text {
+            color: var(--accent-gold-dark);
+        }
+
+        [data-bs-theme="dark"] .brand-title {
             color: #ffffff;
         }
 
-        .brand-logo span {
-            color: #FFD700;
-        }
-
-        .form-control {
-            background: rgba(15, 23, 42, 0.5);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            color: #ffffff;
-            border-radius: 12px;
-            padding: 0.75rem 1rem;
-        }
-
-        .form-control::placeholder {
-            color: #94a3b8 !important;
-            opacity: 0.7 !important;
-        }
-
-        .form-control:focus {
-            background: rgba(15, 23, 42, 0.7);
-            border-color: #FFD700;
-            box-shadow: 0 0 0 0.25rem rgba(255, 215, 0, 0.15);
-            color: #ffffff;
-        }
-
-        .btn-primary {
-            background: #FFD700;
-            border: none;
-            color: #0f172a;
-            font-weight: 700;
-            border-radius: 12px;
-            padding: 0.75rem;
+        .theme-toggle-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            background: var(--bg-light-tint);
+            border: 1px solid var(--border-subtle);
+            color: var(--primary-navy);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            cursor: pointer;
             transition: all 0.2s ease;
         }
 
-        .btn-primary:hover, .btn-primary:focus {
-            background: #e6c200;
-            transform: translateY(-1px);
-            color: #0f172a;
+        .theme-toggle-btn:hover {
+            transform: scale(1.06);
+            background: var(--primary-subtle);
+            color: var(--primary-dark);
         }
 
-        .form-check-input:checked {
-            background-color: #FFD700;
-            border-color: #FFD700;
+        [data-bs-theme="dark"] .theme-toggle-btn {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(255, 255, 255, 0.15);
+            color: var(--accent-gold);
         }
 
-        .form-check-label {
-            color: #cbd5e1;
+        .auth-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: 20px;
+            padding: 2.5rem 2.25rem;
+            box-shadow: var(--shadow-xl);
+            width: 100%;
+            max-width: 460px;
+            margin: 0 auto;
+            transition: background-color 0.3s ease, border-color 0.3s ease;
         }
 
-        .text-muted {
-            color: #94a3b8 !important;
+        .form-label-custom {
+            font-size: 0.84rem;
+            font-weight: 600;
+            color: var(--text-heading);
+            margin-bottom: 0.35rem;
+        }
+
+        [data-bs-theme="dark"] .form-label-custom {
+            color: #f8fafc;
+        }
+
+        .form-control-custom {
+            background-color: var(--bg-canvas);
+            border: 1.5px solid var(--border-subtle);
+            color: var(--text-heading);
+            border-radius: 10px;
+            padding: 0.65rem 0.95rem;
+            font-size: 0.92rem;
+            transition: all 0.2s ease;
+        }
+
+        .form-control-custom:focus {
+            background-color: var(--bg-card);
+            border-color: var(--primary-navy);
+            box-shadow: 0 0 0 3.5px rgba(0, 51, 102, 0.12);
+            color: var(--text-heading);
+        }
+
+        [data-bs-theme="dark"] .form-control-custom {
+            background-color: #0c1427;
+            border-color: rgba(255, 255, 255, 0.1);
+            color: #f8fafc;
+        }
+
+        [data-bs-theme="dark"] .form-control-custom:focus {
+            background-color: #111a2e;
+            border-color: var(--accent-gold);
+            box-shadow: 0 0 0 3.5px rgba(255, 215, 0, 0.15);
+            color: #ffffff;
+        }
+
+        .btn-brand-submit {
+            background: linear-gradient(135deg, var(--primary-navy) 0%, var(--primary-light) 100%);
+            border: none;
+            color: #ffffff !important;
+            font-weight: 700;
+            font-size: 1rem;
+            border-radius: 12px;
+            padding: 0.75rem 1.5rem;
+            box-shadow: 0 4px 14px rgba(0, 51, 102, 0.25);
+            transition: all 0.25s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            width: 100%;
+        }
+
+        .btn-brand-submit:hover {
+            background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary-navy) 100%);
+            box-shadow: 0 6px 18px rgba(0, 51, 102, 0.35);
+            transform: translateY(-2px);
+        }
+
+        .btn-brand-outline-sm {
+            border: 1.5px solid var(--primary-navy);
+            color: var(--primary-navy);
+            background: transparent;
+            font-weight: 600;
+            font-size: 0.85rem;
+            border-radius: 8px;
+            padding: 0.35rem 0.9rem;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            transition: all 0.2s ease;
+        }
+
+        .btn-brand-outline-sm:hover {
+            background: var(--primary-subtle);
+            color: var(--primary-dark);
+        }
+
+        [data-bs-theme="dark"] .btn-brand-outline-sm {
+            border-color: rgba(255, 255, 255, 0.25);
+            color: #f1f5f9;
+        }
+
+        .auth-footer {
+            background: var(--bg-card);
+            border-top: 1px solid var(--border-subtle);
+            padding: 1.25rem 0;
+            font-size: 0.82rem;
+            color: var(--text-muted);
         }
     </style>
 </head>
 <body>
     @include('partials.preloader')
 
-    <div class="login-card">
-        <div class="brand-logo">
-            <i class="bi bi-globe-europe-africa me-2 text-warning"></i>{{ \App\Models\SystemSetting::getVal('platform_name', config('app.name', 'EduLink')) }}
-        </div>
-
-        <h4 class="text-center mb-4" style="font-weight: 600;">Welcome Back</h4>
-
-        @if($errors->any())
-            <div class="alert alert-danger border-0 bg-danger text-white mb-4" style="border-radius: 12px; --bs-bg-opacity: 0.2;">
-                <ul class="mb-0 list-unstyled">
-                    @foreach($errors->all() as $error)
-                        <li><i class="bi bi-exclamation-circle-fill me-2"></i>{{ $error }}</li>
-                    @endforeach
-                </ul>
-            </div>
-        @endif
-
-        <form action="{{ route('login') }}" method="POST">
-            @csrf
-            
-            <div class="mb-3">
-                <label for="email" class="form-label" style="font-size: 0.9rem; font-weight: 500;">Email Address or Student ID</label>
-                <input type="text" class="form-control" id="email" name="email" value="{{ old('email') }}" placeholder="name@example.com or STD-YYYY-XXXX" required autocomplete="username" autofocus>
-            </div>
-
-            <div class="mb-4">
-                <div class="d-flex justify-content-between mb-2">
-                    <label for="password" class="form-label m-0" style="font-size: 0.9rem; font-weight: 500;">Password</label>
-                    <a href="{{ route('password.request') }}" class="text-warning text-decoration-none" style="font-size: 0.85rem; font-weight: 500;">Forgot password?</a>
+    <!-- Top Navigation / Brand Header -->
+    <header class="auth-top-header">
+        <div class="container d-flex justify-content-between align-items-center">
+            <a class="d-flex align-items-center text-decoration-none" href="{{ url('/') }}">
+                <div class="logo-box me-2.5">
+                    <i class="bi bi-mortarboard-fill"></i>
                 </div>
-                <input type="password" class="form-control" id="password" name="password" placeholder="••••••••" required autocomplete="current-password">
+                <span class="brand-title">
+                    {{ substr($appName, 0, 3) }}<span class="gold-text">{{ substr($appName, 3) }}</span>
+                </span>
+            </a>
+
+            <div class="d-flex align-items-center gap-3">
+                <button class="theme-toggle-btn" id="themeToggleBtn" type="button" aria-label="Toggle dark/light theme" title="Toggle theme">
+                    <i class="bi bi-moon-stars-fill" id="themeIcon"></i>
+                </button>
+                <a href="{{ url('/') }}" class="text-decoration-none text-muted small fw-semibold d-none d-sm-inline-flex align-items-center">
+                    <i class="bi bi-arrow-left me-1"></i>Home
+                </a>
+                <a href="{{ route('register') }}" class="btn-brand-outline-sm">
+                    <i class="bi bi-rocket-takeoff-fill"></i>Register School
+                </a>
             </div>
+        </div>
+    </header>
 
-            <div class="mb-4 form-check">
-                <input type="checkbox" class="form-check-input" id="remember" name="remember">
-                <label class="form-check-label" for="remember" style="font-size: 0.9rem;">Remember me on this device</label>
+    <!-- Main Sign In Card -->
+    <main class="py-5 flex-grow-1 d-flex align-items-center">
+        <div class="container">
+            <div class="auth-card">
+                
+                <div class="text-center mb-4">
+                    <div class="logo-box mx-auto mb-3" style="width: 48px; height: 48px; font-size: 1.5rem;">
+                        <i class="bi bi-mortarboard-fill"></i>
+                    </div>
+                    <h3 class="fw-bold mb-1" style="font-size: 1.5rem;">Welcome to EduLink Portal</h3>
+                    <p class="text-muted small mb-0">Sign in to access your administrative, teacher, or parent account</p>
+                </div>
+
+                <!-- Validation Errors Alert -->
+                @if(isset($errors) && $errors->any())
+                    <div class="alert alert-danger border-0 mb-4 rounded-3 p-3" style="background-color: rgba(239, 68, 68, 0.1); color: #dc2626;">
+                        <ul class="mb-0 ps-3 small">
+                            @foreach($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
+
+                <form action="{{ route('login') }}" method="POST" autocomplete="off">
+                    @csrf
+                    
+                    <div class="mb-3">
+                        <label for="email" class="form-label-custom">Email Address or Student ID <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control form-control-custom" id="email" name="email" value="{{ old('email') }}" placeholder="admin@school.edu.gh or STD-2026-001" required autocomplete="username" autofocus>
+                    </div>
+
+                    <div class="mb-3">
+                        <div class="d-flex justify-content-between align-items-center mb-1">
+                            <label for="password" class="form-label-custom mb-0">Password <span class="text-danger">*</span></label>
+                            <a href="{{ route('password.request') }}" class="text-primary text-decoration-none small fw-semibold">Forgot password?</a>
+                        </div>
+                        <input type="password" class="form-control form-control-custom" id="password" name="password" placeholder="••••••••" required autocomplete="current-password">
+                    </div>
+
+                    <div class="mb-4 form-check">
+                        <input type="checkbox" class="form-check-input" id="remember" name="remember">
+                        <label class="form-check-label text-muted small" for="remember">Remember my session on this device</label>
+                    </div>
+
+                    <button type="submit" class="btn-brand-submit mb-3">
+                        <span>Sign In to Dashboard</span>
+                        <i class="bi bi-box-arrow-in-right"></i>
+                    </button>
+
+                    <div class="text-center pt-2 border-top" style="border-color: var(--border-subtle) !important;">
+                        <span class="text-muted small">Need to onboard a new institution?</span>
+                        <a href="{{ route('register') }}" class="text-primary text-decoration-none fw-bold small ms-1">Register School Free &rarr;</a>
+                    </div>
+                </form>
+
             </div>
+        </div>
+    </main>
 
-            <button type="submit" class="btn btn-primary w-100 py-2.5">Sign In</button>
+    <!-- Footer -->
+    <footer class="auth-footer text-center">
+        <div class="container">
+            &copy; 2026 {{ $appName }} Ghana ERP. Built for Educational Excellence.
+        </div>
+    </footer>
 
-            <div class="text-center mt-4">
-                <span class="text-muted small">Are you a school administrator?</span>
-                <a href="{{ route('register') }}" class="text-warning text-decoration-none small fw-bold ms-1">Register your school</a>
-            </div>
-        </form>
-    </div>
+    <!-- Bootstrap 5 Bundle JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
+    <!-- Theme Toggle JS -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const themeToggleBtn = document.getElementById('themeToggleBtn');
+            const themeIcon = document.getElementById('themeIcon');
+            
+            function updateThemeIcon(theme) {
+                if (themeIcon) {
+                    if (theme === 'dark') {
+                        themeIcon.className = 'bi bi-sun-fill text-warning';
+                        themeToggleBtn.setAttribute('title', 'Switch to Light Mode');
+                    } else {
+                        themeIcon.className = 'bi bi-moon-stars-fill';
+                        themeToggleBtn.setAttribute('title', 'Switch to Dark Mode');
+                    }
+                }
+            }
+
+            const currentTheme = document.documentElement.getAttribute('data-bs-theme') || 'light';
+            updateThemeIcon(currentTheme);
+
+            if (themeToggleBtn) {
+                themeToggleBtn.addEventListener('click', function() {
+                    const activeTheme = document.documentElement.getAttribute('data-bs-theme') || 'light';
+                    const newTheme = activeTheme === 'dark' ? 'light' : 'dark';
+                    
+                    document.documentElement.setAttribute('data-bs-theme', newTheme);
+                    localStorage.setItem('theme', newTheme);
+                    updateThemeIcon(newTheme);
+                });
+            }
+        });
+    </script>
 </body>
 </html>

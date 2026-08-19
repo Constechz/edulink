@@ -7,23 +7,50 @@
 <div class="container-fluid p-0">
     <!-- Session Messages -->
     @if(session('success'))
-        <div class="alert alert-success alert-dismissible fade show mb-4 rounded-4 shadow-sm" role="alert">
-            <i class="bi bi-check-circle-fill me-2 text-success"></i>{{ session('success') }}
+        <div class="alert alert-success alert-dismissible fade show mb-4 rounded-4 shadow-sm border-0 d-flex align-items-center" role="alert" style="background: rgba(16, 185, 129, 0.12); color: #059669; border-left: 4px solid #10b981 !important;">
+            <i class="bi bi-check-circle-fill fs-5 me-2.5"></i>
+            <div>{{ session('success') }}</div>
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
     @endif
 
     @if($errors->any())
-        <div class="alert alert-danger alert-dismissible fade show mb-4 rounded-4 shadow-sm" role="alert">
-            <i class="bi bi-exclamation-triangle-fill me-2 text-danger"></i>
-            <ul class="mb-0 ps-3">
-                @foreach($errors->all() as $error)
+        <div class="alert alert-danger alert-dismissible fade show mb-4 rounded-4 shadow-sm border-0" role="alert" style="background: rgba(239, 68, 68, 0.1); color: #dc2626; border-left: 4px solid #ef4444 !important;">
+            <div class="d-flex align-items-center mb-1">
+                <i class="bi bi-exclamation-triangle-fill fs-5 me-2"></i>
+                <strong>Action Failed:</strong>
+            </div>
+            <ul class="mb-0 ps-3 small">
+                @foreach ($errors->all() as $error)
                     <li>{{ $error }}</li>
                 @endforeach
             </ul>
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
     @endif
+
+    <!-- Executive Header Banner -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="p-4 text-white rounded-4 shadow-sm position-relative overflow-hidden" style="background: linear-gradient(135deg, #002244 0%, #003366 60%, #0f4c81 100%); border: 1px solid rgba(255, 215, 0, 0.15);">
+                <div class="row align-items-center g-3">
+                    <div class="col-lg-8">
+                        <h2 class="fw-bold mb-2" style="font-size: 1.75rem; letter-spacing: -0.5px;">
+                            Global Configurations &amp; <span style="color: var(--accent-color, #FFD700);">Module Controls</span>
+                        </h2>
+                        <p class="text-white-50 mb-0" style="font-size: 0.9rem; max-width: 650px;">
+                            Manage payment gateway merchant keys (Paystack / Flutterwave), SMS sender IDs, self-registration switches, SEO meta tags, and feature paywalls.
+                        </p>
+                    </div>
+                    <div class="col-lg-4 text-lg-end">
+                        <a href="{{ route('super-admin.env-settings') }}" class="btn btn-warning rounded-3 px-3 py-2 fw-bold text-decoration-none shadow-sm">
+                            <i class="bi bi-file-earmark-code me-1"></i>.env Environment Editor
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <form action="{{ route('super-admin.settings.update') }}" method="POST" enctype="multipart/form-data">
         @csrf
@@ -32,7 +59,7 @@
             <!-- Left: Pricing & Controls -->
             <div class="col-lg-6">
                 <div class="glass-card p-4 shadow-sm">
-                    <h5 class="fw-bold text-dark mb-4"><i class="bi bi-sliders2-vertical text-primary me-2"></i>Monetization & Controls</h5>
+                    <h5 class="fw-bold text-dark mb-3"><i class="bi bi-sliders2-vertical text-primary me-2"></i>Monetization &amp; Controls</h5>
                     <p class="text-muted small mb-4">Manage monetization variables and core platform status control flags.</p>
                     
                     <div class="mb-4">
@@ -101,7 +128,7 @@
                     </div>
 
                     <div class="form-check form-switch mb-4">
-                        <input class="form-check-input text-danger" type="checkbox" id="maintenance_mode" name="maintenance_mode" value="1" {{ $maintenanceMode == '1' ? 'checked' : '' }}>
+                        <input class="form-check-input" type="checkbox" id="maintenance_mode" name="maintenance_mode" value="1" {{ $maintenanceMode == '1' ? 'checked' : '' }}>
                         <label class="form-check-label fw-semibold text-danger small ms-2" for="maintenance_mode">Enable Platform Maintenance Mode</label>
                         <span class="text-muted small d-block text-danger opacity-75">When enabled, the entire system blocks non-super-admin sessions and serves a platform-wide offline banner. Use with caution.</span>
                     </div>
@@ -128,7 +155,7 @@
 
                 <!-- SEO & Search Engine Indexing -->
                 <div class="glass-card p-4 mt-4 shadow-sm">
-                    <h5 class="fw-bold text-dark mb-4"><i class="bi bi-globe text-primary me-2"></i>SEO & Search Engine Indexing</h5>
+                    <h5 class="fw-bold text-dark mb-3"><i class="bi bi-globe text-primary me-2"></i>SEO &amp; Search Engine Indexing</h5>
                     <p class="text-muted small mb-4">Optimize your platform's visibility on Google, search engines, and social media platforms.</p>
 
                     <div class="mb-4">
@@ -177,7 +204,7 @@
             <!-- Right: Platform Payment Gateways -->
             <div class="col-lg-6">
                 <div class="glass-card p-4 shadow-sm">
-                    <h5 class="fw-bold text-dark mb-4"><i class="bi bi-credit-card text-success me-2"></i>Payment Gateways (SaaS Subscriptions)</h5>
+                    <h5 class="fw-bold text-dark mb-3"><i class="bi bi-credit-card text-success me-2"></i>Payment Gateways (SaaS Subscriptions)</h5>
                     <p class="text-muted small mb-4">Configure API keys for the platform-level merchant accounts used to collect subscription fees from schools.</p>
 
                     <!-- Paystack -->
@@ -220,7 +247,7 @@
 
                     <!-- Platform SMS Notifications -->
                     <div class="glass-card p-4 shadow-sm mt-4">
-                        <h5 class="fw-bold text-dark mb-4"><i class="bi bi-chat-left-text-fill text-info me-2"></i>Platform SMS Notifications</h5>
+                        <h5 class="fw-bold text-dark mb-3"><i class="bi bi-chat-left-text-fill text-info me-2"></i>Platform SMS Notifications</h5>
                         <p class="text-muted small mb-4">Configure the message template and gateway settings for notifications sent to newly registered school owners.</p>
 
                         <div class="row g-2 mb-3">
@@ -264,7 +291,7 @@
         <div class="row mt-4">
             <div class="col-12">
                 <div class="glass-card p-3 d-flex justify-content-between align-items-center shadow-xs">
-                    <span class="text-muted small"><i class="bi bi-info-circle me-1"></i>Saving updates all platform configurations globally.</span>
+                    <span class="text-muted small"><i class="bi bi-info-circle me-1 text-primary"></i>Saving updates all platform configurations globally.</span>
                     <button type="submit" class="btn btn-primary rounded-3 px-4 py-2 fw-semibold">
                         <i class="bi bi-save me-1"></i>Save All Settings
                     </button>
@@ -310,31 +337,31 @@
     <div class="row mt-4">
         <div class="col-12">
             <div class="glass-card p-4 shadow-sm">
-                <h5 class="fw-bold text-dark mb-4"><i class="bi bi-cpu text-info me-2"></i>Platform Infrastructure Analytics</h5>
+                <h5 class="fw-bold text-dark mb-3"><i class="bi bi-cpu text-info me-2"></i>Platform Infrastructure Analytics</h5>
                 
-                <div class="row g-4">
+                <div class="row g-3">
                     <div class="col-md-6 col-lg-3">
-                        <div class="p-3 bg-light rounded-4">
+                        <div class="p-3 bg-light rounded-4 border">
                             <span class="text-muted small d-block mb-1">Framework Version</span>
                             <span class="fw-bold text-dark">Laravel v{{ app()->version() }}</span>
                         </div>
                     </div>
                     <div class="col-md-6 col-lg-3">
-                        <div class="p-3 bg-light rounded-4">
+                        <div class="p-3 bg-light rounded-4 border">
                             <span class="text-muted small d-block mb-1">PHP Interpreter</span>
                             <span class="fw-bold text-dark">v{{ PHP_VERSION }}</span>
                         </div>
                     </div>
                     <div class="col-md-6 col-lg-3">
-                        <div class="p-3 bg-light rounded-4">
-                            <span class="text-muted small d-block mb-1">Local Database Connection</span>
+                        <div class="p-3 bg-light rounded-4 border">
+                            <span class="text-muted small d-block mb-1">Database Engine</span>
                             <span class="fw-bold text-dark text-uppercase">{{ config('database.default') }}</span>
                         </div>
                     </div>
                     <div class="col-md-6 col-lg-3">
-                        <div class="p-3 bg-light rounded-4">
-                            <span class="text-muted small d-block mb-1">Platform Mode</span>
-                            <span class="badge bg-success bg-opacity-10 text-success text-uppercase py-1 px-2 mt-1">Production Ready</span>
+                        <div class="p-3 bg-light rounded-4 border">
+                            <span class="text-muted small d-block mb-1">Platform Status</span>
+                            <span class="badge bg-success-subtle text-success text-uppercase py-1.5 px-2.5 fw-bold">Production Live</span>
                         </div>
                     </div>
                 </div>

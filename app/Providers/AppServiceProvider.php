@@ -91,11 +91,13 @@ class AppServiceProvider extends ServiceProvider
         // View Composer to share unread notifications with layout header
         view()->composer('layouts.app', function ($view) {
             if (\Illuminate\Support\Facades\Auth::check()) {
-                $notifications = NotificationLog::where('user_id', \Illuminate\Support\Facades\Auth::id())
+                $userId = \Illuminate\Support\Facades\Auth::id();
+                $notifications = NotificationLog::select('id', 'title', 'body', 'is_read', 'created_at')
+                    ->where('user_id', $userId)
                     ->orderBy('created_at', 'desc')
                     ->limit(5)
                     ->get();
-                $unreadCount = NotificationLog::where('user_id', \Illuminate\Support\Facades\Auth::id())
+                $unreadCount = NotificationLog::where('user_id', $userId)
                     ->where('is_read', false)
                     ->count();
                 $view->with(compact('notifications', 'unreadCount'));

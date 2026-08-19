@@ -13,7 +13,9 @@ class SuperAdminDocumentationController extends Controller
      */
     public function index(Request $request)
     {
-        $query = DocumentationArticle::orderBy('display_order', 'asc')->orderBy('created_at', 'desc');
+        $query = DocumentationArticle::select('id', 'portal', 'category', 'title', 'slug', 'is_published', 'display_order', 'created_at')
+            ->orderBy('display_order', 'asc')
+            ->orderBy('created_at', 'desc');
 
         if ($request->filled('portal')) {
             $query->where('portal', $request->portal);
@@ -24,9 +26,10 @@ class SuperAdminDocumentationController extends Controller
         }
 
         if ($request->filled('search')) {
-            $query->where(function($q) use ($request) {
-                $q->where('title', 'like', '%' . $request->search . '%')
-                  ->orWhere('content', 'like', '%' . $request->search . '%');
+            $search = trim($request->search);
+            $query->where(function($q) use ($search) {
+                $q->where('title', 'like', '%' . $search . '%')
+                  ->orWhere('slug', 'like', '%' . $search . '%');
             });
         }
 

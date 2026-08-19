@@ -36,8 +36,8 @@ class DemoSchoolSeeder extends Seeder
                 'name' => 'Green Valley International School',
                 'short_name' => 'Green Valley',
                 'subdomain' => 'greenvalley',
-                'plan_id' => 3, // Premium
-                'subscription_status' => 'active',
+                'plan_id' => 1, // Free / Trial
+                'subscription_status' => 'trial',
                 'owner_name' => 'Dr. Kofi Annan',
                 'owner_email' => 'owner@greenvalley.edu.gh',
                 'owner_phone' => '+233244112233',

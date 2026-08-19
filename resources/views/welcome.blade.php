@@ -4,13 +4,21 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
+    <!-- Theme Initializer (Prevent Theme Flash) -->
+    <script>
+        (function() {
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            document.documentElement.setAttribute('data-bs-theme', savedTheme);
+        })();
+    </script>
+
     @php
         $seoTitle = \App\Models\SystemSetting::getVal('seo_meta_title', 'EduLink | Next-Gen School Management ERP');
         $seoDesc = \App\Models\SystemSetting::getVal('seo_meta_description', 'EduLink Ghana ERP is a next-generation school management system empowering administrators, teachers, parents, and students with smart automation.');
-        $seoKeys = \App\Models\SystemSetting::getVal('seo_meta_keywords', 'school software, school management, Ghana ERP, report cards');
+        $seoKeys = \App\Models\SystemSetting::getVal('seo_meta_keywords', 'school software, school management, Ghana ERP, report cards, GES SBA, MoMo fees');
         $googleAnalytics = \App\Models\SystemSetting::getVal('seo_google_analytics', '');
         $googleSearchConsole = \App\Models\SystemSetting::getVal('seo_search_console', '');
-        $socialImage = file_exists(public_path('seo_social.png')) ? asset('seo_social.png') : 'https://placehold.co/1200x630/003366/FFF?text=EduLink';
+        $socialImage = file_exists(public_path('seo_social.png')) ? asset('seo_social.png') : 'https://placehold.co/1200x630/003366/FFF?text=EduLink+Ghana+ERP';
     @endphp
 
     <title>{{ $seoTitle }}</title>
@@ -50,27 +58,343 @@
 
     <link rel="icon" type="image/png" href="{{ asset('favicon.png') }}">
     <link rel="shortcut icon" type="image/x-icon" href="{{ asset('favicon.ico') }}">
-    <!-- Google Fonts: Outfit -->
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <!-- Google Fonts: Outfit & Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
     <!-- Bootstrap 5 CSS CDN -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Bootstrap Icons -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
     
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
-
         :root {
-            --bg-dark: #090d16;
-            --bg-dark-card: rgba(30, 41, 59, 0.45);
-            --border-color: rgba(255, 255, 255, 0.08);
-            --gold-primary: #FFD700;
-            --gold-secondary: #e6c200;
-            --gold-hover: #e6c200;
-            --text-primary: #ffffff;
-            --text-secondary: #94a3b8;
-            --font-family: 'Outfit', sans-serif;
+            /* Brand Identity Colors */
+            --primary-navy: #003366;       /* Official EduLink GES Navy Blue */
+            --primary-dark: #002244;       /* Deep Navy */
+            --primary-deep: #07182d;       /* Dark Banner/Footer Slate */
+            --primary-light: #0f4c81;      /* Mid-Navy Accent */
+            --primary-subtle: #eef4fb;     /* Soft Tint */
+            
+            --accent-gold: #FFD700;        /* Official Warm Gold */
+            --accent-gold-dark: #d99b00;   /* Deep Gold/Amber */
+            --accent-amber: #f59e0b;       /* Amber */
+            
+            --success-green: #10b981;      /* MoMo / Payment Emerald */
+            --success-subtle: #ecfdf5;
+            
+            --bg-canvas: #f8fafc;          /* Crisp Professional Page Background */
+            --bg-card: #ffffff;            /* Pure White Card */
+            --bg-light-tint: #f1f5f9;      /* Subtle Neutral Light */
+            
+            --text-heading: #0f172a;       /* Slate 900 */
+            --text-body: #334155;          /* Slate 700 */
+            --text-muted: #64748b;         /* Slate 500 */
+            
+            --border-subtle: #e2e8f0;      /* Slate 200 */
+            --border-card: rgba(0, 51, 102, 0.08);
+            
+            --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.05), 0 1px 2px rgba(0, 0, 0, 0.03);
+            --shadow-md: 0 4px 14px -2px rgba(0, 51, 102, 0.08), 0 2px 6px -1px rgba(0, 0, 0, 0.04);
+            --shadow-lg: 0 12px 30px -4px rgba(0, 51, 102, 0.12), 0 4px 12px -2px rgba(0, 0, 0, 0.05);
+            --shadow-xl: 0 20px 40px -8px rgba(0, 51, 102, 0.16);
+
+            --font-heading: 'Outfit', sans-serif;
             --font-body: 'Inter', sans-serif;
+        }
+
+        /* Dark Mode Theme Tokens */
+        [data-bs-theme="dark"] {
+            --bg-canvas: #090f1d;          /* Deep rich executive midnight navy */
+            --bg-card: #111a2e;            /* Elevated dark card */
+            --bg-light-tint: #0c1427;      /* Subtle dark tint section */
+            
+            --text-heading: #f8fafc;       /* Bright Crisp White */
+            --text-body: #cbd5e1;          /* Slate 300 */
+            --text-muted: #94a3b8;         /* Slate 400 */
+            
+            --border-subtle: rgba(255, 255, 255, 0.08);
+            --border-card: rgba(255, 255, 255, 0.08);
+            
+            --primary-subtle: rgba(0, 51, 102, 0.45);
+            
+            --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.3);
+            --shadow-md: 0 4px 14px -2px rgba(0, 0, 0, 0.4);
+            --shadow-lg: 0 12px 30px -4px rgba(0, 0, 0, 0.5);
+            --shadow-xl: 0 20px 40px -8px rgba(0, 0, 0, 0.6);
+        }
+
+        /* ==========================================================================
+           COMPREHENSIVE DARK MODE CONTRAST OVERRIDES ([data-bs-theme="dark"])
+           ========================================================================== */
+        [data-bs-theme="dark"] .text-dark,
+        [data-bs-theme="dark"] .text-heading,
+        [data-bs-theme="dark"] h1,
+        [data-bs-theme="dark"] h2,
+        [data-bs-theme="dark"] h3,
+        [data-bs-theme="dark"] h4,
+        [data-bs-theme="dark"] h5,
+        [data-bs-theme="dark"] h6 {
+            color: #f8fafc !important;
+        }
+
+        [data-bs-theme="dark"] .text-body,
+        [data-bs-theme="dark"] .text-secondary {
+            color: #cbd5e1 !important;
+        }
+
+        [data-bs-theme="dark"] .text-muted {
+            color: #94a3b8 !important;
+        }
+
+        [data-bs-theme="dark"] p {
+            color: #cbd5e1;
+        }
+
+        /* Navbar toggler and icons in Dark Mode */
+        [data-bs-theme="dark"] .navbar-toggler i,
+        [data-bs-theme="dark"] .navbar-toggler {
+            color: #f8fafc !important;
+        }
+
+        /* Card, Container & Background Overrides */
+        [data-bs-theme="dark"] .bg-white {
+            background-color: #111a2e !important;
+            color: #f8fafc !important;
+        }
+
+        [data-bs-theme="dark"] .bg-light {
+            background-color: #0c1427 !important;
+            color: #cbd5e1 !important;
+            border-color: rgba(255, 255, 255, 0.08) !important;
+        }
+
+        [data-bs-theme="dark"] .border {
+            border-color: rgba(255, 255, 255, 0.08) !important;
+        }
+
+        /* Tables in Dark Mode */
+        [data-bs-theme="dark"] .table {
+            color: #cbd5e1 !important;
+            --bs-table-color: #cbd5e1;
+            --bs-table-bg: transparent;
+            --bs-table-border-color: rgba(255, 255, 255, 0.08);
+        }
+
+        [data-bs-theme="dark"] .table-light {
+            background-color: #1a2744 !important;
+            color: #f8fafc !important;
+        }
+
+        [data-bs-theme="dark"] .table th {
+            color: #94a3b8 !important;
+            border-bottom-color: rgba(255, 255, 255, 0.08) !important;
+        }
+
+        [data-bs-theme="dark"] .table td {
+            color: #f1f5f9 !important;
+            border-bottom-color: rgba(255, 255, 255, 0.04) !important;
+        }
+
+        /* Showcase Tab Item Inactive State in Dark Mode */
+        [data-bs-theme="dark"] .showcase-tab-item {
+            background: #111a2e !important;
+            border-color: rgba(255, 255, 255, 0.08) !important;
+        }
+
+        [data-bs-theme="dark"] .showcase-tab-item h6 {
+            color: #f8fafc !important;
+        }
+
+        [data-bs-theme="dark"] .showcase-tab-item .text-muted {
+            color: #94a3b8 !important;
+        }
+
+        [data-bs-theme="dark"] .showcase-tab-item:hover {
+            border-color: var(--accent-gold) !important;
+            background: #141f38 !important;
+        }
+
+        /* Showcase Tab Active State in Dark Mode */
+        [data-bs-theme="dark"] .showcase-tab-item.active {
+            background: linear-gradient(135deg, #002244 0%, #003366 100%) !important;
+            border-color: var(--accent-gold) !important;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5) !important;
+        }
+
+        [data-bs-theme="dark"] .showcase-tab-item.active h6 {
+            color: #ffffff !important;
+        }
+
+        [data-bs-theme="dark"] .showcase-tab-item.active .text-muted {
+            color: rgba(255, 255, 255, 0.8) !important;
+        }
+
+        /* Showcase Display Panels */
+        [data-bs-theme="dark"] .showcase-content-panel {
+            background: #111a2e !important;
+            border-color: rgba(255, 255, 255, 0.08) !important;
+        }
+
+        [data-bs-theme="dark"] .showcase-content-panel h3,
+        [data-bs-theme="dark"] .showcase-content-panel h4,
+        [data-bs-theme="dark"] .showcase-content-panel h5,
+        [data-bs-theme="dark"] .showcase-content-panel h6 {
+            color: #f8fafc !important;
+        }
+
+        [data-bs-theme="dark"] .feature-check-list li {
+            color: #cbd5e1 !important;
+        }
+
+        /* Badges Tonal Accents in Dark Mode */
+        [data-bs-theme="dark"] .bg-primary-subtle {
+            background-color: rgba(0, 51, 102, 0.45) !important;
+            color: #58a6ff !important;
+        }
+
+        [data-bs-theme="dark"] .bg-warning-subtle {
+            background-color: rgba(245, 158, 11, 0.18) !important;
+            color: #fbbf24 !important;
+        }
+
+        [data-bs-theme="dark"] .bg-info-subtle {
+            background-color: rgba(14, 165, 233, 0.18) !important;
+            color: #38bdf8 !important;
+        }
+
+        [data-bs-theme="dark"] .bg-success-subtle {
+            background-color: rgba(16, 185, 129, 0.18) !important;
+            color: #34d399 !important;
+        }
+
+        /* Student ID Card Showcase in Dark Mode */
+        [data-bs-theme="dark"] #showcase-portals .bg-white {
+            background-color: #141f38 !important;
+            border-color: rgba(255, 215, 0, 0.35) !important;
+        }
+
+        [data-bs-theme="dark"] #showcase-portals .p-1\.5.bg-light,
+        [data-bs-theme="dark"] #showcase-portals .p-1\.5 {
+            background-color: #ffffff !important;
+        }
+
+        [data-bs-theme="dark"] #showcase-portals .p-1\.5 i {
+            color: #000000 !important;
+        }
+
+        /* Pillars & Feature Cards */
+        [data-bs-theme="dark"] .pillar-card-pro {
+            background: #111a2e !important;
+            border-color: rgba(255, 255, 255, 0.08) !important;
+        }
+
+        [data-bs-theme="dark"] .pillar-card-pro h4 {
+            color: #f8fafc !important;
+        }
+
+        [data-bs-theme="dark"] .pillar-card-pro p {
+            color: #cbd5e1 !important;
+        }
+
+        /* Pricing Cards */
+        [data-bs-theme="dark"] .pricing-card-pro {
+            background: #111a2e !important;
+            border-color: rgba(255, 255, 255, 0.08) !important;
+        }
+
+        [data-bs-theme="dark"] .pricing-card-pro.popular {
+            border-color: var(--accent-gold) !important;
+            background: #141f38 !important;
+        }
+
+        [data-bs-theme="dark"] .pricing-card-pro h4 {
+            color: #f8fafc !important;
+        }
+
+        [data-bs-theme="dark"] .pricing-card-pro p,
+        [data-bs-theme="dark"] .pricing-card-pro li span {
+            color: #cbd5e1 !important;
+        }
+
+        [data-bs-theme="dark"] .pricing-amount-row {
+            color: #ffffff !important;
+        }
+
+        /* FAQ Accordion */
+        [data-bs-theme="dark"] .faq-card-item {
+            background: #111a2e !important;
+            border-color: rgba(255, 255, 255, 0.08) !important;
+        }
+
+        [data-bs-theme="dark"] .faq-card-item summary {
+            color: #f8fafc !important;
+        }
+
+        [data-bs-theme="dark"] .faq-answer-content {
+            color: #cbd5e1 !important;
+            border-top-color: rgba(255, 255, 255, 0.08) !important;
+        }
+
+        /* Trust Chips */
+        [data-bs-theme="dark"] .trust-schools-section {
+            background: #0c1427 !important;
+            border-bottom-color: rgba(255, 255, 255, 0.08) !important;
+        }
+
+        [data-bs-theme="dark"] .trust-school-chip {
+            background: #111a2e !important;
+            border-color: rgba(255, 255, 255, 0.08) !important;
+            color: #cbd5e1 !important;
+        }
+
+        /* ERP Mockup */
+        [data-bs-theme="dark"] .erp-mockup-frame {
+            border-color: rgba(255, 255, 255, 0.1) !important;
+            background: #111a2e !important;
+        }
+
+        [data-bs-theme="dark"] .erp-mockup-topbar {
+            background: #0d1424 !important;
+            border-bottom-color: rgba(255, 255, 255, 0.08) !important;
+        }
+
+        [data-bs-theme="dark"] .browser-url-bar {
+            background: #111a2e !important;
+            border-color: rgba(255, 255, 255, 0.1) !important;
+            color: #94a3b8 !important;
+        }
+
+        [data-bs-theme="dark"] .erp-mockup-body,
+        [data-bs-theme="dark"] .erp-mock-main {
+            background: #090f1d !important;
+        }
+
+        [data-bs-theme="dark"] .erp-app-header,
+        [data-bs-theme="dark"] .erp-kpi-card,
+        [data-bs-theme="dark"] .erp-chart-box,
+        [data-bs-theme="dark"] .erp-table-box {
+            background: #111a2e !important;
+            border-color: rgba(255, 255, 255, 0.08) !important;
+        }
+
+        [data-bs-theme="dark"] .erp-kpi-val {
+            color: #ffffff !important;
+        }
+
+        [data-bs-theme="dark"] .erp-table-box span.fw-bold {
+            color: #f8fafc !important;
+        }
+
+        [data-bs-theme="dark"] .erp-mini-table td {
+            color: #cbd5e1 !important;
+            border-bottom-color: rgba(255, 255, 255, 0.04) !important;
+        }
+
+        [data-bs-theme="dark"] .erp-mini-table td strong {
+            color: #f8fafc !important;
         }
 
         html, body {
@@ -78,413 +402,406 @@
             width: 100%;
             margin: 0;
             padding: 0;
+            scroll-behavior: smooth;
         }
 
         body {
             font-family: var(--font-body);
-            background: linear-gradient(135deg, var(--bg-dark) 0%, #0f172a 100%);
-            color: var(--text-primary);
-            min-height: 100vh;
-            position: relative;
+            background-color: var(--bg-canvas);
+            color: var(--text-body);
+            line-height: 1.6;
+            transition: background-color 0.3s ease, color 0.3s ease;
         }
 
         h1, h2, h3, h4, h5, h6 {
-            font-family: var(--font-family);
+            font-family: var(--font-heading);
+            color: var(--text-heading);
+            font-weight: 700;
         }
 
-        /* Decorative Grid Overlay */
-        .grid-overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-image: 
-                linear-gradient(rgba(255, 255, 255, 0.015) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(255, 255, 255, 0.015) 1px, transparent 1px);
-            background-size: 40px 40px;
-            background-position: center top;
-            z-index: 1;
-            pointer-events: none;
+        /* Top Notification Ribbon */
+        .top-notification-bar {
+            background: linear-gradient(90deg, var(--primary-dark) 0%, var(--primary-navy) 100%);
+            color: #ffffff;
+            font-size: 0.8rem;
+            font-weight: 500;
+            padding: 0.45rem 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
         }
 
-        /* Blur Glows */
-        .glow-blur-1 {
-            position: absolute;
-            top: -150px;
-            right: 5%;
-            width: 500px;
-            height: 500px;
-            background: radial-gradient(circle, rgba(255, 215, 0, 0.06) 0%, transparent 70%);
-            filter: blur(80px);
-            pointer-events: none;
-            z-index: 0;
+        .top-notification-bar a {
+            color: var(--accent-gold);
+            text-decoration: none;
+            font-weight: 600;
         }
 
-        .glow-blur-2 {
-            position: absolute;
-            top: 40%;
-            left: -150px;
-            width: 600px;
-            height: 600px;
-            background: radial-gradient(circle, rgba(79, 70, 229, 0.05) 0%, transparent 70%);
-            filter: blur(100px);
-            pointer-events: none;
-            z-index: 0;
-        }
-
-        .glow-blur-3 {
-            position: absolute;
-            bottom: 10%;
-            right: -150px;
-            width: 500px;
-            height: 500px;
-            background: radial-gradient(circle, rgba(37, 99, 235, 0.04) 0%, transparent 70%);
-            filter: blur(90px);
-            pointer-events: none;
-            z-index: 0;
+        .top-notification-bar a:hover {
+            text-decoration: underline;
         }
 
         /* Sticky Glass Navbar */
-        .navbar {
-            background: rgba(9, 13, 22, 0.7);
-            backdrop-filter: blur(20px) saturate(180%);
-            -webkit-backdrop-filter: blur(20px) saturate(180%);
-            border-bottom: 1px solid var(--border-color);
-            padding: 1.25rem 0;
-            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        .navbar-main {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-bottom: 1px solid var(--border-subtle);
+            padding: 0.9rem 0;
+            transition: all 0.3s ease;
             z-index: 1000;
         }
 
-        .navbar.scrolled {
-            padding: 0.85rem 0;
-            background: rgba(9, 13, 22, 0.85);
-            border-bottom-color: rgba(255, 255, 255, 0.08);
-            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.4);
+        .navbar-main.scrolled {
+            padding: 0.65rem 0;
+            box-shadow: 0 4px 20px rgba(0, 51, 102, 0.08);
+            background: rgba(255, 255, 255, 0.98);
         }
 
-        .logo-icon-wrapper {
-            width: 38px;
-            height: 38px;
-            background: rgba(255, 215, 0, 0.08);
-            border: 1px solid rgba(255, 215, 0, 0.2);
+        [data-bs-theme="dark"] .navbar-main {
+            background: rgba(9, 15, 29, 0.92);
+            border-bottom-color: rgba(255, 255, 255, 0.08);
+        }
+
+        [data-bs-theme="dark"] .navbar-main.scrolled {
+            background: rgba(9, 15, 29, 0.98);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+        }
+
+        .logo-box {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--primary-navy) 0%, var(--primary-light) 100%);
             border-radius: 10px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.2rem;
-            box-shadow: 0 0 15px rgba(255, 215, 0, 0.08);
+            color: var(--accent-gold);
+            font-size: 1.3rem;
+            box-shadow: 0 2px 8px rgba(0, 51, 102, 0.2);
+            transition: transform 0.2s ease;
         }
 
-        .brand-text {
-            font-size: 1.45rem;
+        .logo-box:hover {
+            transform: scale(1.05);
+        }
+
+        .brand-title {
+            font-size: 1.4rem;
             font-weight: 800;
+            color: var(--primary-navy);
             letter-spacing: -0.5px;
-            color: var(--text-primary);
         }
 
-        .brand-text span.text-gold {
-            background: linear-gradient(135deg, var(--gold-primary) 0%, var(--gold-secondary) 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+        .brand-title span.gold-text {
+            color: var(--accent-gold-dark);
         }
 
-        .nav-link {
-            color: var(--text-secondary) !important;
+        [data-bs-theme="dark"] .brand-title {
+            color: #ffffff;
+        }
+
+        .nav-link-custom {
+            color: var(--text-body) !important;
             font-weight: 500;
             font-size: 0.95rem;
+            padding: 0.5rem 0.9rem !important;
+            transition: color 0.2s ease;
             position: relative;
-            padding: 0.5rem 0.75rem;
-            transition: color 0.3s ease;
         }
 
-        .nav-link:hover, .nav-link.active {
-            color: var(--text-primary) !important;
+        .nav-link-custom:hover {
+            color: var(--primary-navy) !important;
         }
 
-        .nav-link::after {
+        .nav-link-custom::after {
             content: '';
             position: absolute;
             bottom: 0;
             left: 50%;
             width: 0;
             height: 2px;
-            background: linear-gradient(90deg, var(--gold-primary), var(--gold-secondary));
-            transition: all 0.3s ease;
+            background: var(--primary-navy);
+            transition: all 0.25s ease;
             transform: translateX(-50%);
         }
 
-        .nav-link:hover::after {
-            width: 80%;
+        .nav-link-custom:hover::after {
+            width: 70%;
+        }
+
+        [data-bs-theme="dark"] .nav-link-custom {
+            color: #cbd5e1 !important;
+        }
+
+        [data-bs-theme="dark"] .nav-link-custom:hover {
+            color: #ffffff !important;
+        }
+
+        [data-bs-theme="dark"] .nav-link-custom::after {
+            background: var(--accent-gold);
+        }
+
+        /* Dark/Light Mode Switcher Button */
+        .theme-toggle-btn {
+            width: 38px;
+            height: 38px;
+            border-radius: 10px;
+            background: var(--bg-light-tint);
+            border: 1px solid var(--border-subtle);
+            color: var(--primary-navy);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.25s ease;
+        }
+
+        .theme-toggle-btn:hover {
+            transform: scale(1.08);
+            background: var(--primary-subtle);
+            color: var(--primary-dark);
+        }
+
+        [data-bs-theme="dark"] .theme-toggle-btn {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(255, 255, 255, 0.15);
+            color: var(--accent-gold);
+        }
+
+        [data-bs-theme="dark"] .theme-toggle-btn:hover {
+            background: rgba(255, 255, 255, 0.15);
+            color: #ffffff;
         }
 
         /* Buttons */
-        .btn-nav-outline {
-            border: 1px solid var(--border-color);
-            color: var(--text-primary);
-            background: rgba(255, 255, 255, 0.02);
+        .btn-brand-outline {
+            border: 1.5px solid var(--primary-navy);
+            color: var(--primary-navy);
+            background: transparent;
             font-weight: 600;
-            font-size: 0.9rem;
+            font-size: 0.92rem;
             border-radius: 10px;
-            padding: 0.55rem 1.15rem;
-            transition: all 0.3s ease;
+            padding: 0.55rem 1.25rem;
+            transition: all 0.25s ease;
             display: inline-flex;
             align-items: center;
-            gap: 0.5rem;
+            gap: 0.4rem;
         }
 
-        .btn-nav-outline:hover {
-            border-color: rgba(255, 255, 255, 0.15);
-            background: rgba(255, 255, 255, 0.05);
-            color: #ffffff;
+        .btn-brand-outline:hover {
+            background: var(--primary-subtle);
+            color: var(--primary-dark);
+            border-color: var(--primary-dark);
             transform: translateY(-1px);
         }
 
-        .btn-nav-primary {
-            background: linear-gradient(135deg, var(--gold-primary) 0%, var(--gold-secondary) 100%);
+        [data-bs-theme="dark"] .btn-brand-outline {
+            border-color: rgba(255, 255, 255, 0.2);
+            color: #f1f5f9;
+        }
+
+        [data-bs-theme="dark"] .btn-brand-outline:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(255, 255, 255, 0.35);
+            color: #ffffff;
+        }
+
+        .btn-brand-primary {
+            background: linear-gradient(135deg, var(--primary-navy) 0%, var(--primary-light) 100%);
             border: none;
-            color: #04060c !important;
-            font-weight: 700;
-            font-size: 0.9rem;
-            border-radius: 10px;
-            padding: 0.55rem 1.25rem;
-            box-shadow: 0 4px 15px rgba(255, 215, 0, 0.2);
-            transition: all 0.3s ease;
-        }
-
-        .btn-nav-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(255, 215, 0, 0.35);
-        }
-
-        /* Hero styling */
-        .hero-section {
-            padding: 9.5rem 0 5rem 0;
-            position: relative;
-            z-index: 10;
-        }
-
-        .hero-badge-container {
-            display: inline-block;
-            padding: 1px;
-            background: linear-gradient(135deg, rgba(255, 215, 0, 0.3) 0%, rgba(255, 255, 255, 0.05) 50%, rgba(255, 215, 0, 0.05) 100%);
-            border-radius: 50px;
-            margin-bottom: 1.5rem;
-        }
-
-        .hero-badge {
-            background: #080a14;
-            padding: 0.4rem 1.15rem;
-            border-radius: 50px;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .badge-dot {
-            width: 6px;
-            height: 6px;
-            background-color: var(--gold-primary);
-            border-radius: 50%;
-            box-shadow: 0 0 8px var(--gold-primary);
-            animation: badge-pulse 2s infinite;
-        }
-
-        @keyframes badge-pulse {
-            0% { transform: scale(0.9); opacity: 0.6; }
-            50% { transform: scale(1.3); opacity: 1; }
-            100% { transform: scale(0.9); opacity: 0.6; }
-        }
-
-        .badge-text {
-            color: var(--text-primary);
-            font-size: 0.8rem;
-            font-weight: 700;
-            letter-spacing: 0.5px;
-            text-transform: uppercase;
-        }
-
-        .hero-title {
-            font-size: clamp(2.4rem, 4.5vw, 3.8rem);
-            font-weight: 900;
-            line-height: 1.15;
-            letter-spacing: -1.5px;
-            margin-bottom: 1.5rem;
-            background: linear-gradient(to bottom right, #ffffff 40%, #a1a1aa 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .hero-title span.text-gold-gradient {
-            background: linear-gradient(135deg, var(--gold-primary) 0%, var(--gold-secondary) 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .hero-sub {
-            color: var(--text-secondary);
-            font-size: 1.15rem;
-            line-height: 1.65;
-            margin-bottom: 2.5rem;
-        }
-
-        .btn-hero-primary {
-            background: linear-gradient(135deg, var(--gold-primary) 0%, var(--gold-secondary) 100%);
-            border: none;
-            color: #04060c !important;
-            font-weight: 700;
-            font-size: 1.05rem;
-            border-radius: 12px;
-            padding: 0.85rem 1.85rem;
-            box-shadow: 0 4px 20px rgba(255, 215, 0, 0.2);
-            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-
-        .btn-hero-primary:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 25px rgba(255, 215, 0, 0.4);
-        }
-
-        .btn-hero-secondary {
-            border: 1px solid var(--border-color);
-            color: var(--text-primary);
-            background: rgba(255, 255, 255, 0.02);
+            color: #ffffff !important;
             font-weight: 600;
-            font-size: 1.05rem;
+            font-size: 0.92rem;
+            border-radius: 10px;
+            padding: 0.6rem 1.35rem;
+            box-shadow: 0 4px 12px rgba(0, 51, 102, 0.25);
+            transition: all 0.25s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .btn-brand-primary:hover {
+            background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary-navy) 100%);
+            box-shadow: 0 6px 18px rgba(0, 51, 102, 0.35);
+            transform: translateY(-2px);
+        }
+
+        .btn-brand-gold {
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+            border: none;
+            color: #ffffff !important;
+            font-weight: 700;
+            font-size: 1rem;
             border-radius: 12px;
             padding: 0.85rem 1.85rem;
-            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            box-shadow: 0 4px 15px rgba(217, 119, 6, 0.3);
+            transition: all 0.25s ease;
             display: inline-flex;
             align-items: center;
             gap: 0.5rem;
         }
 
-        .btn-hero-secondary:hover {
-            border-color: rgba(255, 255, 255, 0.15);
-            background: rgba(255, 255, 255, 0.05);
+        .btn-brand-gold:hover {
+            background: linear-gradient(135deg, #d97706 0%, #b45309 100%);
+            box-shadow: 0 6px 20px rgba(217, 119, 6, 0.4);
+            transform: translateY(-2px);
+        }
+
+        /* Hero Section */
+        .hero-section-wrap {
+            padding: 4.5rem 0 5rem 0;
+            background: radial-gradient(circle at 80% 20%, rgba(0, 51, 102, 0.04) 0%, transparent 60%),
+                        linear-gradient(180deg, #ffffff 0%, var(--bg-canvas) 100%);
+            position: relative;
+            border-bottom: 1px solid var(--border-subtle);
+        }
+
+        [data-bs-theme="dark"] .hero-section-wrap {
+            background: radial-gradient(circle at 80% 20%, rgba(13, 71, 161, 0.12) 0%, transparent 60%),
+                        linear-gradient(180deg, #090f1d 0%, #0c1427 100%);
+            border-bottom-color: rgba(255, 255, 255, 0.08);
+        }
+
+        .hero-main-title {
+            font-size: clamp(2.3rem, 4.2vw, 3.6rem);
+            font-weight: 900;
+            line-height: 1.15;
+            color: var(--primary-dark);
+            letter-spacing: -1.2px;
+            margin-bottom: 1.25rem;
+        }
+
+        [data-bs-theme="dark"] .hero-main-title {
+            color: #ffffff;
+        }
+
+        .hero-main-title span.text-gold-highlight {
+            color: var(--accent-gold-dark);
+            position: relative;
+            display: inline-block;
+        }
+
+        [data-bs-theme="dark"] .hero-main-title span.text-gold-highlight {
+            color: var(--accent-gold);
+        }
+
+        .hero-sub-desc {
+            font-size: 1.125rem;
+            color: var(--text-body);
+            line-height: 1.7;
+            margin-bottom: 2rem;
+            max-width: 540px;
+        }
+
+        /* Hero Stats Cards */
+        .hero-stat-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: 14px;
+            padding: 1rem 1.15rem;
+            box-shadow: var(--shadow-sm);
+            transition: transform 0.25s ease, box-shadow 0.25s ease;
+        }
+
+        .hero-stat-card:hover {
             transform: translateY(-3px);
+            box-shadow: var(--shadow-md);
+            border-color: rgba(0, 51, 102, 0.2);
         }
 
-        .stat-card {
-            background: rgba(255, 255, 255, 0.015);
-            border: 1px solid var(--border-color);
-            border-radius: 16px;
-            padding: 1.15rem 1.25rem;
-            transition: all 0.3s ease;
-        }
-
-        .stat-card:hover {
-            background: rgba(255, 255, 255, 0.03);
-            border-color: rgba(255, 255, 255, 0.1);
-        }
-
-        .stat-value {
-            font-size: 1.85rem;
+        .hero-stat-number {
+            font-size: 1.75rem;
             font-weight: 800;
-            background: linear-gradient(135deg, #ffffff 0%, var(--gold-primary) 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin-bottom: 0.25rem;
+            color: var(--primary-navy);
+            line-height: 1.1;
+            margin-bottom: 0.2rem;
         }
 
-        .stat-label {
-            font-size: 0.8rem;
-            font-weight: 500;
-            color: var(--text-secondary);
+        [data-bs-theme="dark"] .hero-stat-number {
+            color: #58a6ff;
+        }
+
+        .hero-stat-label {
+            font-size: 0.78rem;
+            font-weight: 600;
+            color: var(--text-muted);
             text-transform: uppercase;
-            letter-spacing: 0.5px;
+            letter-spacing: 0.4px;
         }
 
-        /* Mockup */
-        .mockup-wrapper {
-            perspective: 1000px;
-        }
-
-        .mockup-window {
-            background: #080a14;
-            border: 1px solid rgba(255, 255, 255, 0.07);
-            border-radius: 20px;
-            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5), 0 0 40px rgba(255, 215, 0, 0.03);
+        /* Real ERP Platform Showcase Window */
+        .erp-mockup-frame {
+            background: var(--bg-card);
+            border: 1px solid rgba(0, 51, 102, 0.15);
+            border-radius: 18px;
+            box-shadow: 0 25px 50px -12px rgba(0, 51, 102, 0.22), 0 0 0 1px rgba(0, 0, 0, 0.03);
             overflow: hidden;
-            transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
 
-        .mockup-window:hover {
-            transform: translateY(-4px) rotateX(1deg) rotateY(-1deg);
-            border-color: rgba(255, 215, 0, 0.15);
-            box-shadow: 0 35px 70px rgba(0, 0, 0, 0.6), 0 0 50px rgba(255, 215, 0, 0.06);
+        [data-bs-theme="dark"] .erp-mockup-frame {
+            border-color: rgba(255, 255, 255, 0.1);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.6);
         }
 
-        .mockup-window-header {
-            background: #0d1020;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-            padding: 0.65rem 1.25rem;
+        .erp-mockup-frame:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 30px 60px -15px rgba(0, 51, 102, 0.28);
+        }
+
+        .erp-mockup-topbar {
+            background: #f1f5f9;
+            border-bottom: 1px solid var(--border-subtle);
+            padding: 0.65rem 1rem;
             display: flex;
             align-items: center;
             justify-content: space-between;
         }
 
-        .window-dots {
+        [data-bs-theme="dark"] .erp-mockup-topbar {
+            background: #0d1424;
+            border-bottom-color: rgba(255, 255, 255, 0.08);
+        }
+
+        .browser-buttons {
             display: flex;
             gap: 6px;
         }
 
-        .window-dot {
-            width: 9px;
-            height: 9px;
+        .browser-dot {
+            width: 10px;
+            height: 10px;
             border-radius: 50%;
         }
 
-        .window-dot.red { background: #ef4444; }
-        .window-dot.yellow { background: #f59e0b; }
-        .window-dot.green { background: #10b981; }
+        .browser-dot.red { background: #ef4444; }
+        .browser-dot.yellow { background: #f59e0b; }
+        .browser-dot.green { background: #10b981; }
 
-        .window-address {
-            background: #080a14;
-            border: 1px solid rgba(255, 255, 255, 0.04);
-            border-radius: 8px;
-            padding: 0.2rem 1.75rem;
-            font-size: 0.7rem;
-            color: var(--text-secondary);
+        .browser-url-bar {
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: 6px;
+            padding: 0.2rem 1.25rem;
+            font-size: 0.72rem;
+            color: var(--text-muted);
+            font-family: monospace;
             display: flex;
             align-items: center;
-            gap: 0.5rem;
-            max-width: 250px;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
+            gap: 0.4rem;
         }
 
-        .mock-status-pill {
-            background: rgba(16, 185, 129, 0.1);
-            color: #10b981;
-            font-size: 0.65rem;
-            font-weight: 700;
-            padding: 0.2rem 0.6rem;
-            border-radius: 50px;
+        .erp-mockup-body {
             display: flex;
-            align-items: center;
-            gap: 0.35rem;
+            height: 380px;
+            background: var(--bg-canvas);
         }
 
-        .status-pulse-green {
-            width: 5px;
-            height: 5px;
-            background-color: #10b981;
-            border-radius: 50%;
-            box-shadow: 0 0 6px #10b981;
-            animation: badge-pulse 1.5s infinite;
-        }
-
-        .mockup-window-body {
-            display: flex;
-            height: 360px;
-        }
-
-        .mock-sidebar {
-            width: 125px;
-            background: #0c101f;
-            border-right: 1px solid rgba(255, 255, 255, 0.03);
+        .erp-mock-sidebar {
+            width: 130px;
+            background: var(--primary-dark);
+            color: #ffffff;
             padding: 1rem 0.5rem;
             display: flex;
             flex-direction: column;
@@ -492,570 +809,599 @@
             flex-shrink: 0;
         }
 
-        @media (max-width: 575.98px) {
-            .mock-sidebar {
-                display: none;
-            }
-            .mockup-window-header {
-                padding: 0.5rem 0.75rem;
-            }
-            .window-address {
-                max-width: 130px;
-                padding: 0.2rem 0.5rem;
-            }
-            .mock-status-pill {
-                font-size: 0.55rem;
-                padding: 0.15rem 0.4rem;
-            }
-        }
-
-        .mock-sidebar-logo {
+        .erp-sidebar-logo {
+            font-size: 0.82rem;
+            font-weight: 800;
+            color: #ffffff;
             display: flex;
             align-items: center;
             gap: 0.35rem;
-            padding: 0 0.5rem;
-            font-size: 0.8rem;
-            font-weight: 800;
-            color: #ffffff;
+            padding: 0 0.4rem;
         }
 
-        .mock-sidebar-logo span span {
-            color: var(--gold-primary);
+        .erp-sidebar-logo span span {
+            color: var(--accent-gold);
         }
 
-        .mock-sidebar-menu {
+        .erp-sidebar-nav {
             display: flex;
             flex-direction: column;
-            gap: 0.3rem;
+            gap: 0.25rem;
         }
 
-        .mock-menu-item {
+        .erp-nav-item {
             display: flex;
             align-items: center;
-            gap: 0.45rem;
-            padding: 0.35rem 0.5rem;
+            gap: 0.5rem;
+            padding: 0.4rem 0.55rem;
             border-radius: 6px;
-            font-size: 0.7rem;
+            font-size: 0.72rem;
             font-weight: 500;
-            color: var(--text-secondary);
+            color: #94a3b8;
             cursor: pointer;
-            transition: all 0.2s ease;
+            transition: all 0.15s ease;
         }
 
-        .mock-menu-item:hover, .mock-menu-item.active {
+        .erp-nav-item:hover, .erp-nav-item.active {
             color: #ffffff;
-            background: rgba(255, 255, 255, 0.04);
+            background: rgba(255, 255, 255, 0.08);
         }
 
-        .mock-menu-item.active {
-            border-left: 2px solid var(--gold-primary);
-            padding-left: calc(0.5rem - 2px);
-            background: rgba(255, 215, 0, 0.04);
-            color: var(--gold-primary);
+        .erp-nav-item.active {
+            background: rgba(255, 215, 0, 0.15);
+            color: var(--accent-gold);
+            font-weight: 700;
         }
 
-        .mock-main {
+        .erp-mock-main {
             flex-grow: 1;
             display: flex;
             flex-direction: column;
-            background: #080a14;
             overflow-y: auto;
+            background: var(--bg-canvas);
         }
 
-        .mock-topbar {
-            height: 44px;
-            background: #0c101f;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.03);
-            padding: 0 1rem;
+        .erp-app-header {
+            background: var(--bg-card);
+            border-bottom: 1px solid var(--border-subtle);
+            padding: 0.6rem 1rem;
             display: flex;
             align-items: center;
             justify-content: space-between;
         }
 
-        .mock-search {
-            display: flex;
-            align-items: center;
-            gap: 0.4rem;
-            color: var(--text-secondary);
-            font-size: 0.7rem;
-            background: #080a14;
-            border: 1px solid rgba(255, 255, 255, 0.03);
-            border-radius: 6px;
-            padding: 0.2rem 0.65rem;
-            width: 130px;
-        }
-
-        .mock-user {
-            display: flex;
-            align-items: center;
-            gap: 0.65rem;
-        }
-
-        .mock-noti {
-            color: var(--text-secondary);
-            font-size: 0.8rem;
-            position: relative;
-            cursor: pointer;
-        }
-
-        .noti-badge {
-            position: absolute;
-            top: 0;
-            right: 0;
-            width: 5px;
-            height: 5px;
-            background: #ef4444;
-            border-radius: 50%;
-        }
-
-        .mock-avatar {
-            width: 22px;
-            height: 22px;
-            border-radius: 50%;
-            background: var(--gold-primary);
-            color: #04060c;
-            font-size: 0.65rem;
+        .erp-school-tag {
+            font-size: 0.75rem;
             font-weight: 700;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            color: var(--primary-navy);
         }
 
-        .mock-content {
+        [data-bs-theme="dark"] .erp-school-tag {
+            color: #58a6ff;
+        }
+
+        .erp-app-content {
             padding: 0.85rem;
             overflow-y: auto;
         }
 
-        .mock-section-title {
-            font-size: 0.85rem;
-            font-weight: 700;
+        .erp-kpi-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: 8px;
+            padding: 0.55rem 0.75rem;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .erp-kpi-label {
+            font-size: 0.62rem;
+            color: var(--text-muted);
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .erp-kpi-val {
+            font-size: 1.05rem;
+            font-weight: 800;
+            color: var(--primary-dark);
+            margin: 0.1rem 0;
+        }
+
+        [data-bs-theme="dark"] .erp-kpi-val {
             color: #ffffff;
         }
 
-        .mock-metric-card {
-            background: #0c101f;
-            border: 1px solid rgba(255, 255, 255, 0.03);
-            border-radius: 10px;
-            padding: 0.55rem 0.65rem;
-        }
-
-        .metric-title {
-            display: block;
+        .erp-kpi-sub {
             font-size: 0.6rem;
-            color: var(--text-secondary);
-            margin-bottom: 0.15rem;
-        }
-
-        .metric-val {
-            font-size: 0.95rem;
-            font-weight: 700;
-            color: #ffffff;
-            margin-bottom: 0.1rem;
-        }
-
-        .metric-change {
-            font-size: 0.55rem;
             font-weight: 600;
         }
 
-        .metric-change.positive { color: #10b981; }
-        .metric-change.neutral { color: var(--text-secondary); }
+        .erp-chart-box {
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: 8px;
+            padding: 0.65rem 0.85rem;
+            box-shadow: var(--shadow-sm);
+        }
 
-        .mock-chart-container {
-            background: #0c101f;
-            border: 1px solid rgba(255, 255, 255, 0.03);
-            border-radius: 10px;
+        .erp-table-box {
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: 8px;
             padding: 0.65rem;
+            box-shadow: var(--shadow-sm);
         }
 
-        .mock-chart-title {
-            font-size: 0.65rem;
-            font-weight: 600;
-            color: #ffffff;
-        }
-
-        .mock-chart-legend {
-            display: flex;
-            align-items: center;
-            gap: 0.35rem;
-            font-size: 0.55rem;
-            color: var(--text-secondary);
-        }
-
-        .legend-dot {
-            width: 5px;
-            height: 5px;
-            border-radius: 50%;
-        }
-
-        .legend-dot.invoiced { background: var(--gold-primary); }
-        .legend-dot.collected { background: #3b82f6; }
-
-        .mock-chart {
-            height: 60px;
-            position: relative;
-        }
-
-        .mock-table-card {
-            background: #0c101f;
-            border: 1px solid rgba(255, 255, 255, 0.03);
-            border-radius: 10px;
-            padding: 0.65rem;
-        }
-
-        .table-header-title {
-            font-size: 0.65rem;
-            font-weight: 600;
-            color: #ffffff;
-            margin-bottom: 0.4rem;
-        }
-
-        .mock-table-wrapper {
-            overflow-x: auto;
-        }
-
-        .mock-table {
+        .erp-mini-table {
             width: 100%;
             border-collapse: collapse;
-            font-size: 0.6rem;
-            text-align: left;
+            font-size: 0.64rem;
         }
 
-        .mock-table th {
-            color: var(--text-secondary);
+        .erp-mini-table th {
+            color: var(--text-muted);
             font-weight: 600;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-            padding: 0.3rem 0.4rem;
+            padding: 0.25rem 0.35rem;
+            border-bottom: 1px solid var(--border-subtle);
         }
 
-        .mock-table td {
-            color: #ffffff;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.03);
-            padding: 0.35rem 0.4rem;
+        .erp-mini-table td {
+            padding: 0.35rem;
+            color: var(--text-heading);
+            border-bottom: 1px solid var(--border-subtle);
         }
 
-        .status-pill {
-            padding: 0.05rem 0.35rem;
+        .badge-momo-paid {
+            background: #ecfdf5;
+            color: #059669;
+            font-weight: 700;
+            padding: 0.15rem 0.4rem;
             border-radius: 4px;
-            font-size: 0.55rem;
-            font-weight: 600;
+            font-size: 0.58rem;
+            border: 1px solid rgba(5, 150, 105, 0.2);
         }
 
-        .status-pill.completed {
-            background: rgba(16, 185, 129, 0.1);
-            color: #10b981;
+        [data-bs-theme="dark"] .badge-momo-paid {
+            background: rgba(16, 185, 129, 0.15);
+            color: #34d399;
+            border-color: rgba(52, 211, 153, 0.3);
         }
 
-        /* Trust section */
-        .trust-section {
-            border-top: 1px solid var(--border-color);
-            border-bottom: 1px solid var(--border-color);
-            background: rgba(255, 255, 255, 0.015);
-            position: relative;
-            z-index: 10;
+        /* Trust / Institutional Accreditation Section */
+        .trust-schools-section {
+            background: var(--bg-card);
+            border-bottom: 1px solid var(--border-subtle);
+            padding: 2.25rem 0;
         }
 
-        .trust-logo {
-            color: var(--text-secondary);
-            font-size: 0.95rem;
-            font-weight: 600;
+        .trust-school-chip {
             display: inline-flex;
             align-items: center;
-            transition: color 0.3s ease;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: var(--bg-canvas);
+            border: 1px solid var(--border-subtle);
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-body);
+            transition: all 0.2s ease;
         }
 
-        .trust-logo:hover {
-            color: var(--gold-primary);
+        .trust-school-chip:hover {
+            border-color: var(--primary-navy);
+            color: var(--primary-navy);
+            background: var(--primary-subtle);
+            transform: translateY(-2px);
         }
 
-        /* Spacing utility override */
-        
+        [data-bs-theme="dark"] .trust-school-chip:hover {
+            border-color: var(--accent-gold);
+            color: var(--accent-gold);
+            background: rgba(255, 215, 0, 0.08);
+        }
 
-        /* Pillars & Features */
-        .section-title {
-            font-size: 2.3rem;
+        /* Section Headings */
+        .section-tagline {
+            color: var(--accent-gold-dark);
+            font-weight: 700;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+
+        [data-bs-theme="dark"] .section-tagline {
+            color: var(--accent-gold);
+        }
+
+        .section-header-title {
+            font-size: clamp(1.8rem, 3.2vw, 2.5rem);
             font-weight: 800;
+            color: var(--primary-dark);
             letter-spacing: -0.75px;
-            margin-bottom: 1rem;
-            background: linear-gradient(135deg, #ffffff 40%, #a1a1aa 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.85rem;
         }
 
-        .section-sub {
-            color: var(--text-secondary);
-            font-size: 1.1rem;
-            max-width: 600px;
-            margin: 0 auto 3.5rem auto;
+        [data-bs-theme="dark"] .section-header-title {
+            color: #ffffff;
         }
 
-        .feature-card {
-            background: var(--bg-dark-card);
-            border: 1px solid var(--border-color);
-            border-radius: 20px;
-            padding: 2.25rem 2rem;
-            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        .section-header-desc {
+            color: var(--text-body);
+            font-size: 1.05rem;
+            max-width: 620px;
+            margin: 0 auto 3rem auto;
+            line-height: 1.65;
+        }
+
+        /* Feature / Core Pillar Cards */
+        .pillar-card-pro {
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: 18px;
+            padding: 2.25rem 1.85rem;
+            box-shadow: var(--shadow-sm);
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
             height: 100%;
             display: flex;
             flex-direction: column;
             position: relative;
-            overflow: hidden;
         }
 
-        .feature-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: radial-gradient(circle at top left, rgba(255, 215, 0, 0.06) 0%, transparent 60%);
-            opacity: 0;
-            transition: opacity 0.4s ease;
-            pointer-events: none;
+        .pillar-card-pro:hover {
+            transform: translateY(-6px);
+            border-color: rgba(0, 51, 102, 0.25);
+            box-shadow: var(--shadow-lg);
         }
 
-        .feature-card:hover {
-            transform: translateY(-8px);
-            border-color: rgba(255, 215, 0, 0.25);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), 0 0 25px rgba(255, 215, 0, 0.03);
+        [data-bs-theme="dark"] .pillar-card-pro:hover {
+            border-color: rgba(255, 215, 0, 0.3);
+            box-shadow: 0 16px 32px -4px rgba(0, 0, 0, 0.6);
         }
 
-        .feature-card:hover::before {
-            opacity: 1;
-        }
-
-        .feature-icon-wrapper {
-            width: 56px;
-            height: 56px;
-            background: rgba(255, 215, 0, 0.05);
-            border: 1px solid rgba(255, 215, 0, 0.15);
-            border-radius: 16px;
+        .pillar-icon-box {
+            width: 58px;
+            height: 58px;
+            background: var(--primary-subtle);
+            border: 1px solid rgba(0, 51, 102, 0.12);
+            border-radius: 14px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.5rem;
-            color: var(--gold-primary);
-            margin-bottom: 1.5rem;
-            transition: all 0.4s ease;
+            font-size: 1.6rem;
+            color: var(--primary-navy);
+            margin-bottom: 1.35rem;
+            transition: all 0.3s ease;
         }
 
-        .feature-card:hover .feature-icon-wrapper {
-            background: rgba(255, 215, 0, 0.1);
-            border-color: rgba(255, 215, 0, 0.3);
-            color: #ffffff;
-            box-shadow: 0 0 20px rgba(255, 215, 0, 0.15);
+        [data-bs-theme="dark"] .pillar-icon-box {
+            color: #58a6ff;
+            border-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .pillar-card-pro:hover .pillar-icon-box {
+            background: var(--primary-navy);
+            color: var(--accent-gold);
             transform: scale(1.05);
         }
 
-        /* Pricing Billing Toggle */
-        .pricing-toggle-container {
+        /* Interactive Showcase Deep Dive Section */
+        .showcase-tab-item {
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: 14px;
+            padding: 1rem 1.25rem;
+            width: 100%;
+            text-align: left;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .showcase-tab-item:hover {
+            border-color: var(--primary-navy);
+            transform: translateX(4px);
+        }
+
+        [data-bs-theme="dark"] .showcase-tab-item:hover {
+            border-color: var(--accent-gold);
+        }
+
+        .showcase-tab-item.active {
+            background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary-navy) 100%);
+            border-color: var(--primary-dark);
+            color: #ffffff;
+            box-shadow: var(--shadow-md);
+            transform: translateX(6px);
+        }
+
+        .showcase-tab-item.active h6 {
+            color: #ffffff !important;
+        }
+
+        .showcase-tab-item.active span {
+            color: rgba(255, 255, 255, 0.8) !important;
+        }
+
+        .showcase-tab-icon {
+            width: 42px;
+            height: 42px;
+            border-radius: 10px;
+            background: var(--primary-subtle);
+            color: var(--primary-navy);
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 1rem;
-            margin-top: 1.5rem;
+            font-size: 1.25rem;
+            flex-shrink: 0;
         }
 
-        .toggle-label {
-            font-size: 0.95rem;
-            font-weight: 600;
-            color: var(--text-secondary);
-            transition: color 0.3s ease;
+        [data-bs-theme="dark"] .showcase-tab-icon {
+            color: #58a6ff;
         }
 
-        .toggle-label.active {
-            color: #ffffff;
+        .showcase-tab-item.active .showcase-tab-icon {
+            background: rgba(255, 215, 0, 0.2);
+            color: var(--accent-gold);
         }
 
-        .theme-switch {
-            display: inline-block;
-            height: 28px;
-            position: relative;
-            width: 50px;
-        }
-
-        .theme-switch input {
+        .showcase-content-panel {
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: 20px;
+            padding: 2.5rem;
+            box-shadow: var(--shadow-lg);
             display: none;
         }
 
-        .slider {
-            background-color: rgba(255, 255, 255, 0.1);
-            bottom: 0;
-            cursor: pointer;
-            left: 0;
-            position: absolute;
-            right: 0;
-            top: 0;
-            transition: .4s;
-            border: 1px solid var(--border-color);
+        .showcase-content-panel.active {
+            display: block;
+            animation: fadeInTab 0.35s ease-in-out forwards;
         }
 
-        .slider:before {
-            background-color: var(--gold-primary);
-            bottom: 3px;
-            content: "";
-            height: 20px;
-            left: 3px;
-            position: absolute;
-            transition: .4s;
-            width: 20px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+        @keyframes fadeInTab {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
-        input:checked + .slider {
-            background-color: rgba(255, 215, 0, 0.1);
-            border-color: rgba(255, 215, 0, 0.3);
+        .feature-check-list {
+            list-style: none;
+            padding: 0;
+            margin: 1.5rem 0;
         }
 
-        input:checked + .slider:before {
-            transform: translateX(22px);
-            background-color: var(--gold-primary);
+        .feature-check-list li {
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.65rem;
+            font-size: 0.95rem;
+            color: var(--text-body);
         }
 
-        .slider.round {
-            border-radius: 34px;
+        .feature-check-list li i {
+            color: var(--success-green);
+            font-size: 1.1rem;
         }
 
-        .slider.round:before {
-            border-radius: 50%;
-        }
-
-        /* Pricing Card */
-        .pricing-card {
-            background: var(--bg-dark-card);
-            border: 1px solid var(--border-color);
+        /* Interactive ROI Efficiency Calculator */
+        .calculator-card {
+            background: linear-gradient(135deg, var(--primary-deep) 0%, var(--primary-dark) 100%);
             border-radius: 24px;
-            padding: 3rem 2rem;
-            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            color: #ffffff;
+            padding: 3.5rem 2.5rem;
+            box-shadow: var(--shadow-xl);
             position: relative;
             overflow: hidden;
+        }
+
+        .calculator-card h3 {
+            color: #ffffff;
+        }
+
+        .calc-range-slider {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 100%;
+            height: 10px;
+            border-radius: 5px;
+            background: rgba(255, 255, 255, 0.2);
+            outline: none;
+            margin: 1.5rem 0;
+        }
+
+        .calc-range-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            background: var(--accent-gold);
+            cursor: pointer;
+            box-shadow: 0 0 10px rgba(255, 215, 0, 0.6);
+        }
+
+        .calc-result-box {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 16px;
+            padding: 1.5rem;
+            text-align: center;
+        }
+
+        .calc-result-val {
+            font-size: 2.2rem;
+            font-weight: 800;
+            color: var(--accent-gold);
+            line-height: 1;
+            margin-bottom: 0.25rem;
+        }
+
+        /* Pricing Billing Switch */
+        .billing-toggle-wrapper {
+            display: inline-flex;
+            align-items: center;
+            gap: 1rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: 50px;
+            padding: 0.4rem 1.25rem;
+            box-shadow: var(--shadow-sm);
+            margin-bottom: 3rem;
+        }
+
+        .billing-label {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: color 0.2s ease;
+        }
+
+        .billing-label.active {
+            color: var(--primary-navy);
+            font-weight: 700;
+        }
+
+        [data-bs-theme="dark"] .billing-label.active {
+            color: #58a6ff;
+        }
+
+        .form-check-switch-custom .form-check-input {
+            width: 44px;
+            height: 24px;
+            cursor: pointer;
+            background-color: var(--border-subtle);
+            border-color: var(--border-subtle);
+        }
+
+        .form-check-switch-custom .form-check-input:checked {
+            background-color: var(--primary-navy);
+            border-color: var(--primary-navy);
+        }
+
+        /* Pricing Cards */
+        .pricing-card-pro {
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: 22px;
+            padding: 2.75rem 2rem;
+            box-shadow: var(--shadow-sm);
+            transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+            position: relative;
             display: flex;
             flex-direction: column;
             height: 100%;
         }
 
-        .pricing-card.popular {
-            border-color: var(--gold-primary);
-            box-shadow: 0 15px 35px rgba(255, 215, 0, 0.05), 0 0 30px rgba(255, 215, 0, 0.05);
-            background: linear-gradient(180deg, #0d1020 0%, #06080e 100%);
-        }
-
-        .pricing-card:hover {
+        .pricing-card-pro:hover {
             transform: translateY(-8px);
-            border-color: rgba(255, 255, 255, 0.15);
+            box-shadow: var(--shadow-xl);
+            border-color: rgba(0, 51, 102, 0.2);
         }
 
-        .pricing-card.popular:hover {
-            border-color: var(--gold-hover);
-            box-shadow: 0 20px 45px rgba(255, 215, 0, 0.08), 0 0 40px rgba(255, 215, 0, 0.08);
+        .pricing-card-pro.popular {
+            border: 2px solid var(--primary-navy);
+            box-shadow: var(--shadow-lg);
         }
 
-        .popular-badge {
+        [data-bs-theme="dark"] .pricing-card-pro.popular {
+            border-color: var(--accent-gold);
+            background: #141f38;
+        }
+
+        .popular-plan-badge {
             position: absolute;
-            top: 25px;
-            right: -35px;
-            background: linear-gradient(135deg, var(--gold-primary) 0%, var(--gold-secondary) 100%);
-            color: #04060c;
-            padding: 0.25rem 3rem;
-            font-size: 0.7rem;
+            top: -14px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(135deg, var(--accent-gold-dark) 0%, #b45309 100%);
+            color: #ffffff;
+            font-size: 0.75rem;
             font-weight: 800;
+            padding: 0.3rem 1.25rem;
+            border-radius: 50px;
             letter-spacing: 0.5px;
-            transform: rotate(45deg);
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 4px 10px rgba(180, 83, 9, 0.25);
         }
 
-        .pricing-price {
-            font-size: 2.5rem;
-            font-weight: 800;
-            margin: 1.5rem 0;
-            color: #ffffff;
+        .pricing-amount-row {
+            font-size: 2.6rem;
+            font-weight: 900;
+            color: var(--primary-dark);
+            margin: 1.25rem 0 0.5rem 0;
             display: flex;
             align-items: baseline;
+            gap: 0.3rem;
         }
 
-        .pricing-price span.price-duration {
+        [data-bs-theme="dark"] .pricing-amount-row {
+            color: #ffffff;
+        }
+
+        .pricing-duration-text {
             font-size: 0.95rem;
-            color: var(--text-secondary);
-            font-weight: 400;
-            margin-left: 0.25rem;
+            color: var(--text-muted);
+            font-weight: 500;
         }
 
-        .pricing-list {
+        .pricing-feature-list {
             list-style: none;
             padding: 0;
             margin: 2rem 0;
             flex-grow: 1;
         }
 
-        .pricing-list li {
+        .pricing-feature-list li {
             margin-bottom: 0.85rem;
-            color: #cbd5e1;
-            font-size: 0.95rem;
+            color: var(--text-body);
+            font-size: 0.92rem;
             display: flex;
-            align-items: center;
+            align-items: flex-start;
             gap: 0.65rem;
         }
 
-        .pricing-list li i {
-            color: var(--gold-primary);
-            font-size: 1rem;
+        .pricing-feature-list li i {
+            color: var(--primary-navy);
+            font-size: 1.05rem;
+            margin-top: 0.15rem;
             flex-shrink: 0;
         }
 
-        .btn-price-outline {
-            border: 1px solid var(--border-color);
-            color: var(--text-primary);
-            background: rgba(255, 255, 255, 0.02);
-            font-weight: 600;
-            border-radius: 12px;
-            padding: 0.75rem 1.5rem;
-            transition: all 0.3s ease;
-            display: block;
+        [data-bs-theme="dark"] .pricing-feature-list li i {
+            color: #58a6ff;
         }
 
-        .btn-price-outline:hover {
-            border-color: rgba(255, 255, 255, 0.15);
-            background: rgba(255, 255, 255, 0.05);
+        /* FAQ Accordion */
+        .faq-card-item {
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: 14px;
+            margin-bottom: 0.9rem;
+            box-shadow: var(--shadow-sm);
+            overflow: hidden;
+            transition: all 0.25s ease;
         }
 
-        .btn-price-primary {
-            background: linear-gradient(135deg, var(--gold-primary) 0%, var(--gold-secondary) 100%);
-            border: none;
-            color: #04060c !important;
-            font-weight: 700;
-            border-radius: 12px;
-            padding: 0.75rem 1.5rem;
-            box-shadow: 0 4px 15px rgba(255, 215, 0, 0.15);
-            transition: all 0.3s ease;
-            display: block;
-        }
-
-        .btn-price-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(255, 215, 0, 0.3);
-        }
-
-        /* FAQ */
-        .faq-accordion details {
-            background: var(--bg-dark-card);
-            border: 1px solid var(--border-color);
-            border-radius: 16px;
-            margin-bottom: 1rem;
+        .faq-card-item details {
             padding: 1.25rem 1.5rem;
-            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        .faq-accordion details[open] {
-            border-color: rgba(255, 215, 0, 0.25);
-            background: rgba(13, 16, 32, 0.55);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        .faq-card-item details[open] {
+            border-color: rgba(0, 51, 102, 0.2);
+            background: var(--bg-card);
+            box-shadow: var(--shadow-md);
         }
 
-        .faq-accordion summary {
-            font-size: 1.1rem;
-            font-weight: 600;
-            color: var(--text-primary);
+        .faq-card-item summary {
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: var(--primary-dark);
             cursor: pointer;
             list-style: none;
             display: flex;
@@ -1064,264 +1410,141 @@
             outline: none;
         }
 
-        .faq-accordion summary::-webkit-details-marker {
+        [data-bs-theme="dark"] .faq-card-item summary {
+            color: #ffffff;
+        }
+
+        .faq-card-item summary::-webkit-details-marker {
             display: none;
         }
 
-        .faq-accordion summary::after {
+        .faq-card-item summary::after {
             content: "\F282";
             font-family: "bootstrap-icons";
-            font-size: 0.95rem;
-            color: var(--text-secondary);
-            transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            font-size: 1rem;
+            color: var(--primary-navy);
+            transition: transform 0.25s ease;
         }
 
-        .faq-accordion details[open] summary::after {
+        [data-bs-theme="dark"] .faq-card-item summary::after {
+            color: #58a6ff;
+        }
+
+        .faq-card-item details[open] summary::after {
             transform: rotate(180deg);
-            color: var(--gold-primary);
         }
 
-        .faq-content {
+        .faq-answer-content {
             margin-top: 1rem;
-            color: var(--text-secondary);
+            color: var(--text-body);
             font-size: 0.95rem;
-            line-height: 1.6;
-            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            line-height: 1.65;
+            border-top: 1px solid var(--border-subtle);
             padding-top: 1rem;
         }
 
-        /* Footer */
-        footer {
-            border-top: 1px solid var(--border-color);
-            background: #020306;
-            padding: 5rem 0 3rem 0;
-            position: relative;
-            z-index: 10;
-        }
-
-        .status-dot {
-            width: 8px;
-            height: 8px;
-            background-color: #10b981;
-            border-radius: 50%;
-            display: inline-block;
-            box-shadow: 0 0 10px #10b981;
-            animation: badge-pulse 2s infinite;
-        }
-
-        .footer-link {
-            color: var(--text-secondary);
-            transition: color 0.2s ease;
-        }
-
-        .footer-link:hover {
-            color: var(--gold-primary);
-        }
-
-        @media (max-width: 991.98px) {
-            .hero-title {
-                font-size: 2.5rem;
-                text-align: center;
-            }
-            .hero-section {
-                padding: clamp(7.5rem, 12vh, 10.5rem) 0 clamp(4rem, 8vh, 6.5rem) 0;
-            }
-            .navbar-collapse {
-                background: rgba(9, 13, 22, 0.95);
-                border-radius: 12px;
-                padding: 1.5rem;
-                margin-top: 1rem;
-                border: 1px solid var(--border-color);
-                text-align: center;
-            }
-            .navbar-nav {
-                align-items: center;
-                margin-bottom: 1.25rem;
-            }
-            .navbar-collapse .d-flex {
-                flex-direction: column;
-                width: 100%;
-                gap: 0.75rem !important;
-                align-items: stretch !important;
-            }
-            .navbar-collapse .d-flex .btn-nav-outline,
-            .navbar-collapse .d-flex .btn-nav-primary {
-                text-align: center;
-                justify-content: center;
-                width: 100%;
-            }
-        }
-
-        @media (max-width: 767.98px) {
-            .showcase-display-card {
-                padding: 1.5rem 1rem;
-                min-height: auto;
-            }
-        }
-
-
-        /* Interactive Showcase Styles */
-        .showcase-tab-btn {
-            background: rgba(255, 255, 255, 0.02);
-            border: 1px solid var(--border-color);
-            color: var(--text-secondary);
-            border-radius: 12px;
-            padding: 0.85rem 1.5rem;
-            font-weight: 600;
-            font-size: 0.95rem;
-            transition: all 0.3s ease;
-            cursor: pointer;
-            width: 100%;
-            text-align: left;
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-        }
-
-        .showcase-tab-btn:hover {
-            background: rgba(255, 255, 255, 0.04);
-            border-color: rgba(255, 255, 255, 0.15);
-            color: var(--text-primary);
-        }
-
-        .showcase-tab-btn.active {
-            background: rgba(255, 215, 0, 0.06);
-            border-color: var(--gold-primary);
-            color: var(--gold-primary);
-            box-shadow: 0 0 15px rgba(255, 215, 0, 0.05);
-        }
-
-        .showcase-display-card {
-            background: var(--bg-dark-card);
-            border: 1px solid var(--border-color);
+        /* CTA Banner */
+        .cta-banner-section {
+            background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary-navy) 100%);
             border-radius: 24px;
-            padding: 2.5rem;
-            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.4), 0 0 40px rgba(255, 215, 0, 0.02);
-            min-height: 400px;
-            display: none;
-            transition: all 0.4s ease;
-        }
-
-        .showcase-display-card.active {
-            display: block;
-            animation: fadeInShowcase 0.5s ease-in-out forwards;
-        }
-
-        @keyframes fadeInShowcase {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .showcase-illustration-window {
-            background: #080a14;
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            border-radius: 16px;
-            padding: 1.25rem;
-            overflow: hidden;
-            box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.6);
-        }
-
-        /* Spacing improvements */
-        .py-6 {
-            padding-top: clamp(4rem, 8vw, 7.5rem);
-            padding-bottom: clamp(4rem, 8vw, 7.5rem);
-        }
-
-        .hero-section {
-            padding: clamp(7.5rem, 12vh, 10.5rem) 0 clamp(4rem, 8vh, 6.5rem) 0;
+            padding: 4rem 3rem;
+            color: #ffffff;
+            box-shadow: var(--shadow-xl);
             position: relative;
-            z-index: 10;
+            overflow: hidden;
         }
 
-        /* FAQ details card adjustments to fix empty spaces */
-        .faq-accordion details {
-            margin-bottom: 0.75rem;
-            padding: 1rem 1.25rem;
+        .cta-banner-section h2 {
+            color: #ffffff;
+            font-size: clamp(2rem, 3.5vw, 2.75rem);
+            font-weight: 800;
         }
 
-        /* Trust Logos responsiveness */
-        .trust-logos-container {
-            opacity: 0.65;
-            transition: all 0.3s ease;
-        }
-        .trust-logos-container:hover {
-            opacity: 0.95;
-            transform: scale(1.01);
+        /* Footer */
+        .site-footer {
+            background: var(--primary-deep);
+            color: #cbd5e1;
+            padding: 5rem 0 2.5rem 0;
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
         }
 
-        /* Override Bootstrap's dark text utilities to make them light & readable on our dark background */
-        .text-secondary,
-        .text-muted {
-            color: #94a3b8 !important;
+        .site-footer h6 {
+            color: #ffffff;
+            font-weight: 700;
+            margin-bottom: 1.25rem;
+            font-size: 1rem;
         }
 
-        .showcase-tab-btn.active .text-muted {
-            color: rgba(255, 255, 255, 0.7) !important;
+        .footer-nav-link {
+            color: #94a3b8;
+            text-decoration: none;
+            transition: color 0.2s ease;
+            font-size: 0.9rem;
+            display: inline-block;
+            margin-bottom: 0.65rem;
         }
 
-        /* Floating WhatsApp Button */
-        .whatsapp-float {
+        .footer-nav-link:hover {
+            color: var(--accent-gold);
+            transform: translateX(2px);
+        }
+
+        .system-status-indicator {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 0.35rem 0.85rem;
+            border-radius: 50px;
+            font-size: 0.78rem;
+            color: #e2e8f0;
+        }
+
+        /* Floating WhatsApp Support Button */
+        .whatsapp-float-btn {
             position: fixed;
             bottom: 30px;
             right: 30px;
-            width: 60px;
-            height: 60px;
+            width: 58px;
+            height: 58px;
             background-color: #25d366;
-            color: #fff !important;
+            color: #ffffff !important;
             border-radius: 50px;
-            text-align: center;
-            font-size: 30px;
-            box-shadow: 0 4px 15px rgba(37, 211, 102, 0.3);
-            z-index: 9999;
             display: flex;
             align-items: center;
             justify-content: center;
+            font-size: 30px;
+            box-shadow: 0 4px 18px rgba(37, 211, 102, 0.4);
+            z-index: 9999;
             text-decoration: none;
             transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
-        @media (max-width: 767.98px) {
-            .whatsapp-float {
-                bottom: 20px;
-                right: 20px;
-                width: 48px;
-                height: 48px;
-                font-size: 24px;
-            }
-        }
-
-        .whatsapp-float:hover {
+        .whatsapp-float-btn:hover {
             transform: scale(1.1) rotate(5deg);
             background-color: #20ba5a;
-            box-shadow: 0 6px 20px rgba(37, 211, 102, 0.45);
+            box-shadow: 0 6px 22px rgba(37, 211, 102, 0.55);
         }
 
-        .whatsapp-float i {
-            display: inline-block;
-            line-height: 0;
-        }
-
-        /* Pulse wave animation */
-        .whatsapp-float::before {
-            content: '';
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            background-color: inherit;
-            border-radius: inherit;
-            z-index: -1;
-            opacity: 0.4;
-            animation: whatsappPulse 2s infinite;
-        }
-
-        @keyframes whatsappPulse {
-            0% {
-                transform: scale(1);
-                opacity: 0.4;
+        @media (max-width: 991.98px) {
+            .hero-section-wrap {
+                padding: 3rem 0 3.5rem 0;
             }
-            100% {
-                transform: scale(1.6);
-                opacity: 0;
+            .hero-main-title {
+                font-size: 2.4rem;
+            }
+            .erp-mockup-body {
+                height: 320px;
+            }
+            .erp-mock-sidebar {
+                display: none;
+            }
+            .calculator-card {
+                padding: 2.5rem 1.5rem;
+            }
+            .cta-banner-section {
+                padding: 3rem 1.5rem;
             }
         }
     </style>
@@ -1329,42 +1552,71 @@
 <body>
     @include('partials.preloader')
 
-    <!-- Glow Backdrops -->
-    <div class="glow-blur-1"></div>
-    <div class="glow-blur-2"></div>
-    <div class="glow-blur-3"></div>
-    <div class="grid-overlay"></div>
+    <!-- Top Announcement Ribbon -->
+    <div class="top-notification-bar d-none d-md-block">
+        <div class="container d-flex justify-content-between align-items-center">
+            <div>
+                <i class="bi bi-patch-check-fill text-warning me-1.5"></i>
+                <span>Ghana Education Service (GES) SBA Standard Compliant &bull; Automated MTN MoMo & Telecel Billing</span>
+            </div>
+            <div>
+                <span class="me-3"><i class="bi bi-headset me-1"></i>Dedicated Local Support: <strong>{{ \App\Models\SystemSetting::getVal('welcome_support_email', 'support@' . strtolower(config('app.name', 'edulink')) . '.gh') }}</strong></span>
+                <a href="{{ route('register') }}">Get Started Free &rarr;</a>
+            </div>
+        </div>
+    </div>
 
     <!-- Navigation Header -->
-    <nav class="navbar navbar-expand-lg fixed-top" id="mainNavbar">
+    <nav class="navbar navbar-expand-lg sticky-top navbar-main" id="mainNavbar">
         <div class="container">
-            <a class="navbar-brand d-flex align-items-center" href="{{ url('/') }}">
-                <div class="logo-icon-wrapper me-2">
-                    <i class="bi bi-globe-europe-africa text-warning"></i>
+            <a class="navbar-brand d-flex align-items-center text-decoration-none" href="{{ url('/') }}">
+                <div class="logo-box me-2.5">
+                    <i class="bi bi-mortarboard-fill"></i>
                 </div>
-                <span class="brand-text">{!! str_starts_with(strtolower(config('app.name', 'EduLink')), 'edu') && strlen(config('app.name', 'EduLink')) > 3 ? substr(config('app.name', 'EduLink'), 0, 3) . '<span class="text-gold">' . e(substr(config('app.name', 'EduLink'), 3)) . '</span>' : e(config('app.name', 'EduLink')) !!}</span>
+                <span class="brand-title">
+                    {{ substr(config('app.name', 'EduLink'), 0, 3) }}<span class="gold-text">{{ substr(config('app.name', 'EduLink'), 3) }}</span>
+                </span>
             </a>
-            <button class="navbar-toggler border-0 text-white" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <i class="bi bi-list fs-2 text-white"></i>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav mx-auto">
+            
+            <div class="d-flex align-items-center gap-2 d-lg-none">
+                <!-- Mobile Theme Toggle -->
+                <button class="theme-toggle-btn theme-toggle-action" type="button" aria-label="Toggle dark or light theme" title="Toggle theme">
+                    <i class="bi bi-moon-stars-fill theme-icon-el"></i>
+                </button>
+                <button class="navbar-toggler border-0 shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMainCollapse" aria-controls="navbarMainCollapse" aria-expanded="false" aria-label="Toggle navigation">
+                    <i class="bi bi-list fs-2"></i>
+                </button>
+            </div>
+
+            <div class="collapse navbar-collapse" id="navbarMainCollapse">
+                <ul class="navbar-nav mx-auto mb-3 mb-lg-0">
                     <li class="nav-item">
-                        <a class="nav-link" href="#features">Features</a>
+                        <a class="nav-link nav-link-custom" href="#pillars">Core Pillars</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#pricing">Pricing Plans</a>
+                        <a class="nav-link nav-link-custom" href="#tour">Platform Tour</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#faq">FAQs</a>
+                        <a class="nav-link nav-link-custom" href="#calculator">ROI Calculator</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link nav-link-custom" href="#pricing">Pricing Plans</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link nav-link-custom" href="#faq">FAQs</a>
                     </li>
                 </ul>
-                <div class="d-flex align-items-center gap-3">
-                    <a href="{{ route('login') }}" class="btn-nav-outline text-decoration-none">
-                        <i class="bi bi-person me-1.5"></i>Client Sign In
+
+                <div class="d-flex flex-column flex-lg-row align-items-stretch align-items-lg-center gap-2.5">
+                    <!-- Desktop Theme Toggle -->
+                    <button class="theme-toggle-btn theme-toggle-action d-none d-lg-inline-flex" type="button" aria-label="Toggle dark or light theme" title="Toggle theme">
+                        <i class="bi bi-moon-stars-fill theme-icon-el"></i>
+                    </button>
+                    <a href="{{ route('login') }}" class="btn-brand-outline text-decoration-none justify-content-center">
+                        <i class="bi bi-person-lock"></i>Client Sign In
                     </a>
-                    <a href="{{ route('register') }}" class="btn-nav-primary text-decoration-none">
-                        Register School
+                    <a href="{{ route('register') }}" class="btn-brand-primary text-decoration-none justify-content-center">
+                        <i class="bi bi-rocket-takeoff-fill"></i>Register School Free
                     </a>
                 </div>
             </div>
@@ -1372,205 +1624,188 @@
     </nav>
 
     <!-- Hero Section -->
-    <header class="hero-section">
+    <header class="hero-section-wrap">
         <div class="container">
             <div class="row align-items-center g-5">
                 <div class="col-lg-6 text-center text-lg-start">
-                    <div class="hero-badge-container d-flex justify-content-center justify-content-lg-start">
-                        <div class="hero-badge">
-                            <span class="badge-dot"></span>
-                            <span class="badge-text"><i class="bi bi-stars text-warning me-1"></i> {{ \App\Models\SystemSetting::getVal('welcome_hero_badge', 'ERP Automation Solution') }}</span>
-                        </div>
-                    </div>
-                    <h1 class="hero-title">
-                        {!! str_ireplace('ERP', '<span class="text-gold-gradient">ERP</span>', e(\App\Models\SystemSetting::getVal('welcome_hero_title', 'The Intelligent Cloud ERP for Modern Institutions'))) !!}
+
+                    <h1 class="hero-main-title">
+                        {!! str_ireplace('ERP', '<span class="text-gold-highlight">ERP</span>', e(\App\Models\SystemSetting::getVal('welcome_hero_title', 'The Intelligent Cloud ERP for Modern Institutions'))) !!}
                     </h1>
-                    <p class="hero-sub">
+
+                    <p class="hero-sub-desc">
                         {{ \App\Models\SystemSetting::getVal('welcome_hero_sub', 'Empower your school with a unified platform for academics, real-time fee tracking, automated terminal report cards, and seamless multi-portal communication. Built for institutions striving for excellence.') }}
                     </p>
-                    <div class="d-flex flex-column flex-sm-row justify-content-center justify-content-lg-start gap-3">
-                        <a href="{{ route('register') }}" class="btn-hero-primary text-decoration-none text-center d-inline-flex justify-content-center align-items-center">
-                            Register Now
+
+                    <div class="d-flex flex-column flex-sm-row justify-content-center justify-content-lg-start gap-3 mb-5">
+                        <a href="{{ route('register') }}" class="btn-brand-gold text-decoration-none justify-content-center">
+                            <span>Start 14-Day Free Trial</span>
+                            <i class="bi bi-arrow-right"></i>
                         </a>
-                        <a href="{{ route('login') }}" class="btn-hero-secondary text-decoration-none text-center d-inline-flex justify-content-center align-items-center">
-                            Explore Client Login <i class="bi bi-arrow-right ms-1"></i>
+                        <a href="{{ route('login') }}" class="btn-brand-outline text-decoration-none justify-content-center py-3 px-4">
+                            <span>Explore Client Portals</span>
                         </a>
                     </div>
-                    
-                    <div class="row mt-5 g-3 g-sm-4 justify-content-center">
-                        <div class="col-sm-4 col-12">
-                            <div class="stat-card text-center text-sm-start">
-                                <div class="stat-value">{{ \App\Models\SystemSetting::getVal('welcome_stat1_value', '10k+') }}</div>
-                                <div class="stat-label">{{ \App\Models\SystemSetting::getVal('welcome_stat1_label', 'Students Enrolled') }}</div>
+
+                    <!-- Live KPI Stat Badges -->
+                    <div class="row g-3 justify-content-center justify-content-lg-start">
+                        <div class="col-4">
+                            <div class="hero-stat-card text-center text-lg-start">
+                                <div class="hero-stat-number">{{ \App\Models\SystemSetting::getVal('welcome_stat1_value', '10k+') }}</div>
+                                <div class="hero-stat-label">{{ \App\Models\SystemSetting::getVal('welcome_stat1_label', 'Students Enrolled') }}</div>
                             </div>
                         </div>
-                        <div class="col-sm-4 col-12">
-                            <div class="stat-card text-center text-sm-start">
-                                <div class="stat-value">{{ \App\Models\SystemSetting::getVal('welcome_stat2_value', '99.9%') }}</div>
-                                <div class="stat-label">{{ \App\Models\SystemSetting::getVal('welcome_stat2_label', 'Uptime SLA') }}</div>
+                        <div class="col-4">
+                            <div class="hero-stat-card text-center text-lg-start">
+                                <div class="hero-stat-number">{{ \App\Models\SystemSetting::getVal('welcome_stat2_value', '99.9%') }}</div>
+                                <div class="hero-stat-label">{{ \App\Models\SystemSetting::getVal('welcome_stat2_label', 'Uptime SLA') }}</div>
                             </div>
                         </div>
-                        <div class="col-sm-4 col-12">
-                            <div class="stat-card text-center text-sm-start">
-                                <div class="stat-value">{{ \App\Models\SystemSetting::getVal('welcome_stat3_value', '15+') }}</div>
-                                <div class="stat-label">{{ \App\Models\SystemSetting::getVal('welcome_stat3_label', 'Smart Modules') }}</div>
+                        <div class="col-4">
+                            <div class="hero-stat-card text-center text-lg-start">
+                                <div class="hero-stat-number">{{ \App\Models\SystemSetting::getVal('welcome_stat3_value', '15+') }}</div>
+                                <div class="hero-stat-label">{{ \App\Models\SystemSetting::getVal('welcome_stat3_label', 'Smart Modules') }}</div>
                             </div>
                         </div>
                     </div>
                 </div>
-                
-                <!-- Mockup Graph -->
+
+                <!-- Realistic ERP Platform Mockup -->
                 <div class="col-lg-6">
-                    <div class="mockup-wrapper">
-                        <div class="mockup-window">
-                            <!-- Mockup Window Header / Window controls -->
-                            <div class="mockup-window-header">
-                                <div class="window-dots">
-                                    <span class="window-dot red"></span>
-                                    <span class="window-dot yellow"></span>
-                                    <span class="window-dot green"></span>
+                    <div class="erp-mockup-frame">
+                        <div class="erp-mockup-topbar">
+                            <div class="browser-buttons">
+                                <span class="browser-dot red"></span>
+                                <span class="browser-dot yellow"></span>
+                                <span class="browser-dot green"></span>
+                            </div>
+                            <div class="browser-url-bar">
+                                <i class="bi bi-shield-check text-success"></i>
+                                <span>https://portal.edulink.gh/admin/dashboard</span>
+                            </div>
+                            <span class="badge bg-success-subtle text-success px-2 py-1 fw-bold" style="font-size: 0.68rem;">
+                                <i class="bi bi-circle-fill me-1" style="font-size: 0.45rem;"></i>Active Session
+                            </span>
+                        </div>
+
+                        <div class="erp-mockup-body">
+                            <!-- Sidebar -->
+                            <div class="erp-mock-sidebar">
+                                <div class="erp-sidebar-logo">
+                                    <i class="bi bi-mortarboard-fill text-warning"></i>
+                                    <span>Edu<span>Link</span></span>
                                 </div>
-                                <div class="window-address">
-                                    <i class="bi bi-shield-lock-fill text-success"></i>
-                                    <span>edulink-erp.gh/admin/dashboard</span>
-                                </div>
-                                <div class="window-actions">
-                                    <span class="mock-status-pill"><span class="status-pulse-green"></span> Live Analytics</span>
+                                <div class="erp-sidebar-nav">
+                                    <div class="erp-nav-item active">
+                                        <i class="bi bi-grid-1x2-fill"></i><span>Dashboard</span>
+                                    </div>
+                                    <div class="erp-nav-item">
+                                        <i class="bi bi-people-fill"></i><span>Students</span>
+                                    </div>
+                                    <div class="erp-nav-item">
+                                        <i class="bi bi-journal-bookmark-fill"></i><span>SBA Reports</span>
+                                    </div>
+                                    <div class="erp-nav-item">
+                                        <i class="bi bi-wallet2"></i><span>MoMo Billing</span>
+                                    </div>
+                                    <div class="erp-nav-item">
+                                        <i class="bi bi-calendar3"></i><span>Timetables</span>
+                                    </div>
                                 </div>
                             </div>
-                            
-                            <!-- Mockup Window Body (The App Layout) -->
-                            <div class="mockup-window-body">
-                                <!-- Simulated Sidebar Navigation -->
-                                <div class="mock-sidebar">
-                                    <div class="mock-sidebar-logo">
-                                        <i class="bi bi-globe-europe-africa text-warning"></i>
-                                        <span>Edu<span>Link</span></span>
+
+                            <!-- Main Dashboard Area -->
+                            <div class="erp-mock-main">
+                                <div class="erp-app-header">
+                                    <div>
+                                        <div class="erp-school-tag">Achimota Model Academy</div>
+                                        <span class="text-muted" style="font-size: 0.65rem;">Academic Year 2026/2027 &bull; Term 1</span>
                                     </div>
-                                    <div class="mock-sidebar-menu">
-                                        <div class="mock-menu-item active">
-                                            <i class="bi bi-grid-1x2-fill"></i><span>Dashboard</span>
-                                        </div>
-                                        <div class="mock-menu-item">
-                                            <i class="bi bi-people-fill"></i><span>Students</span>
-                                        </div>
-                                        <div class="mock-menu-item">
-                                            <i class="bi bi-journal-text"></i><span>Academics</span>
-                                        </div>
-                                        <div class="mock-menu-item">
-                                            <i class="bi bi-wallet2"></i><span>Finance</span>
+                                    <div class="d-flex align-items-center gap-2">
+                                        <span class="badge bg-primary text-white" style="font-size: 0.6rem;">Admin Workspace</span>
+                                        <div class="rounded-circle bg-warning text-dark fw-bold d-flex align-items-center justify-content-center" style="width: 22px; height: 22px; font-size: 0.65rem;">
+                                            GH
                                         </div>
                                     </div>
                                 </div>
-                                
-                                <!-- Simulated Main App Panel -->
-                                <div class="mock-main">
-                                    <!-- Mock Topbar -->
-                                    <div class="mock-topbar">
-                                        <div class="mock-search">
-                                            <i class="bi bi-search"></i>
-                                            <span>Search...</span>
+
+                                <div class="erp-app-content">
+                                    <!-- Metric KPI Row -->
+                                    <div class="row g-2 mb-2.5">
+                                        <div class="col-4">
+                                            <div class="erp-kpi-card">
+                                                <div class="erp-kpi-label">Fees Collected</div>
+                                                <div class="erp-kpi-val">GHS 124.5k</div>
+                                                <div class="erp-kpi-sub text-success"><i class="bi bi-arrow-up-right"></i> 89.4% MoMo</div>
+                                            </div>
                                         </div>
-                                        <div class="mock-user">
-                                            <div class="mock-noti"><i class="bi bi-bell-fill"></i><span class="noti-badge"></span></div>
-                                            <div class="mock-avatar">AD</div>
+                                        <div class="col-4">
+                                            <div class="erp-kpi-card">
+                                                <div class="erp-kpi-label">Active Pupils</div>
+                                                <div class="erp-kpi-val">1,280</div>
+                                                <div class="erp-kpi-sub text-primary"><i class="bi bi-check-all"></i> Verified</div>
+                                            </div>
+                                        </div>
+                                        <div class="col-4">
+                                            <div class="erp-kpi-card">
+                                                <div class="erp-kpi-label">Attendance</div>
+                                                <div class="erp-kpi-val">96.8%</div>
+                                                <div class="erp-kpi-sub text-success"><i class="bi bi-shield-check"></i> Normal</div>
+                                            </div>
                                         </div>
                                     </div>
-                                    
-                                    <!-- Mock Content Area -->
-                                    <div class="mock-content">
-                                        <div class="d-flex justify-content-between align-items-center mb-3">
-                                            <div>
-                                                <h5 class="mock-section-title mb-0" style="font-size: 0.8rem;">Ghana International Academy</h5>
-                                                <span class="mock-subtitle text-muted" style="font-size: 0.65rem;">Term 1 Summary</span>
-                                            </div>
-                                            <span class="badge bg-warning text-dark px-2 py-0.5 fw-semibold" style="font-size: 0.6rem; border-radius: 4px;">2026/27 Active</span>
+
+                                    <!-- Chart Container -->
+                                    <div class="erp-chart-box mb-2.5">
+                                        <div class="d-flex justify-content-between align-items-center mb-1">
+                                            <span class="fw-bold text-dark" style="font-size: 0.68rem;">Weekly Fee Collection Velocity</span>
+                                            <span class="text-muted" style="font-size: 0.58rem;">MTN MoMo &bull; Telecel &bull; Cash</span>
                                         </div>
-                                        
-                                        <!-- Metrics Cards Grid -->
-                                        <div class="row g-2 mb-3">
-                                            <div class="col-4">
-                                                <div class="mock-metric-card">
-                                                    <span class="metric-title">Enrolled</span>
-                                                    <div class="metric-val">1,248</div>
-                                                    <span class="metric-change positive"><i class="bi bi-arrow-up-right"></i> +4.2%</span>
-                                                </div>
-                                            </div>
-                                            <div class="col-4">
-                                                <div class="mock-metric-card">
-                                                    <span class="metric-title">Collected</span>
-                                                    <div class="metric-val">89.2%</div>
-                                                    <span class="metric-change positive"><i class="bi bi-shield-check"></i> Secure</span>
-                                                </div>
-                                            </div>
-                                            <div class="col-4">
-                                                <div class="mock-metric-card">
-                                                    <span class="metric-title">Attendance</span>
-                                                    <div class="metric-val">96.4%</div>
-                                                    <span class="metric-change neutral">Target 95%</span>
-                                                </div>
-                                            </div>
+                                        <svg width="100%" height="45" viewBox="0 0 400 45" preserveAspectRatio="none">
+                                            <defs>
+                                                <linearGradient id="chartGrad" x1="0" y1="0" x2="0" y2="1">
+                                                    <stop offset="0%" stop-color="#003366" stop-opacity="0.3"/>
+                                                    <stop offset="100%" stop-color="#003366" stop-opacity="0"/>
+                                                </linearGradient>
+                                            </defs>
+                                            <path d="M 0 45 Q 60 10 120 28 T 240 12 T 320 22 T 400 5 L 400 45 Z" fill="url(#chartGrad)"></path>
+                                            <path d="M 0 45 Q 60 10 120 28 T 240 12 T 320 22 T 400 5" fill="none" stroke="#003366" stroke-width="2.5"></path>
+                                        </svg>
+                                    </div>
+
+                                    <!-- Table Container -->
+                                    <div class="erp-table-box">
+                                        <div class="d-flex justify-content-between align-items-center mb-1.5">
+                                            <span class="fw-bold text-dark" style="font-size: 0.68rem;">Recent Verified Terminal Fees</span>
+                                            <span class="badge bg-light text-dark" style="font-size: 0.58rem;">Live Stream</span>
                                         </div>
-                                        
-                                        <!-- Chart Section -->
-                                        <div class="mock-chart-container mb-3">
-                                            <div class="d-flex justify-content-between align-items-center mb-1">
-                                                <span class="mock-chart-title">Monthly Collection Trend</span>
-                                                <div class="mock-chart-legend">
-                                                    <span class="legend-dot invoiced"></span><span>Invoiced</span>
-                                                    <span class="legend-dot collected"></span><span>Paid</span>
-                                                </div>
-                                            </div>
-                                            <div class="mock-chart">
-                                                <svg width="100%" height="60" viewBox="0 0 400 60" preserveAspectRatio="none">
-                                                    <defs>
-                                                        <linearGradient id="chartGlowInvoiced" x1="0" y1="0" x2="0" y2="1">
-                                                            <stop offset="0%" stop-color="#FFD700" stop-opacity="0.2"/>
-                                                            <stop offset="100%" stop-color="#FFD700" stop-opacity="0"/>
-                                                        </linearGradient>
-                                                        <linearGradient id="chartGlowCollected" x1="0" y1="0" x2="0" y2="1">
-                                                            <stop offset="0%" stop-color="#3b82f6" stop-opacity="0.15"/>
-                                                            <stop offset="100%" stop-color="#3b82f6" stop-opacity="0"/>
-                                                        </linearGradient>
-                                                    </defs>
-                                                    <path d="M 0 60 Q 50 15 100 50 T 200 20 T 300 40 T 400 10 L 400 60 Z" fill="url(#chartGlowInvoiced)"></path>
-                                                    <path d="M 0 60 Q 50 15 100 50 T 200 20 T 300 40 T 400 10" fill="none" stroke="#FFD700" stroke-width="2"></path>
-                                                    <path d="M 0 60 Q 50 35 100 55 T 200 30 T 300 50 T 400 20 L 400 60 Z" fill="url(#chartGlowCollected)"></path>
-                                                    <path d="M 0 60 Q 50 35 100 55 T 200 30 T 300 50 T 400 20" fill="none" stroke="#3b82f6" stroke-width="1.2" stroke-dasharray="2 2"></path>
-                                                </svg>
-                                            </div>
-                                        </div>
-                                        
-                                        <!-- Table Section -->
-                                        <div class="mock-table-card">
-                                            <div class="table-header-title">Recent MoMo Payments</div>
-                                            <div class="mock-table-wrapper">
-                                                <table class="mock-table">
-                                                    <thead>
-                                                        <tr>
-                                                            <th>Student</th>
-                                                            <th>Class</th>
-                                                            <th>Amount</th>
-                                                            <th>Status</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        <tr>
-                                                            <td>Kofi Mensah</td>
-                                                            <td>Grade 6A</td>
-                                                            <td>GHS 1,200</td>
-                                                            <td><span class="status-pill completed">Paid</span></td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td>Ama Serwaa</td>
-                                                            <td>JHS 1</td>
-                                                            <td>GHS 850</td>
-                                                            <td><span class="status-pill completed">Paid</span></td>
-                                                        </tr>
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                        </div>
+                                        <table class="erp-mini-table">
+                                            <thead>
+                                                <tr>
+                                                    <th>Student</th>
+                                                    <th>Class</th>
+                                                    <th>Channel</th>
+                                                    <th>Amount</th>
+                                                    <th>Status</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td><strong>Kwame Asante</strong></td>
+                                                    <td>JHS 2 Green</td>
+                                                    <td><i class="bi bi-phone text-warning me-1"></i>MTN MoMo</td>
+                                                    <td>GHS 1,450</td>
+                                                    <td><span class="badge-momo-paid">Confirmed</span></td>
+                                                </tr>
+                                                <tr>
+                                                    <td><strong>Akosua Mensah</strong></td>
+                                                    <td>Basic 6A</td>
+                                                    <td><i class="bi bi-phone text-danger me-1"></i>Telecel</td>
+                                                    <td>GHS 980</td>
+                                                    <td><span class="badge-momo-paid">Confirmed</span></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
                                     </div>
                                 </div>
                             </div>
@@ -1581,70 +1816,77 @@
         </div>
     </header>
 
-    <!-- Partner Schools Trust Section -->
-    <section class="trust-section py-4">
+    <!-- Accreditation & Trusted Schools Section -->
+    <section class="trust-schools-section">
         <div class="container text-center">
-            <span class="text-secondary small text-uppercase tracking-wider mb-3 d-block" style="font-size: 0.75rem; letter-spacing: 1.5px; font-weight: 600;">Trusted by Excellent Educational Institutions</span>
-            <div class="d-flex flex-wrap justify-content-center align-items-center gap-md-5 gap-3 trust-logos-container">
-                <span class="trust-logo"><i class="bi bi-mortarboard me-2"></i>Achimota School</span>
-                <span class="trust-logo"><i class="bi bi-shield-check me-2"></i>Adisadel College</span>
-                <span class="trust-logo"><i class="bi bi-book me-2"></i>Presbyterian Sec.</span>
-                <span class="trust-logo"><i class="bi bi-award me-2"></i>Wesley Girls High</span>
+            <span class="section-tagline mb-2">Institutional Trust</span>
+            <h6 class="text-muted fw-semibold mb-3.5" style="font-size: 0.95rem;">Empowering leading Basic, JHS, and Senior High Schools nationwide</h6>
+            <div class="d-flex flex-wrap justify-content-center align-items-center gap-2.5 gap-md-4">
+                <div class="trust-school-chip"><i class="bi bi-patch-check-fill text-primary"></i> Achimota Model School</div>
+                <div class="trust-school-chip"><i class="bi bi-shield-fill-check text-primary"></i> Adisadel Collegiate</div>
+                <div class="trust-school-chip"><i class="bi bi-mortarboard-fill text-primary"></i> Wesley Girls High Academy</div>
+                <div class="trust-school-chip"><i class="bi bi-award-fill text-primary"></i> Presbyterian Senior Sec.</div>
+                <div class="trust-school-chip"><i class="bi bi-building-check text-primary"></i> Prempeh Model Institute</div>
             </div>
         </div>
     </section>
 
-    <!-- Product Features Section -->
-    <section class="py-6" id="features">
+    <!-- Core Management Pillars Section -->
+    <section class="py-5 my-4" id="pillars">
         <div class="container text-center">
-            <h2 class="section-title">Core Management Pillars</h2>
-            <p class="section-sub">
-                Designed to cover every aspect of your educational ecosystem, bringing operations onto a unified platform.
+            <span class="section-tagline">Comprehensive Architecture</span>
+            <h2 class="section-header-title">Built for Real School Workflows</h2>
+            <p class="section-header-desc">
+                Everything required to operate an exceptional institution smoothly, securely, and transparently.
             </p>
-            
+
             <div class="row g-4 text-start">
+                <!-- Pillar 1 -->
                 <div class="col-md-6 col-lg-3">
-                    <div class="feature-card">
-                        <div class="feature-icon-wrapper">
+                    <div class="pillar-card-pro">
+                        <div class="pillar-icon-box">
                             <i class="bi {{ \App\Models\SystemSetting::getVal('welcome_pillar1_icon', 'bi-wallet2') }}"></i>
                         </div>
-                        <h4 class="fw-bold mb-3">{{ \App\Models\SystemSetting::getVal('welcome_pillar1_title', 'Fee & Billing Hub') }}</h4>
+                        <h4 class="fw-bold fs-5 mb-2.5">{{ \App\Models\SystemSetting::getVal('welcome_pillar1_title', 'Fee & MoMo Billing Hub') }}</h4>
                         <p class="text-secondary small mb-0">
                             {{ \App\Models\SystemSetting::getVal('welcome_pillar1_desc', 'Automate student invoices, record payments dynamically via mobile money, track partial payment history, and generate digital financial reports.') }}
                         </p>
                     </div>
                 </div>
 
+                <!-- Pillar 2 -->
                 <div class="col-md-6 col-lg-3">
-                    <div class="feature-card">
-                        <div class="feature-icon-wrapper">
+                    <div class="pillar-card-pro">
+                        <div class="pillar-icon-box">
                             <i class="bi {{ \App\Models\SystemSetting::getVal('welcome_pillar2_icon', 'bi-journal-check') }}"></i>
                         </div>
-                        <h4 class="fw-bold mb-3">{{ \App\Models\SystemSetting::getVal('welcome_pillar2_title', 'Academic Reports') }}</h4>
+                        <h4 class="fw-bold fs-5 mb-2.5">{{ \App\Models\SystemSetting::getVal('welcome_pillar2_title', 'Academic Reports & SBA') }}</h4>
                         <p class="text-secondary small mb-0">
                             {{ \App\Models\SystemSetting::getVal('welcome_pillar2_desc', 'Compile terminal grades, calculate GPA averages automatically, customize teacher remarks, and generate beautiful, print-ready student report cards.') }}
                         </p>
                     </div>
                 </div>
 
+                <!-- Pillar 3 -->
                 <div class="col-md-6 col-lg-3">
-                    <div class="feature-card">
-                        <div class="feature-icon-wrapper">
+                    <div class="pillar-card-pro">
+                        <div class="pillar-icon-box">
                             <i class="bi {{ \App\Models\SystemSetting::getVal('welcome_pillar3_icon', 'bi-people-fill') }}"></i>
                         </div>
-                        <h4 class="fw-bold mb-3">{{ \App\Models\SystemSetting::getVal('welcome_pillar3_title', 'Multi-Role Portals') }}</h4>
+                        <h4 class="fw-bold fs-5 mb-2.5">{{ \App\Models\SystemSetting::getVal('welcome_pillar3_title', 'Multi-Role Portals') }}</h4>
                         <p class="text-secondary small mb-0">
                             {{ \App\Models\SystemSetting::getVal('welcome_pillar3_desc', 'Dedicated dashboards tailored for administrators, teachers, parents, and students. Improve engagement with real-time access to assignments and performance.') }}
                         </p>
                     </div>
                 </div>
 
+                <!-- Pillar 4 -->
                 <div class="col-md-6 col-lg-3">
-                    <div class="feature-card">
-                        <div class="feature-icon-wrapper">
+                    <div class="pillar-card-pro">
+                        <div class="pillar-icon-box">
                             <i class="bi {{ \App\Models\SystemSetting::getVal('welcome_pillar4_icon', 'bi-calendar-event') }}"></i>
                         </div>
-                        <h4 class="fw-bold mb-3">{{ \App\Models\SystemSetting::getVal('welcome_pillar4_title', 'Timetable Planner') }}</h4>
+                        <h4 class="fw-bold fs-5 mb-2.5">{{ \App\Models\SystemSetting::getVal('welcome_pillar4_title', 'Timetable Planner') }}</h4>
                         <p class="text-secondary small mb-0">
                             {{ \App\Models\SystemSetting::getVal('welcome_pillar4_desc', 'Generate clash-free timetables for classes, schedule subject allocations, assign teacher rooms, and organize academic calendars with ease.') }}
                         </p>
@@ -1654,13 +1896,14 @@
         </div>
     </section>
 
-    <!-- Interactive Product Showcase Section -->
-    <section class="py-6" style="background: rgba(255, 255, 255, 0.005); border-top: 1px solid var(--border-color); border-bottom: 1px solid var(--border-color);">
+    <!-- Interactive Platform Tour (Tabbed Deep-Dive) -->
+    <section class="py-5" id="tour" style="background-color: var(--bg-light-tint); border-top: 1px solid var(--border-subtle); border-bottom: 1px solid var(--border-subtle);">
         <div class="container">
             <div class="text-center mb-5">
-                <h2 class="section-title">Deep Dive Platform Experience</h2>
-                <p class="section-sub">
-                    Explore the robust capabilities of our intelligent system designed to streamline your administration's workflow.
+                <span class="section-tagline">Interactive Experience</span>
+                <h2 class="section-header-title">Deep Dive Platform Capabilities</h2>
+                <p class="section-header-desc">
+                    Discover how each component of EduLink eliminates repetitive administrative friction.
                 </p>
             </div>
 
@@ -1668,69 +1911,77 @@
                 <!-- Tabs Navigation -->
                 <div class="col-lg-4">
                     <div class="d-flex flex-column gap-3">
-                        <button class="showcase-tab-btn active" data-target="showcase-billing">
-                            <i class="bi bi-receipt-cutoff fs-5"></i>
-                            <div>
-                                <h6 class="mb-0 fw-bold text-white">Billing & Cashflow</h6>
-                                <span class="small text-muted" style="font-size: 0.75rem;">Real-time automated school invoicing</span>
+                        <div class="showcase-tab-item active" data-target="showcase-billing">
+                            <div class="showcase-tab-icon">
+                                <i class="bi bi-cash-stack"></i>
                             </div>
-                        </button>
+                            <div>
+                                <h6 class="mb-0 fw-bold text-dark">Finance & MoMo Collections</h6>
+                                <span class="text-muted small">Automated terminal billing & receipts</span>
+                            </div>
+                        </div>
 
-                        <button class="showcase-tab-btn" data-target="showcase-reports">
-                            <i class="bi bi-file-bar-graph fs-5"></i>
-                            <div>
-                                <h6 class="mb-0 fw-bold text-white">Report Cards & SBA</h6>
-                                <span class="small text-muted" style="font-size: 0.75rem;">GPA auto-scaling & remarks builder</span>
+                        <div class="showcase-tab-item" data-target="showcase-reports">
+                            <div class="showcase-tab-icon">
+                                <i class="bi bi-file-earmark-spreadsheet"></i>
                             </div>
-                        </button>
+                            <div>
+                                <h6 class="mb-0 fw-bold text-dark">GES SBA & Report Cards</h6>
+                                <span class="text-muted small">50/50 weighting & batch PDF printer</span>
+                            </div>
+                        </div>
 
-                        <button class="showcase-tab-btn" data-target="showcase-timetables">
-                            <i class="bi bi-calendar3-range fs-5"></i>
-                            <div>
-                                <h6 class="mb-0 fw-bold text-white">Clash-free Timetables</h6>
-                                <span class="small text-muted" style="font-size: 0.75rem;">Dynamic course planner & teachers load</span>
+                        <div class="showcase-tab-item" data-target="showcase-timetables">
+                            <div class="showcase-tab-icon">
+                                <i class="bi bi-calendar3-range"></i>
                             </div>
-                        </button>
+                            <div>
+                                <h6 class="mb-0 fw-bold text-dark">Clash-Free Academic Planner</h6>
+                                <span class="text-muted small">Course allocations & teacher loads</span>
+                            </div>
+                        </div>
 
-                        <button class="showcase-tab-btn" data-target="showcase-portals">
-                            <i class="bi bi-phone-vibrate fs-5"></i>
-                            <div>
-                                <h6 class="mb-0 fw-bold text-white">Client Portals & ID Cards</h6>
-                                <span class="small text-muted" style="font-size: 0.75rem;">Mobile login logs & digital ID badges</span>
+                        <div class="showcase-tab-item" data-target="showcase-portals">
+                            <div class="showcase-tab-icon">
+                                <i class="bi bi-qr-code-scan"></i>
                             </div>
-                        </button>
+                            <div>
+                                <h6 class="mb-0 fw-bold text-dark">Parent Portal & QR ID Cards</h6>
+                                <span class="text-muted small">SMS alerts & digital student badges</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
-                <!-- Display Screen Mockups -->
+                <!-- Tab Display Panels -->
                 <div class="col-lg-8">
                     <!-- Tab 1: Billing -->
-                    <div class="showcase-display-card active" id="showcase-billing">
+                    <div class="showcase-content-panel active" id="showcase-billing">
                         <div class="row align-items-center g-4">
-                            <div class="col-md-6 text-start">
-                                <h4 class="fw-bold text-white mb-3">Finance & Fee Ledger</h4>
-                                <p class="text-secondary small mb-4">
-                                    Create flexible fees items, automatically bulk-generate terminal invoices for selected streams, and verify mobile money payments dynamically.
+                            <div class="col-md-7">
+                                <h3 class="fw-bold text-dark mb-3">Zero Fee Leakage with Instant Mobile Money Callbacks</h3>
+                                <p class="text-secondary small mb-3">
+                                    Eliminate cash handling queues. EduLink automatically creates terminal bills, accepts MTN MoMo, Telecel Cash, and bank cards, and reconciles balances in real time.
                                 </p>
-                                <ul class="list-unstyled small text-light mb-0 text-start" style="padding-left: 0;">
-                                    <li class="mb-2"><i class="bi bi-check-circle-fill text-warning me-2"></i>Automated invoice compilation</li>
-                                    <li class="mb-2"><i class="bi bi-check-circle-fill text-warning me-2"></i>MoMo (MTN/Telecel) payment api callbacks</li>
-                                    <li class="mb-2"><i class="bi bi-check-circle-fill text-warning me-2"></i>General ledger reconciliation audits</li>
+                                <ul class="feature-check-list">
+                                    <li><i class="bi bi-check-circle-fill"></i> Bulk terminal invoice generator for all classes</li>
+                                    <li><i class="bi bi-check-circle-fill"></i> Instant SMS fee receipts dispatched to parents</li>
+                                    <li><i class="bi bi-check-circle-fill"></i> Granular audit log and bank reconciliation exporter</li>
                                 </ul>
                             </div>
-                            <div class="col-md-6">
-                                <div class="showcase-illustration-window">
-                                    <div class="d-flex justify-content-between align-items-center border-bottom border-secondary pb-2 mb-3" style="border-color: rgba(255,255,255,0.05) !important;">
-                                        <span class="text-white small fw-bold"><i class="bi bi-cash-coin text-success me-1"></i> Fee Summary</span>
-                                        <span class="badge bg-success text-white" style="font-size: 0.6rem;">Term 1</span>
+                            <div class="col-md-5">
+                                <div class="p-3 bg-light rounded-4 border">
+                                    <div class="d-flex justify-content-between align-items-center mb-3">
+                                        <span class="fw-bold text-dark small"><i class="bi bi-wallet2 text-primary me-1"></i> Term Summary</span>
+                                        <span class="badge bg-success text-white" style="font-size: 0.65rem;">Active</span>
                                     </div>
-                                    <div class="p-2 bg-dark rounded border mb-2 text-center" style="border-color: rgba(255,255,255,0.05) !important; background-color: #0b0f19 !important;">
-                                        <span class="text-secondary small d-block" style="font-size: 0.65rem;">Total Outstanding</span>
-                                        <h4 class="fw-bold text-white mb-0">GHS 84,200</h4>
+                                    <div class="p-2.5 bg-white rounded-3 border mb-2 text-center">
+                                        <span class="text-muted small d-block" style="font-size: 0.7rem;">Total Invoiced</span>
+                                        <h5 class="fw-bold text-dark mb-0">GHS 184,200</h5>
                                     </div>
-                                    <div class="p-2 bg-dark rounded border text-center" style="border-color: rgba(255,255,255,0.05) !important; background-color: #0b0f19 !important;">
-                                        <span class="text-secondary small d-block" style="font-size: 0.65rem;">Total Collection (Momo)</span>
-                                        <h4 class="fw-bold text-success mb-0">GHS 126,500</h4>
+                                    <div class="p-2.5 bg-white rounded-3 border text-center">
+                                        <span class="text-muted small d-block" style="font-size: 0.7rem;">Collected via MoMo</span>
+                                        <h5 class="fw-bold text-success mb-0">GHS 164,850</h5>
                                     </div>
                                 </div>
                             </div>
@@ -1738,132 +1989,184 @@
                     </div>
 
                     <!-- Tab 2: Reports -->
-                    <div class="showcase-display-card" id="showcase-reports">
+                    <div class="showcase-content-panel" id="showcase-reports">
                         <div class="row align-items-center g-4">
-                            <div class="col-md-6 text-start">
-                                <h4 class="fw-bold text-white mb-3">Grading System & Report Hub</h4>
-                                <p class="text-secondary small mb-4">
-                                    Calculate student GPA scores based on raw class SBA tests (50%) and terminal exam totals (50%). Automatically populate class standings.
+                            <div class="col-md-7">
+                                <h3 class="fw-bold text-dark mb-3">Automated Terminal Report Cards in Minutes</h3>
+                                <p class="text-secondary small mb-3">
+                                    Teachers enter continuous class SBA tests (50%) and terminal exam marks (50%). EduLink automatically scales scores, calculates GPAs, assigns class positions, and generates print-ready PDF broadsheets.
                                 </p>
-                                <ul class="list-unstyled small text-light mb-0 text-start" style="padding-left: 0;">
-                                    <li class="mb-2"><i class="bi bi-check-circle-fill text-warning me-2"></i>Scalable SBA grading rules manager</li>
-                                    <li class="mb-2"><i class="bi bi-check-circle-fill text-warning me-2"></i>Bulk print-ready PDF reports compilation</li>
-                                    <li class="mb-2"><i class="bi bi-check-circle-fill text-warning me-2"></i>Dynamic teacher remarks autocomplete assistant</li>
+                                <ul class="feature-check-list">
+                                    <li><i class="bi bi-check-circle-fill"></i> Standard GES continuous assessment grading scale</li>
+                                    <li><i class="bi bi-check-circle-fill"></i> Automated smart teacher & headteacher remarks assistant</li>
+                                    <li><i class="bi bi-check-circle-fill"></i> 1-click batch PDF export with custom school crest and signatures</li>
                                 </ul>
                             </div>
-                            <div class="col-md-6">
-                                <div class="showcase-illustration-window">
-                                    <div class="d-flex justify-content-between align-items-center border-bottom border-secondary pb-2 mb-3" style="border-color: rgba(255,255,255,0.05) !important;">
-                                        <span class="text-white small fw-bold"><i class="bi bi-file-earmark-check-fill text-warning me-1"></i> SBA Broadsheet</span>
-                                        <span class="badge bg-warning text-dark" style="font-size: 0.6rem;">JHS 3</span>
+                            <div class="col-md-5">
+                                <div class="p-3 bg-light rounded-4 border">
+                                    <div class="d-flex justify-content-between align-items-center mb-2">
+                                        <span class="fw-bold text-dark small"><i class="bi bi-award-fill text-warning me-1"></i> SBA Broadsheet</span>
+                                        <span class="badge bg-primary text-white" style="font-size: 0.65rem;">JHS 3</span>
                                     </div>
-                                    <div class="table-responsive">
-                                        <table class="table table-dark table-sm table-borderless mb-0 text-white" style="font-size: 0.65rem; background: transparent !important;">
-                                            <thead>
-                                                <tr class="border-bottom border-secondary" style="border-color: rgba(255,255,255,0.05) !important;">
-                                                    <th style="background: transparent !important;">Pupil</th>
-                                                    <th style="background: transparent !important;">SBA(50)</th>
-                                                    <th style="background: transparent !important;">Exam(50)</th>
-                                                    <th style="background: transparent !important;">Grade</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <tr>
-                                                    <td style="background: transparent !important;">Ama Osei</td>
-                                                    <td style="background: transparent !important;">42.5</td>
-                                                    <td style="background: transparent !important;">45.0</td>
-                                                    <td style="background: transparent !important;"><span class="text-success">A1</span> (87.5%)</td>
-                                                </tr>
-                                                <tr>
-                                                    <td style="background: transparent !important;">Kojo Larbi</td>
-                                                    <td style="background: transparent !important;">35.0</td>
-                                                    <td style="background: transparent !important;">38.5</td>
-                                                    <td style="background: transparent !important;"><span class="text-warning">B2</span> (73.5%)</td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
+                                    <table class="table table-sm table-borderless small mb-0 bg-transparent">
+                                        <thead>
+                                            <tr class="border-bottom text-muted" style="font-size: 0.7rem;">
+                                                <th>Pupil</th>
+                                                <th>SBA(50)</th>
+                                                <th>Exam(50)</th>
+                                                <th>Grade</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>Ama Osei</td>
+                                                <td>44.0</td>
+                                                <td>46.0</td>
+                                                <td><span class="badge bg-success" style="font-size: 0.65rem;">A1 (90%)</span></td>
+                                            </tr>
+                                            <tr>
+                                                <td>Kofi Antwi</td>
+                                                <td>38.5</td>
+                                                <td>41.0</td>
+                                                <td><span class="badge bg-warning text-dark" style="font-size: 0.65rem;">B2 (79.5%)</span></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
                                 </div>
                             </div>
                         </div>
                     </div>
 
                     <!-- Tab 3: Timetables -->
-                    <div class="showcase-display-card" id="showcase-timetables">
+                    <div class="showcase-content-panel" id="showcase-timetables">
                         <div class="row align-items-center g-4">
-                            <div class="col-md-6 text-start">
-                                <h4 class="fw-bold text-white mb-3">Clash-free Academic Planner</h4>
-                                <p class="text-secondary small mb-4">
-                                    Allocate subject course periods to class streams, assign classrooms, and organize weekly teacher allocations with an intelligent conflict warning detector.
+                            <div class="col-md-7">
+                                <h3 class="fw-bold text-dark mb-3">Clash-Free Timetables and Room Allocations</h3>
+                                <p class="text-secondary small mb-3">
+                                    Easily configure subject periods, assign teachers to class streams, and inspect room capacities. Our built-in conflict detector guarantees zero double-booking.
                                 </p>
-                                <ul class="list-unstyled small text-light mb-0 text-start" style="padding-left: 0;">
-                                    <li class="mb-2"><i class="bi bi-check-circle-fill text-warning me-2"></i>Drag-and-drop course assignments</li>
-                                    <li class="mb-2"><i class="bi bi-check-circle-fill text-warning me-2"></i>Room capacity limits inspector</li>
-                                    <li class="mb-2"><i class="bi bi-check-circle-fill text-warning me-2"></i>Teacher-wise schedules exporter</li>
+                                <ul class="feature-check-list">
+                                    <li><i class="bi bi-check-circle-fill"></i> Visual weekly grid schedule for all streams</li>
+                                    <li><i class="bi bi-check-circle-fill"></i> Teacher workload balancing & lesson limits inspection</li>
+                                    <li><i class="bi bi-check-circle-fill"></i> Printable master and individual teacher timetables</li>
                                 </ul>
                             </div>
-                            <div class="col-md-6">
-                                <div class="showcase-illustration-window">
-                                    <div class="d-flex justify-content-between align-items-center border-bottom border-secondary pb-2 mb-3" style="border-color: rgba(255,255,255,0.05) !important;">
-                                        <span class="text-white small fw-bold"><i class="bi bi-calendar-week text-primary me-1"></i> Course Grid</span>
-                                        <span class="badge bg-primary text-white" style="font-size: 0.6rem;">Mon - Fri</span>
+                            <div class="col-md-5">
+                                <div class="p-3 bg-light rounded-4 border text-center">
+                                    <div class="d-flex justify-content-between align-items-center mb-2">
+                                        <span class="fw-bold text-dark small"><i class="bi bi-calendar-check text-primary me-1"></i> Class Matrix</span>
+                                        <span class="badge bg-info text-dark" style="font-size: 0.65rem;">Mon - Fri</span>
                                     </div>
-                                    <div class="table-responsive">
-                                        <table class="table table-bordered table-dark table-sm text-center mb-0 text-white" style="font-size: 0.6rem; border-color: rgba(255,255,255,0.05) !important; background: transparent !important;">
-                                            <thead>
-                                                <tr>
-                                                    <th style="background: transparent !important;">Period</th>
-                                                    <th style="background: transparent !important;">JHS 1</th>
-                                                    <th style="background: transparent !important;">JHS 2</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <tr>
-                                                    <td style="background: transparent !important;">08:30</td>
-                                                    <td style="background: rgba(13,110,253,0.15) !important; color: #58a6ff !important;" class="fw-bold">Maths</td>
-                                                    <td style="background: rgba(25,135,84,0.15) !important; color: #10b981 !important;" class="fw-bold">Science</td>
-                                                </tr>
-                                                <tr>
-                                                    <td style="background: transparent !important;">09:30</td>
-                                                    <td style="background: rgba(13,202,240,0.15) !important; color: #0dcaf0 !important;" class="fw-bold">English</td>
-                                                    <td style="background: rgba(13,110,253,0.15) !important; color: #58a6ff !important;" class="fw-bold">Maths</td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
+                                    <table class="table table-bordered table-sm text-center small mb-0 bg-white" style="font-size: 0.68rem;">
+                                        <thead>
+                                            <tr class="table-light">
+                                                <th>Period</th>
+                                                <th>JHS 1</th>
+                                                <th>JHS 2</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>08:30</td>
+                                                <td class="bg-primary-subtle text-primary fw-bold">Maths</td>
+                                                <td class="bg-success-subtle text-success fw-bold">Science</td>
+                                            </tr>
+                                            <tr>
+                                                <td>09:30</td>
+                                                <td class="bg-warning-subtle text-warning-emphasis fw-bold">English</td>
+                                                <td class="bg-primary-subtle text-primary fw-bold">Maths</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
                                 </div>
                             </div>
                         </div>
                     </div>
 
                     <!-- Tab 4: Portals -->
-                    <div class="showcase-display-card" id="showcase-portals">
+                    <div class="showcase-content-panel" id="showcase-portals">
                         <div class="row align-items-center g-4">
-                            <div class="col-md-6 text-start">
-                                <h4 class="fw-bold text-white mb-3">Digital ID Badges & Portals</h4>
-                                <p class="text-secondary small mb-4">
-                                    Dedicated parent login profiles to review fee status, student check-in alerts, assignment tasks, and automated QR-code reader checks.
+                            <div class="col-md-7">
+                                <h3 class="fw-bold text-dark mb-3">Multi-Role Portals & Digital Student ID Badges</h3>
+                                <p class="text-secondary small mb-3">
+                                    Keep parents informed with real-time fee balances, attendance alerts, homework assignments, and generate secure student ID badges with scannable QR verification.
                                 </p>
-                                <ul class="list-unstyled small text-light mb-0 text-start" style="padding-left: 0;">
-                                    <li class="mb-2"><i class="bi bi-check-circle-fill text-warning me-2"></i>Live bus trackers & attendance notifications</li>
-                                    <li class="mb-2"><i class="bi bi-check-circle-fill text-warning me-2"></i>QR code badge scanning for student verification</li>
-                                    <li class="mb-2"><i class="bi bi-check-circle-fill text-warning me-2"></i>Multi-role credentials dashboard</li>
+                                <ul class="feature-check-list">
+                                    <li><i class="bi bi-check-circle-fill"></i> Parent portal with direct mobile payment link</li>
+                                    <li><i class="bi bi-check-circle-fill"></i> Downloadable student assignments and lesson materials</li>
+                                    <li><i class="bi bi-check-circle-fill"></i> Printable student ID cards with encrypted verification QR</li>
                                 </ul>
                             </div>
-                            <div class="col-md-6 text-center">
-                                <div class="showcase-illustration-window d-inline-block p-4" style="max-width: 240px; border-color: rgba(255, 215, 0, 0.15) !important; background-color: #0b0f19 !important;">
-                                    <div class="text-center mb-3">
-                                        <i class="bi bi-globe-europe-africa text-warning fs-3 mb-1 d-block"></i>
-                                        <span class="fw-bold text-white small" style="font-size: 0.75rem;">EDULINK STUDENT ID</span>
-                                    </div>
-                                    <div class="bg-warning rounded-circle mx-auto mb-3" style="width: 60px; height: 60px; display: flex; align-items: center; justify-content: center; color: #020617; font-weight: 800; font-size: 1.25rem;">
+                            <div class="col-md-5 text-center">
+                                <div class="p-3 bg-white rounded-4 border shadow-sm d-inline-block text-center" style="width: 220px; border-color: var(--primary-navy) !important;">
+                                    <i class="bi bi-mortarboard-fill text-primary fs-3 mb-1 d-block"></i>
+                                    <span class="fw-bold text-dark d-block mb-2" style="font-size: 0.72rem;">EDULINK STUDENT ID</span>
+                                    <div class="bg-warning-subtle text-warning-emphasis fw-bold rounded-circle mx-auto mb-2 d-flex align-items-center justify-content-center" style="width: 50px; height: 50px; font-size: 1.1rem;">
                                         KO
                                     </div>
-                                    <h6 class="text-white mb-1 fw-bold" style="font-size: 0.8rem;">Kofi Osei</h6>
-                                    <span class="text-secondary d-block mb-3" style="font-size: 0.65rem;">ID: EL-2026-9043</span>
-                                    <div class="p-2 bg-white rounded d-inline-block">
-                                        <i class="bi bi-qr-code text-dark" style="font-size: 2.2rem;"></i>
+                                    <h6 class="fw-bold mb-0 text-dark" style="font-size: 0.82rem;">Kofi Osei</h6>
+                                    <span class="text-muted d-block mb-2" style="font-size: 0.65rem;">ID: EL-2026-9043</span>
+                                    <div class="p-1.5 bg-light rounded d-inline-block border">
+                                        <i class="bi bi-qr-code text-dark" style="font-size: 2rem;"></i>
                                     </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Interactive School Efficiency Calculator -->
+    <section class="py-5" id="calculator">
+        <div class="container">
+            <div class="calculator-card">
+                <div class="row align-items-center g-5">
+                    <div class="col-lg-6">
+                        <h3 class="fw-bold mb-3" style="font-size: 2rem;">Calculate Your Institution's Time & Revenue Savings</h3>
+                        <p class="text-white-50 mb-4">
+                            Slide to match your school's total student enrollment and see the measurable boost in administrative velocity and fee collection rates with EduLink Ghana ERP.
+                        </p>
+                        
+                        <div class="mb-3">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span class="fw-bold">Student Population:</span>
+                                <span class="fw-bold text-warning fs-5" id="calc-student-display">500 Students</span>
+                            </div>
+                            <input type="range" class="calc-range-slider" id="studentSlider" min="50" max="2500" step="50" value="500">
+                            <div class="d-flex justify-content-between text-white-50 small">
+                                <span>50 Pupils</span>
+                                <span>1,200 Pupils</span>
+                                <span>2,500+ Pupils</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-6">
+                        <div class="row g-3">
+                            <div class="col-sm-6">
+                                <div class="calc-result-box">
+                                    <div class="calc-result-val" id="calc-hours-saved">120+</div>
+                                    <span class="text-white-50 small fw-semibold">Staff Hours Saved Per Term</span>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="calc-result-box">
+                                    <div class="calc-result-val" id="calc-fee-recovery">+32%</div>
+                                    <span class="text-white-50 small fw-semibold">Faster MoMo Fee Recovery</span>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="calc-result-box">
+                                    <div class="calc-result-val" id="calc-report-time">10 Mins</div>
+                                    <span class="text-white-50 small fw-semibold">Term Report Generation</span>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="calc-result-box">
+                                    <div class="calc-result-val" id="calc-sms-speed">Instant</div>
+                                    <span class="text-white-50 small fw-semibold">Parent Communication</span>
                                 </div>
                             </div>
                         </div>
@@ -1874,27 +2177,28 @@
     </section>
 
     <!-- Pricing Section -->
-    <section class="py-6" id="pricing">
+    <section class="py-5 my-4" id="pricing">
         <div class="container text-center">
-            <h2 class="section-title">Transparent School Plans</h2>
-            <p class="section-sub">
-                No hidden setup fees. Choose the right size option for your school. Every package starts with our 14-day full free trial.
+            <span class="section-tagline">Transparent Investment</span>
+            <h2 class="section-header-title">Simple, All-Inclusive School Packages</h2>
+            <p class="section-header-desc">
+                No setup surprises or hidden hardware fees. Every package starts with our full-featured 14-day free trial.
             </p>
-            
-            <!-- Pricing Billing Toggle -->
-            <div class="pricing-toggle-container mb-5">
-                <span class="toggle-label active" id="toggle-termly">Termly Billing</span>
-                <label class="theme-switch" for="pricing-switch">
-                    <input type="checkbox" id="pricing-switch" />
-                    <span class="slider round"></span>
-                </label>
-                <span class="toggle-label" id="toggle-annual">
+
+            <!-- Billing Toggle -->
+            <div class="billing-toggle-wrapper">
+                <span class="billing-label active" id="label-termly">Termly Billing</span>
+                <div class="form-check form-switch form-check-switch-custom mb-0 d-inline-block">
+                    <input class="form-check-input" type="checkbox" role="switch" id="pricingBillingSwitch">
+                </div>
+                <span class="billing-label" id="label-annual">
                     Annual Billing 
-                    <span class="badge bg-success-subtle text-success ms-1" style="font-size: 0.75rem; border-radius: 4px;">Save 20%</span>
+                    <span class="badge bg-success text-white ms-1" style="font-size: 0.72rem;">Save 20%</span>
                 </span>
             </div>
-            
-            <div class="row g-4 text-start justify-content-center">
+
+            <!-- Pricing Cards Grid -->
+            <div class="row g-4 justify-content-center text-start">
                 @php
                     try {
                         $plans = \App\Models\Plan::where('is_active', true)->orderBy('price_monthly', 'asc')->get();
@@ -1906,12 +2210,12 @@
                 @if($plans->isNotEmpty())
                     @foreach($plans as $index => $plan)
                         <div class="col-md-6 col-lg-4">
-                            <div class="pricing-card {{ $index === 1 ? 'popular' : '' }}">
+                            <div class="pricing-card-pro {{ $index === 1 ? 'popular' : '' }}">
                                 @if($index === 1)
-                                    <div class="popular-badge">MOST POPULAR</div>
+                                    <div class="popular-plan-badge">MOST POPULAR</div>
                                 @endif
-                                <h4 class="fw-bold mb-1 text-white">{{ $plan->name }}</h4>
-                                <p class="text-secondary small">
+                                <h4 class="fw-bold mb-1 text-dark">{{ $plan->name }}</h4>
+                                <p class="text-muted small">
                                     @if($plan->max_students == -1)
                                         Unlimited Students
                                     @else
@@ -1919,44 +2223,44 @@
                                     @endif
                                 </p>
                                 
-                                <div class="pricing-price">
+                                <div class="pricing-amount-row">
                                     @if($plan->price_monthly == 0)
-                                        <span class="price-amount" data-monthly="Free" data-yearly="Free">Free</span>
-                                        <span class="price-duration" data-monthly="" data-yearly=""></span>
+                                        <span class="plan-price-val" data-monthly="Free" data-yearly="Free">Free</span>
+                                        <span class="pricing-duration-text" data-monthly="" data-yearly=""></span>
                                     @else
-                                        <span class="price-amount" data-monthly="GHS {{ number_format($plan->price_monthly, 0) }}" data-yearly="GHS {{ number_format($plan->price_yearly, 0) }}">GHS {{ number_format($plan->price_monthly, 0) }}</span>
-                                        <span class="price-duration" data-monthly="/term" data-yearly="/year, billed annually">/term</span>
+                                        <span class="plan-price-val" data-monthly="GHS {{ number_format($plan->price_monthly, 0) }}" data-yearly="GHS {{ number_format($plan->price_yearly, 0) }}">GHS {{ number_format($plan->price_monthly, 0) }}</span>
+                                        <span class="pricing-duration-text" data-monthly="/term" data-yearly="/year, billed annually">/term</span>
                                     @endif
                                 </div>
                                 
                                 <p class="small text-secondary mb-4">
                                     @if($plan->price_monthly == 0)
-                                        Great to test the software features with real data before choosing a subscription plan.
+                                        Ideal to test all system features with live sample data before subscribing.
                                     @elseif($plan->max_students == -1)
-                                        For school groups with multiple branches, heavy resource operations, or dedicated servers.
+                                        Designed for multi-branch institutions, large senior high schools, or custom servers.
                                     @else
-                                        Unlock automated grading and billing. Most chosen by growing private and model institutions.
+                                        Complete automated SBA reports, mobile money billing, and parent SMS communications.
                                     @endif
                                 </p>
                                 
-                                <ul class="pricing-list">
+                                <ul class="pricing-feature-list">
                                     @if(is_array($plan->features))
                                         @foreach($plan->features as $feat)
                                             @if(!empty(trim($feat)))
-                                                <li><i class="bi bi-check-circle-fill text-warning"></i><span>{{ ucwords(str_replace('_', ' ', trim($feat))) }}</span></li>
+                                                <li><i class="bi bi-check-circle-fill"></i><span>{{ ucwords(str_replace('_', ' ', trim($feat))) }}</span></li>
                                             @endif
                                         @endforeach
                                     @endif
                                     @if($plan->sms_credits_monthly > 0)
-                                        <li><i class="bi bi-check-circle-fill text-warning"></i><span>{{ number_format($plan->sms_credits_monthly) }} monthly SMS credits</span></li>
+                                        <li><i class="bi bi-check-circle-fill"></i><span>{{ number_format($plan->sms_credits_monthly) }} monthly parent SMS credits</span></li>
                                     @endif
                                 </ul>
                                 
-                                <a href="{{ route('register') }}" class="btn-price-{{ $index === 1 ? 'primary' : 'outline' }} w-100 text-decoration-none text-center">
+                                <a href="{{ route('register') }}" class="btn-brand-{{ $index === 1 ? 'gold' : 'primary' }} w-100 text-decoration-none justify-content-center py-3">
                                     @if($plan->price_monthly == 0)
-                                        Register Now
+                                        Register Free Trial
                                     @elseif($plan->max_students == -1)
-                                        Contact Sales
+                                        Contact Enterprise Sales
                                     @else
                                         Get {{ $plan->name }} Plan
                                     @endif
@@ -1965,12 +2269,13 @@
                         </div>
                     @endforeach
                 @else
-                    <!-- Fallback: Static settings pricing cards -->
-                    <!-- Basic Trial -->
+                    <!-- Fallback: Static system settings pricing cards -->
+                    <!-- Starter Plan -->
                     <div class="col-md-6 col-lg-4">
-                        <div class="pricing-card">
-                            <h4 class="fw-bold mb-1 text-white">{{ \App\Models\SystemSetting::getVal('welcome_price1_title', 'Starter Trial') }}</h4>
-                            <p class="text-secondary small">{{ \App\Models\SystemSetting::getVal('welcome_price1_sub', 'Evaluate basic capabilities') }}</p>
+                        <div class="pricing-card-pro">
+                            <h4 class="fw-bold mb-1 text-dark">{{ \App\Models\SystemSetting::getVal('welcome_price1_title', 'Starter Trial') }}</h4>
+                            <p class="text-muted small">{{ \App\Models\SystemSetting::getVal('welcome_price1_sub', 'Evaluate basic capabilities') }}</p>
+                            
                             @php
                                 $priceText1 = \App\Models\SystemSetting::getVal('welcome_price1_price', 'GHS 0/14 days');
                                 $priceVal1 = $priceText1;
@@ -1980,29 +2285,35 @@
                                 }
                                 $price1Features = explode("\n", trim(\App\Models\SystemSetting::getVal('welcome_price1_features', "Max 50 students\nBasic Student Register\nDaily Attendance logs\nSelf-managed onboarding")));
                             @endphp
-                            <div class="pricing-price">
-                                <span class="price-amount">{{ $priceVal1 }}</span><span class="price-duration">@if($priceUnit1)/{{ $priceUnit1 }}@endif</span>
+                            
+                            <div class="pricing-amount-row">
+                                <span class="plan-price-val">{{ $priceVal1 }}</span>
+                                <span class="pricing-duration-text">@if($priceUnit1)/{{ $priceUnit1 }}@endif</span>
                             </div>
+                            
                             <p class="small text-secondary mb-4">{{ \App\Models\SystemSetting::getVal('welcome_price1_desc', 'Great to test the software features with real data before choosing a subscription plan.') }}</p>
-                            <ul class="pricing-list">
+                            
+                            <ul class="pricing-feature-list">
                                 @foreach($price1Features as $feat)
                                     @if(!empty(trim($feat)))
-                                        <li><i class="bi bi-check-circle-fill text-warning"></i><span>{{ trim($feat) }}</span></li>
+                                        <li><i class="bi bi-check-circle-fill"></i><span>{{ trim($feat) }}</span></li>
                                     @endif
                                 @endforeach
                             </ul>
-                            <a href="{{ route('register') }}" class="btn-price-outline w-100 text-decoration-none text-center">
-                                Register Now
+                            
+                            <a href="{{ route('register') }}" class="btn-brand-primary w-100 text-decoration-none justify-content-center py-3">
+                                Register Free Trial
                             </a>
                         </div>
                     </div>
 
-                    <!-- Standard Package (Popular) -->
+                    <!-- Standard Package (Most Popular) -->
                     <div class="col-md-6 col-lg-4">
-                        <div class="pricing-card popular">
-                            <div class="popular-badge">MOST POPULAR</div>
-                            <h4 class="fw-bold mb-1 text-white">{{ \App\Models\SystemSetting::getVal('welcome_price2_title', 'Standard School') }}</h4>
-                            <p class="text-secondary small">{{ \App\Models\SystemSetting::getVal('welcome_price2_sub', 'For single campus primary/secondary') }}</p>
+                        <div class="pricing-card-pro popular">
+                            <div class="popular-plan-badge">MOST POPULAR</div>
+                            <h4 class="fw-bold mb-1 text-dark">{{ \App\Models\SystemSetting::getVal('welcome_price2_title', 'Standard School') }}</h4>
+                            <p class="text-muted small">{{ \App\Models\SystemSetting::getVal('welcome_price2_sub', 'For single campus primary/secondary') }}</p>
+                            
                             @php
                                 $priceText2 = \App\Models\SystemSetting::getVal('welcome_price2_price', 'GHS 450/term');
                                 $priceVal2 = $priceText2;
@@ -2012,28 +2323,34 @@
                                 }
                                 $price2Features = explode("\n", trim(\App\Models\SystemSetting::getVal('welcome_price2_features', "Up to 800 students\nSmart Accounting & Bills\nGrading System & Report Cards\nParent & Teacher Portals\nSMS Notifications support")));
                             @endphp
-                            <div class="pricing-price">
-                                <span class="price-amount">{{ $priceVal2 }}</span><span class="price-duration">@if($priceUnit2)/{{ $priceUnit2 }}@endif</span>
+                            
+                            <div class="pricing-amount-row">
+                                <span class="plan-price-val">{{ $priceVal2 }}</span>
+                                <span class="pricing-duration-text">@if($priceUnit2)/{{ $priceUnit2 }}@endif</span>
                             </div>
+                            
                             <p class="small text-secondary mb-4">{{ \App\Models\SystemSetting::getVal('welcome_price2_desc', 'Unlock automated grading and billing. Most chosen by growing private and model institutions.') }}</p>
-                            <ul class="pricing-list">
+                            
+                            <ul class="pricing-feature-list">
                                 @foreach($price2Features as $feat)
                                     @if(!empty(trim($feat)))
-                                        <li><i class="bi bi-check-circle-fill text-warning"></i><span>{{ trim($feat) }}</span></li>
+                                        <li><i class="bi bi-check-circle-fill"></i><span>{{ trim($feat) }}</span></li>
                                     @endif
                                 @endforeach
                             </ul>
-                            <a href="{{ route('register') }}" class="btn-price-primary w-100 text-decoration-none text-center">
+                            
+                            <a href="{{ route('register') }}" class="btn-brand-gold w-100 text-decoration-none justify-content-center py-3">
                                 Get Standard Plan
                             </a>
                         </div>
                     </div>
 
-                    <!-- Enterprise Plan -->
+                    <!-- Enterprise Package -->
                     <div class="col-md-6 col-lg-4">
-                        <div class="pricing-card">
-                            <h4 class="fw-bold mb-1 text-white">{{ \App\Models\SystemSetting::getVal('welcome_price3_title', 'Institution Enterprise') }}</h4>
-                            <p class="text-secondary small">{{ \App\Models\SystemSetting::getVal('welcome_price3_sub', 'Custom deployments') }}</p>
+                        <div class="pricing-card-pro">
+                            <h4 class="fw-bold mb-1 text-dark">{{ \App\Models\SystemSetting::getVal('welcome_price3_title', 'Institution Enterprise') }}</h4>
+                            <p class="text-muted small">{{ \App\Models\SystemSetting::getVal('welcome_price3_sub', 'Custom deployments') }}</p>
+                            
                             @php
                                 $priceText3 = \App\Models\SystemSetting::getVal('welcome_price3_price', 'Custom/negotiated');
                                 $priceVal3 = $priceText3;
@@ -2043,18 +2360,23 @@
                                 }
                                 $price3Features = explode("\n", trim(\App\Models\SystemSetting::getVal('welcome_price3_features', "Unlimited Students\nCustom Branding & Subdomain\nDedicated DB Instance\nPremium 24/7 SLA Support\nAPI Access & Integrations")));
                             @endphp
-                            <div class="pricing-price">
-                                <span class="price-amount">{{ $priceVal3 }}</span><span class="price-duration">@if($priceUnit3)/{{ $priceUnit3 }}@endif</span>
+                            
+                            <div class="pricing-amount-row">
+                                <span class="plan-price-val">{{ $priceVal3 }}</span>
+                                <span class="pricing-duration-text">@if($priceUnit3)/{{ $priceUnit3 }}@endif</span>
                             </div>
+                            
                             <p class="small text-secondary mb-4">{{ \App\Models\SystemSetting::getVal('welcome_price3_desc', 'For school groups with multiple branches, heavy resource operations, or dedicated servers.') }}</p>
-                            <ul class="pricing-list">
+                            
+                            <ul class="pricing-feature-list">
                                 @foreach($price3Features as $feat)
                                     @if(!empty(trim($feat)))
-                                        <li><i class="bi bi-check-circle-fill text-warning"></i><span>{{ trim($feat) }}</span></li>
+                                        <li><i class="bi bi-check-circle-fill"></i><span>{{ trim($feat) }}</span></li>
                                     @endif
                                 @endforeach
                             </ul>
-                            <a href="{{ route('register') }}" class="btn-price-outline w-100 text-decoration-none text-center">
+                            
+                            <a href="{{ route('register') }}" class="btn-brand-primary w-100 text-decoration-none justify-content-center py-3">
                                 Contact Sales
                             </a>
                         </div>
@@ -2065,216 +2387,307 @@
     </section>
 
     <!-- FAQ Section -->
-    <section class="py-6" id="faq">
+    <section class="py-5" id="faq" style="background-color: var(--bg-light-tint); border-top: 1px solid var(--border-subtle); border-bottom: 1px solid var(--border-subtle);">
         <div class="container">
             <div class="row align-items-center g-5">
                 <div class="col-lg-5 text-center text-lg-start">
-                    <h2 class="section-title">Frequently Asked Questions</h2>
+                    <span class="section-tagline">Got Questions?</span>
+                    <h2 class="section-header-title">Frequently Asked Questions</h2>
                     <p class="text-secondary mb-4">
                         Everything you need to know about setting up and running your institution workspace on the {{ config('app.name', 'EduLink') }} platform.
                     </p>
-                    <a href="{{ route('register') }}" class="btn-hero-primary text-decoration-none">
-                        Register Now
+                    <a href="{{ route('register') }}" class="btn-brand-primary text-decoration-none">
+                        <span>Get Started with EduLink</span>
+                        <i class="bi bi-arrow-right"></i>
                     </a>
                 </div>
-                
+
                 <div class="col-lg-7">
-                    <div class="faq-accordion">
-                        <details>
-                            <summary>{{ \App\Models\SystemSetting::getVal('welcome_faq1_q', 'How long does it take to onboard our school?') }}</summary>
-                            <div class="faq-content">
-                                {{ \App\Models\SystemSetting::getVal('welcome_faq1_a', 'You can register online instantly! Setup takes less than 10 minutes. Once registered, our setup assistant will guide you through adding classes, academic terms, assigning subjects to teachers, and uploading students.') }}
-                            </div>
-                        </details>
+                    <div class="faq-accordion-group">
+                        <div class="faq-card-item">
+                            <details>
+                                <summary>{{ \App\Models\SystemSetting::getVal('welcome_faq1_q', 'How long does it take to onboard our school?') }}</summary>
+                                <div class="faq-answer-content">
+                                    {{ \App\Models\SystemSetting::getVal('welcome_faq1_a', 'You can register online instantly! Setup takes less than 10 minutes. Once registered, our setup assistant will guide you through adding classes, academic terms, assigning subjects to teachers, and uploading students.') }}
+                                </div>
+                            </details>
+                        </div>
 
-                        <details>
-                            <summary>{{ \App\Models\SystemSetting::getVal('welcome_faq2_q', 'Are parent and student portal accounts free?') }}</summary>
-                            <div class="faq-content">
-                                {{ \App\Models\SystemSetting::getVal('welcome_faq2_a', 'Yes! Once a school subscribes to our platform, there are no extra charges for parents, students, or teacher accounts. All user portals are included in the flat monthly tenant package.') }}
-                            </div>
-                        </details>
+                        <div class="faq-card-item">
+                            <details>
+                                <summary>{{ \App\Models\SystemSetting::getVal('welcome_faq2_q', 'Are parent and student portal accounts free?') }}</summary>
+                                <div class="faq-answer-content">
+                                    {{ \App\Models\SystemSetting::getVal('welcome_faq2_a', 'Yes! Once a school subscribes to our platform, there are no extra charges for parents, students, or teacher accounts. All user portals are included in the flat monthly tenant package.') }}
+                                </div>
+                            </details>
+                        </div>
 
-                        <details>
-                            <summary>{{ \App\Models\SystemSetting::getVal('welcome_faq3_q', 'What payment methods are integrated for fees?') }}</summary>
-                            <div class="faq-content">
-                                {{ \App\Models\SystemSetting::getVal('welcome_faq3_a', config('app.name', 'EduLink') . ' integrates natively with major mobile money providers in Ghana (MTN MoMo, Telecel Cash, AT Money) and credit/debit card processors. Parents can pay bills directly online, updating school accounts in real time.') }}
-                            </div>
-                        </details>
+                        <div class="faq-card-item">
+                            <details>
+                                <summary>{{ \App\Models\SystemSetting::getVal('welcome_faq3_q', 'What payment methods are integrated for fees?') }}</summary>
+                                <div class="faq-answer-content">
+                                    {{ \App\Models\SystemSetting::getVal('welcome_faq3_a', config('app.name', 'EduLink') . ' integrates natively with major mobile money providers in Ghana (MTN MoMo, Telecel Cash, AT Money) and credit/debit card processors. Parents can pay bills directly online, updating school accounts in real time.') }}
+                                </div>
+                            </details>
+                        </div>
 
-                        <details>
-                            <summary>{{ \App\Models\SystemSetting::getVal('welcome_faq4_q', 'Is our institution\'s data safe and secure?') }}</summary>
-                            <div class="faq-content">
-                                {{ \App\Models\SystemSetting::getVal('welcome_faq4_a', 'Absolutely. We run on enterprise cloud services, utilizing daily automated database backups, multi-factor authentication (MFA) for user accounts, and end-to-end HTTPS encryption to ensure compliance and data safety.') }}
-                            </div>
-                        </details>
+                        <div class="faq-card-item">
+                            <details>
+                                <summary>{{ \App\Models\SystemSetting::getVal('welcome_faq4_q', 'Is our institution\'s data safe and secure?') }}</summary>
+                                <div class="faq-answer-content">
+                                    {{ \App\Models\SystemSetting::getVal('welcome_faq4_a', 'Absolutely. We run on enterprise cloud services, utilizing daily automated database backups, multi-factor authentication (MFA) for user accounts, and end-to-end HTTPS encryption to ensure compliance and data safety.') }}
+                                </div>
+                            </details>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Footer -->
-    <footer>
+    <!-- Bottom Conversion CTA Section -->
+    <section class="py-5">
+        <div class="container">
+            <div class="cta-banner-section text-center text-lg-start">
+                <div class="row align-items-center g-4">
+                    <div class="col-lg-8">
+                        <h2 class="mb-3">Ready to Elevate Your Institution's Academic Standards?</h2>
+                        <p class="text-white-50 fs-6 mb-0" style="max-width: 580px;">
+                            Join hundreds of modern basic, junior, and senior high schools running automated report cards, mobile money fees, and connected parent portals.
+                        </p>
+                    </div>
+                    <div class="col-lg-4 text-center text-lg-end">
+                        <a href="{{ route('register') }}" class="btn-brand-gold text-decoration-none py-3.5 px-4.5 fs-6">
+                            <span>Register Your School Free</span>
+                            <i class="bi bi-arrow-right"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Site Footer -->
+    <footer class="site-footer">
         <div class="container">
             <div class="row g-4 mb-5">
                 <div class="col-lg-4">
-                    <a href="{{ url('/') }}" class="navbar-brand d-flex align-items-center mb-3 text-decoration-none">
-                        <div class="logo-icon-wrapper me-2">
-                            <i class="bi bi-globe-europe-africa text-warning"></i>
+                    <a href="{{ url('/') }}" class="d-flex align-items-center mb-3 text-decoration-none">
+                        <div class="logo-box me-2.5">
+                            <i class="bi bi-mortarboard-fill"></i>
                         </div>
-                        <span class="brand-text">{!! str_starts_with(strtolower(config('app.name', 'EduLink')), 'edu') && strlen(config('app.name', 'EduLink')) > 3 ? substr(config('app.name', 'EduLink'), 0, 3) . '<span class="text-gold">' . e(substr(config('app.name', 'EduLink'), 3)) . '</span>' : e(config('app.name', 'EduLink')) !!}</span>
+                        <span class="brand-title text-white">
+                            {{ substr(config('app.name', 'EduLink'), 0, 3) }}<span class="gold-text">{{ substr(config('app.name', 'EduLink'), 3) }}</span>
+                        </span>
                     </a>
-                    <p class="text-secondary small">
+                    <p class="text-secondary small mb-3">
                         {{ \App\Models\SystemSetting::getVal('welcome_footer_desc', 'Providing premium SaaS management systems for modern schools across Ghana and the West African sub-region.') }}
                     </p>
-                    <div class="d-flex align-items-center gap-2 mt-4 text-secondary small">
-                        <span class="status-dot"></span> All Systems Operational
+                    <div class="system-status-indicator">
+                        <span class="badge-live-pulse" style="width: 7px; height: 7px;"></span>
+                        <span>All ERP Infrastructure Systems Operational</span>
                     </div>
                 </div>
-                
-                <div class="col-6 col-lg-3 offset-lg-1">
-                    <h6 class="fw-bold text-white mb-3">Product Links</h6>
+
+                <div class="col-6 col-lg-2 offset-lg-1">
+                    <h6>Quick Links</h6>
                     <ul class="list-unstyled">
-                        <li class="mb-2"><a href="#features" class="footer-link text-decoration-none small">Features</a></li>
-                        <li class="mb-2"><a href="#pricing" class="footer-link text-decoration-none small">Pricing Plans</a></li>
-                        <li class="mb-2"><a href="#faq" class="footer-link text-decoration-none small">FAQs</a></li>
+                        <li><a href="#pillars" class="footer-nav-link">Core Pillars</a></li>
+                        <li><a href="#tour" class="footer-nav-link">Platform Tour</a></li>
+                        <li><a href="#calculator" class="footer-nav-link">ROI Calculator</a></li>
+                        <li><a href="#pricing" class="footer-nav-link">Pricing Plans</a></li>
+                        <li><a href="#faq" class="footer-nav-link">FAQs</a></li>
                     </ul>
                 </div>
 
-                <div class="col-6 col-lg-4">
-                    <h6 class="fw-bold text-white mb-3">Platform Governance</h6>
+                <div class="col-6 col-lg-2">
+                    <h6>Access Portals</h6>
                     <ul class="list-unstyled">
-                        <li class="mb-2 text-secondary small"><i class="bi bi-shield-lock-fill me-2 text-warning"></i>MFA Protection Enabled</li>
-                        <li class="mb-2 text-secondary small"><i class="bi bi-hdd-network-fill me-2 text-warning"></i>Daily Automated Cloud Backups</li>
-                        <li class="mb-2 text-secondary small"><i class="bi bi-envelope me-2 text-warning"></i>{{ \App\Models\SystemSetting::getVal('welcome_support_email', 'support@' . strtolower(config('app.name', 'EduLink')) . '.gh') }}</li>
+                        <li><a href="{{ route('login') }}" class="footer-nav-link">School Admin Portal</a></li>
+                        <li><a href="{{ route('login') }}" class="footer-nav-link">Teacher Gradebook</a></li>
+                        <li><a href="{{ route('login') }}" class="footer-nav-link">Parent Mobile Portal</a></li>
+                        <li><a href="{{ route('login') }}" class="footer-nav-link">Student Portal</a></li>
+                        <li><a href="{{ route('register') }}" class="footer-nav-link">Register Institution</a></li>
+                    </ul>
+                </div>
+
+                <div class="col-lg-3">
+                    <h6>Platform Governance</h6>
+                    <ul class="list-unstyled small text-secondary">
+                        <li class="mb-2"><i class="bi bi-shield-lock-fill text-warning me-2"></i>MFA Two-Factor Authentication</li>
+                        <li class="mb-2"><i class="bi bi-cloud-arrow-up-fill text-warning me-2"></i>Automated Daily Database Backups</li>
+                        <li class="mb-2"><i class="bi bi-lock-fill text-warning me-2"></i>256-Bit SSL Encryption</li>
+                        <li class="mb-2"><i class="bi bi-envelope-fill text-warning me-2"></i>{{ \App\Models\SystemSetting::getVal('welcome_support_email', 'support@' . strtolower(config('app.name', 'edulink')) . '.gh') }}</li>
                     </ul>
                 </div>
             </div>
-            
-            <div class="border-top border-secondary pt-4 text-center text-secondary small" style="border-color: rgba(255,255,255,0.05) !important;">
-                &copy; 2026 {{ config('app.name', 'EduLink') }} Ghana ERP. All rights reserved. Built with pride for better education.
+
+            <div class="border-top pt-4 text-center text-secondary small" style="border-color: rgba(255, 255, 255, 0.08) !important;">
+                &copy; 2026 {{ config('app.name', 'EduLink') }} Ghana ERP. All rights reserved. Built with pride for Ghanaian Educational Excellence.
             </div>
         </div>
     </footer>
 
-    <!-- Bootstrap 5 Bundle JS CDN -->
+    <!-- Bootstrap 5 Bundle JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
-    <!-- Pricing Switch Controller JS -->
+    <!-- Interactive Features & Calculations Script -->
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Showcase Tab Switcher
-            const tabButtons = document.querySelectorAll('.showcase-tab-btn');
-            const displayCards = document.querySelectorAll('.showcase-display-card');
+            // Theme Switcher Controller
+            const themeToggleBtns = document.querySelectorAll('.theme-toggle-action');
+            
+            function updateThemeIcons(theme) {
+                const iconClass = theme === 'dark' ? 'bi bi-sun-fill text-warning' : 'bi bi-moon-stars-fill';
+                const buttonTitle = theme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode';
+                
+                document.querySelectorAll('.theme-icon-el').forEach(icon => {
+                    icon.className = iconClass + ' theme-icon-el';
+                });
+                themeToggleBtns.forEach(btn => {
+                    btn.setAttribute('title', buttonTitle);
+                });
+            }
+
+            // Sync current theme icon state
+            const currentActiveTheme = document.documentElement.getAttribute('data-bs-theme') || 'light';
+            updateThemeIcons(currentActiveTheme);
+
+            // Bind click handler on toggle buttons
+            themeToggleBtns.forEach(btn => {
+                btn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const activeTheme = document.documentElement.getAttribute('data-bs-theme') || 'light';
+                    const newTheme = activeTheme === 'dark' ? 'light' : 'dark';
+                    
+                    document.documentElement.setAttribute('data-bs-theme', newTheme);
+                    localStorage.setItem('theme', newTheme);
+                    updateThemeIcons(newTheme);
+                });
+            });
+
+            // Interactive Tab Switcher
+            const tabButtons = document.querySelectorAll('.showcase-tab-item');
+            const displayPanels = document.querySelectorAll('.showcase-content-panel');
 
             tabButtons.forEach(btn => {
                 btn.addEventListener('click', function() {
                     const targetId = this.getAttribute('data-target');
                     
-                    // Deactivate all buttons & cards
                     tabButtons.forEach(b => b.classList.remove('active'));
-                    displayCards.forEach(c => c.classList.remove('active'));
+                    displayPanels.forEach(p => p.classList.remove('active'));
                     
-                    // Activate selected
                     this.classList.add('active');
-                    const targetCard = document.getElementById(targetId);
-                    if (targetCard) {
-                        targetCard.classList.add('active');
+                    const targetPanel = document.getElementById(targetId);
+                    if (targetPanel) {
+                        targetPanel.classList.add('active');
                     }
                 });
             });
 
-            const pSwitch = document.getElementById('pricing-switch');
-            const labelMonthly = document.getElementById('toggle-termly');
-            const labelAnnual = document.getElementById('toggle-annual');
-            
-            // Select all pricing amount elements
-            const priceCards = document.querySelectorAll('.pricing-card');
-            
-            const originalPrices = [];
-            priceCards.forEach((card) => {
-                const priceContainer = card.querySelector('.pricing-price');
-                if (priceContainer) {
-                    const amountEl = priceContainer.querySelector('.price-amount');
-                    const durationEl = priceContainer.querySelector('.price-duration');
-                    if (amountEl) {
-                        originalPrices.push({
-                            amountEl: amountEl,
-                            durationEl: durationEl,
-                            originalText: amountEl.textContent.trim(),
-                            originalDuration: durationEl ? durationEl.textContent.trim() : ''
-                        });
-                    }
+            // Interactive School Efficiency Calculator
+            const slider = document.getElementById('studentSlider');
+            const studentDisplay = document.getElementById('calc-student-display');
+            const hoursSaved = document.getElementById('calc-hours-saved');
+            const feeRecovery = document.getElementById('calc-fee-recovery');
+            const reportTime = document.getElementById('calc-report-time');
+
+            if (slider) {
+                slider.addEventListener('input', function() {
+                    const val = parseInt(this.value);
+                    studentDisplay.textContent = val.toLocaleString() + ' Students';
+                    
+                    // Dynamic calculations
+                    const hours = Math.round(val * 0.24);
+                    hoursSaved.textContent = hours + '+ hrs';
+                    
+                    const recovery = Math.min(48, Math.round(20 + (val / 100)));
+                    feeRecovery.textContent = '+' + recovery + '%';
+                    
+                    const mins = Math.max(5, Math.round(val * 0.02));
+                    reportTime.textContent = mins + ' Mins';
+                });
+            }
+
+            // Pricing Switch Controller (Termly vs. Annual)
+            const billingSwitch = document.getElementById('pricingBillingSwitch');
+            const labelTermly = document.getElementById('label-termly');
+            const labelAnnual = document.getElementById('label-annual');
+            const pricingCards = document.querySelectorAll('.pricing-card-pro');
+
+            const priceStore = [];
+            pricingCards.forEach(card => {
+                const amountEl = card.querySelector('.plan-price-val');
+                const durationEl = card.querySelector('.pricing-duration-text');
+                if (amountEl) {
+                    priceStore.push({
+                        amountEl: amountEl,
+                        durationEl: durationEl,
+                        origText: amountEl.textContent.trim(),
+                        origDuration: durationEl ? durationEl.textContent.trim() : ''
+                    });
                 }
             });
 
-            pSwitch.addEventListener('change', function() {
-                const isAnnual = this.checked;
-                
-                if (isAnnual) {
-                    labelMonthly.classList.remove('active');
-                    labelAnnual.classList.add('active');
-                } else {
-                    labelMonthly.classList.add('active');
-                    labelAnnual.classList.remove('active');
-                }
-                
-                originalPrices.forEach(item => {
-                    if (item.amountEl.hasAttribute('data-monthly')) {
-                        if (isAnnual) {
-                            item.amountEl.textContent = item.amountEl.getAttribute('data-yearly');
-                            if (item.durationEl) {
-                                item.durationEl.textContent = '/year, billed annually';
-                            }
-                        } else {
-                            item.amountEl.textContent = item.amountEl.getAttribute('data-monthly');
-                            if (item.durationEl) {
-                                item.durationEl.textContent = '/term';
-                            }
-                        }
+            if (billingSwitch) {
+                billingSwitch.addEventListener('change', function() {
+                    const isAnnual = this.checked;
+                    
+                    if (isAnnual) {
+                        labelTermly.classList.remove('active');
+                        labelAnnual.classList.add('active');
                     } else {
-                        const text = item.originalText;
-                        const numericPart = text.replace(/[^0-9.]/g, '');
-                        const nonNumericPart = text.replace(/[0-9.]/g, '').trim(); // e.g. "GHS "
-                        
-                        if (numericPart) {
-                            const value = parseFloat(numericPart);
-                            if (value > 0) {
-                                if (isAnnual) {
-                                    const discountedRate = Math.round(value * 0.8 * 3);
-                                    item.amountEl.textContent = nonNumericPart + discountedRate;
-                                    if (item.durationEl) {
-                                        item.durationEl.textContent = '/year, billed annually';
-                                    }
-                                } else {
-                                    item.amountEl.textContent = item.originalText;
-                                    if (item.durationEl) {
-                                        item.durationEl.textContent = item.originalDuration;
-                                    }
+                        labelTermly.classList.add('active');
+                        labelAnnual.classList.remove('active');
+                    }
+
+                    priceStore.forEach(item => {
+                        if (item.amountEl.hasAttribute('data-monthly')) {
+                            if (isAnnual) {
+                                item.amountEl.textContent = item.amountEl.getAttribute('data-yearly');
+                                if (item.durationEl) {
+                                    item.durationEl.textContent = '/year, billed annually';
                                 }
                             } else {
-                                item.amountEl.textContent = item.originalText;
+                                item.amountEl.textContent = item.amountEl.getAttribute('data-monthly');
                                 if (item.durationEl) {
-                                    item.durationEl.textContent = item.originalDuration;
+                                    item.durationEl.textContent = '/term';
                                 }
                             }
                         } else {
-                            item.amountEl.textContent = item.originalText;
-                            if (item.durationEl) {
-                                item.durationEl.textContent = item.originalDuration;
+                            const text = item.origText;
+                            const numericPart = text.replace(/[^0-9.]/g, '');
+                            const nonNumericPart = text.replace(/[0-9.]/g, '').trim();
+                            
+                            if (numericPart) {
+                                const value = parseFloat(numericPart);
+                                if (value > 0) {
+                                    if (isAnnual) {
+                                        const annualDiscounted = Math.round(value * 0.8 * 3);
+                                        item.amountEl.textContent = nonNumericPart + ' ' + annualDiscounted.toLocaleString();
+                                        if (item.durationEl) {
+                                            item.durationEl.textContent = '/year, billed annually';
+                                        }
+                                    } else {
+                                        item.amountEl.textContent = item.origText;
+                                        if (item.durationEl) {
+                                            item.durationEl.textContent = item.origDuration;
+                                        }
+                                    }
+                                }
                             }
                         }
-                    }
+                    });
                 });
-            });
+            }
 
-            // Navbar Scroll Action
-            const navbar = document.getElementById('mainNavbar');
+            // Navbar Scroll Class
+            const nav = document.getElementById('mainNavbar');
             window.addEventListener('scroll', function() {
                 if (window.scrollY > 30) {
-                    navbar.classList.add('scrolled');
+                    nav.classList.add('scrolled');
                 } else {
-                    navbar.classList.remove('scrolled');
+                    nav.classList.remove('scrolled');
                 }
             });
         });
@@ -2283,11 +2696,11 @@
     @php
         $whatsappNumber = \App\Models\SystemSetting::getVal('welcome_whatsapp_number', '');
         $cleanWhatsapp = preg_replace('/[^0-9]/', '', $whatsappNumber);
-        $whatsappMsg = urlencode('Hi, admin, i am interested.');
+        $whatsappMsg = urlencode('Hello EduLink Team! I would like to inquire about registering our school on EduLink Ghana ERP.');
     @endphp
 
     @if(!empty($cleanWhatsapp))
-        <a href="https://wa.me/{{ $cleanWhatsapp }}?text={{ $whatsappMsg }}" class="whatsapp-float" target="_blank" rel="noopener noreferrer" title="Chat with us on WhatsApp">
+        <a href="https://wa.me/{{ $cleanWhatsapp }}?text={{ $whatsappMsg }}" class="whatsapp-float-btn" target="_blank" rel="noopener noreferrer" title="Chat with us on WhatsApp">
             <i class="bi bi-whatsapp"></i>
         </a>
     @endif

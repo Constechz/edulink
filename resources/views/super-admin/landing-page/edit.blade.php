@@ -25,6 +25,29 @@
         </div>
     @endif
 
+    <!-- Executive Header Banner -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="p-4 text-white rounded-4 shadow-sm position-relative overflow-hidden" style="background: linear-gradient(135deg, #002244 0%, #003366 60%, #0f4c81 100%); border: 1px solid rgba(255, 215, 0, 0.15);">
+                <div class="row align-items-center g-3">
+                    <div class="col-lg-8">
+                        <h2 class="fw-bold mb-2" style="font-size: 1.75rem; letter-spacing: -0.5px;">
+                            Public Landing Page <span style="color: var(--accent-color, #FFD700);">Visual Editor</span>
+                        </h2>
+                        <p class="text-white-50 mb-0" style="font-size: 0.9rem; max-width: 650px;">
+                            Customize marketing value propositions, hero section titles, core architecture pillars, FAQ directories, and footer contact credentials in real time.
+                        </p>
+                    </div>
+                    <div class="col-lg-4 text-lg-end">
+                        <a href="{{ url('/') }}" target="_blank" class="btn btn-warning rounded-3 px-3 py-2 fw-bold text-decoration-none shadow-sm">
+                            <i class="bi bi-box-arrow-up-right me-1"></i>View Live Website
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <form action="{{ route('super-admin.landing-page.update') }}" method="POST">
         @csrf
 

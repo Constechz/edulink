@@ -186,11 +186,26 @@
 
 @section('content')
 <div class="container-fluid p-0">
-    <!-- Header Section -->
-    <div class="row mb-4 align-items-center">
-        <div class="col-sm-12">
-            <h5 class="fw-bold mb-1 text-dark">Email Gateway Configuration</h5>
-            <p class="text-muted small mb-0">Manage outbound SMTP settings and monitor broadcast transmission logs.</p>
+    <!-- Executive Header Banner -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="p-4 text-white rounded-4 shadow-sm position-relative overflow-hidden" style="background: linear-gradient(135deg, #002244 0%, #003366 60%, #0f4c81 100%); border: 1px solid rgba(255, 215, 0, 0.15);">
+                <div class="row align-items-center g-3">
+                    <div class="col-lg-8">
+                        <h2 class="fw-bold mb-2" style="font-size: 1.75rem; letter-spacing: -0.5px;">
+                            Email Gateway &amp; <span style="color: var(--accent-color, #FFD700);">Broadcast Center</span>
+                        </h2>
+                        <p class="text-white-50 mb-0" style="font-size: 0.9rem; max-width: 650px;">
+                            Configure production SMTP servers, dispatch system-wide email notifications, run connectivity handshakes, and inspect outbound delivery audit trails.
+                        </p>
+                    </div>
+                    <div class="col-lg-4 text-lg-end">
+                        <a href="{{ route('super-admin.settings') }}" class="btn btn-warning rounded-3 px-3 py-2 fw-bold text-decoration-none shadow-sm">
+                            <i class="bi bi-sliders me-1"></i>Platform Settings
+                        </a>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
