@@ -541,7 +541,7 @@
         }
 
         /* ==========================================================================
-           PROFESSIONAL MOBILE NAVIGATION DRAWER & APP MENU
+           CLEAN SLEEK MOBILE NAVIGATION MENU
            ========================================================================== */
         @media (max-width: 991.98px) {
             .navbar-main {
@@ -551,40 +551,41 @@
             .navbar-collapse {
                 background: var(--bg-card) !important;
                 border: 1px solid var(--border-subtle);
-                border-radius: 20px;
-                padding: 1.15rem !important;
-                margin-top: 0.85rem;
-                box-shadow: 0 18px 40px -8px rgba(0, 51, 102, 0.18), 0 0 0 1px rgba(0, 51, 102, 0.04);
+                border-radius: 16px;
+                padding: 1rem !important;
+                margin-top: 0.75rem;
+                box-shadow: 0 16px 35px -8px rgba(0, 51, 102, 0.15);
             }
 
             [data-bs-theme="dark"] .navbar-collapse {
                 background: #111a2e !important;
                 border-color: rgba(255, 255, 255, 0.08);
-                box-shadow: 0 20px 45px -10px rgba(0, 0, 0, 0.65);
+                box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.65);
             }
 
             .mobile-nav-list {
                 display: flex;
                 flex-direction: column;
-                gap: 0.4rem;
+                gap: 0.25rem;
             }
 
             .mobile-nav-item {
                 display: flex;
                 align-items: center;
-                gap: 0.85rem;
-                padding: 0.65rem 0.85rem;
-                border-radius: 12px;
+                gap: 0.65rem;
+                padding: 0.6rem 0.85rem;
+                border-radius: 10px;
                 background: transparent;
                 transition: all 0.2s ease;
                 color: var(--text-heading) !important;
+                font-size: 0.95rem;
+                font-weight: 600;
             }
 
             .mobile-nav-item:hover,
             .mobile-nav-item:active {
                 background: var(--bg-light-tint);
                 color: var(--primary-navy) !important;
-                transform: translateX(3px);
             }
 
             [data-bs-theme="dark"] .mobile-nav-item {
@@ -597,62 +598,15 @@
                 color: var(--accent-gold) !important;
             }
 
-            .mobile-nav-icon {
-                width: 36px;
-                height: 36px;
-                border-radius: 10px;
-                background: var(--primary-subtle);
-                color: var(--primary-navy);
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                font-size: 1.05rem;
-                flex-shrink: 0;
-                transition: all 0.2s ease;
-            }
-
-            [data-bs-theme="dark"] .mobile-nav-icon {
-                background: rgba(255, 255, 255, 0.06);
-                color: var(--accent-gold);
-            }
-
-            .mobile-nav-item:hover .mobile-nav-icon {
-                background: var(--primary-navy);
-                color: #ffffff;
-            }
-
-            [data-bs-theme="dark"] .mobile-nav-item:hover .mobile-nav-icon {
-                background: var(--accent-gold);
-                color: #002244;
-            }
-
-            .mobile-nav-text {
-                display: flex;
-                flex-direction: column;
-                line-height: 1.25;
-            }
-
-            .mobile-nav-title {
-                font-size: 0.92rem;
-                font-weight: 700;
-            }
-
-            .mobile-nav-sub {
-                font-size: 0.74rem;
-                font-weight: 400;
-                color: var(--text-muted);
-                margin-top: 1px;
-            }
-
             .mobile-nav-arrow {
-                font-size: 0.78rem;
+                font-size: 0.75rem;
                 color: var(--text-muted);
                 margin-left: auto;
-                transition: transform 0.2s ease;
+                opacity: 0.6;
             }
 
             .mobile-nav-item:hover .mobile-nav-arrow {
-                transform: translateX(2px);
+                opacity: 1;
                 color: var(--primary-navy);
             }
 
@@ -1979,68 +1933,43 @@
                     </li>
                 </ul>
 
-                <!-- Mobile App Navigation Drawer (Phones & Tablets) -->
+                <!-- Mobile App Navigation (Phones & Tablets) -->
                 <div class="mobile-nav-panel d-lg-none w-100">
                     <div class="mobile-nav-list mb-3">
                         <a class="mobile-nav-item text-decoration-none" href="#pillars" onclick="closeMobileNav()">
-                            <div class="mobile-nav-icon">
-                                <i class="bi bi-grid-1x2-fill"></i>
-                            </div>
-                            <div class="mobile-nav-text">
-                                <span class="mobile-nav-title">Core Pillars</span>
-                                <span class="mobile-nav-sub">Modular ERP Architecture</span>
-                            </div>
+                            <i class="bi bi-grid-1x2 text-primary opacity-75"></i>
+                            <span>Core Pillars</span>
                             <i class="bi bi-chevron-right mobile-nav-arrow"></i>
                         </a>
 
                         <a class="mobile-nav-item text-decoration-none" href="#tour" onclick="closeMobileNav()">
-                            <div class="mobile-nav-icon">
-                                <i class="bi bi-laptop-fill"></i>
-                            </div>
-                            <div class="mobile-nav-text">
-                                <span class="mobile-nav-title">Platform Tour</span>
-                                <span class="mobile-nav-sub">Interactive System Walkthrough</span>
-                            </div>
+                            <i class="bi bi-laptop text-primary opacity-75"></i>
+                            <span>Platform Tour</span>
                             <i class="bi bi-chevron-right mobile-nav-arrow"></i>
                         </a>
 
                         <a class="mobile-nav-item text-decoration-none" href="#calculator" onclick="closeMobileNav()">
-                            <div class="mobile-nav-icon">
-                                <i class="bi bi-calculator-fill"></i>
-                            </div>
-                            <div class="mobile-nav-text">
-                                <span class="mobile-nav-title">ROI Calculator</span>
-                                <span class="mobile-nav-sub">Estimate School Cost Savings</span>
-                            </div>
+                            <i class="bi bi-calculator text-primary opacity-75"></i>
+                            <span>ROI Calculator</span>
                             <i class="bi bi-chevron-right mobile-nav-arrow"></i>
                         </a>
 
                         <a class="mobile-nav-item text-decoration-none" href="#pricing" onclick="closeMobileNav()">
-                            <div class="mobile-nav-icon">
-                                <i class="bi bi-tags-fill"></i>
-                            </div>
-                            <div class="mobile-nav-text">
-                                <span class="mobile-nav-title">Pricing Plans</span>
-                                <span class="mobile-nav-sub">Transparent SaaS Subscription Tiers</span>
-                            </div>
+                            <i class="bi bi-tags text-primary opacity-75"></i>
+                            <span>Pricing Plans</span>
                             <i class="bi bi-chevron-right mobile-nav-arrow"></i>
                         </a>
 
                         <a class="mobile-nav-item text-decoration-none" href="#faq" onclick="closeMobileNav()">
-                            <div class="mobile-nav-icon">
-                                <i class="bi bi-question-circle-fill"></i>
-                            </div>
-                            <div class="mobile-nav-text">
-                                <span class="mobile-nav-title">Help &amp; FAQs</span>
-                                <span class="mobile-nav-sub">Common Questions &amp; Support</span>
-                            </div>
+                            <i class="bi bi-question-circle text-primary opacity-75"></i>
+                            <span>FAQs</span>
                             <i class="bi bi-chevron-right mobile-nav-arrow"></i>
                         </a>
                     </div>
 
                     <!-- Mobile Action Buttons -->
                     <div class="mobile-auth-actions pt-3 border-top">
-                        <a href="{{ route('login') }}" class="btn btn-outline-brand-mobile w-100 py-2.5 rounded-3 fw-semibold text-decoration-none d-flex align-items-center justify-content-center gap-2">
+                        <a href="{{ route('login') }}" class="btn btn-outline-brand-mobile w-100 py-2.5 rounded-3 fw-semibold text-decoration-none d-flex align-items-center justify-content-center gap-2 mb-2">
                             <i class="bi bi-person-lock"></i>
                             <span>Client Sign In</span>
                         </a>
