@@ -40,6 +40,16 @@
         border-color: var(--primary-color);
     }
 
+    [data-bs-theme="dark"] .btn-filter {
+        background-color: rgba(255, 255, 255, 0.05);
+        border-color: rgba(255, 255, 255, 0.1);
+        color: #cbd5e1;
+    }
+    [data-bs-theme="dark"] .btn-filter:hover {
+        background-color: rgba(255, 255, 255, 0.1);
+        color: #ffffff;
+    }
+
     .student-row {
         transition: background-color 0.2s ease;
     }
