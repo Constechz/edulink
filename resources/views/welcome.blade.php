@@ -540,6 +540,164 @@
             background: var(--accent-gold);
         }
 
+        /* ==========================================================================
+           PROFESSIONAL MOBILE NAVIGATION DRAWER & APP MENU
+           ========================================================================== */
+        @media (max-width: 991.98px) {
+            .navbar-main {
+                padding: 0.75rem 0 !important;
+            }
+
+            .navbar-collapse {
+                background: var(--bg-card) !important;
+                border: 1px solid var(--border-subtle);
+                border-radius: 20px;
+                padding: 1.15rem !important;
+                margin-top: 0.85rem;
+                box-shadow: 0 18px 40px -8px rgba(0, 51, 102, 0.18), 0 0 0 1px rgba(0, 51, 102, 0.04);
+            }
+
+            [data-bs-theme="dark"] .navbar-collapse {
+                background: #111a2e !important;
+                border-color: rgba(255, 255, 255, 0.08);
+                box-shadow: 0 20px 45px -10px rgba(0, 0, 0, 0.65);
+            }
+
+            .mobile-nav-list {
+                display: flex;
+                flex-direction: column;
+                gap: 0.4rem;
+            }
+
+            .mobile-nav-item {
+                display: flex;
+                align-items: center;
+                gap: 0.85rem;
+                padding: 0.65rem 0.85rem;
+                border-radius: 12px;
+                background: transparent;
+                transition: all 0.2s ease;
+                color: var(--text-heading) !important;
+            }
+
+            .mobile-nav-item:hover,
+            .mobile-nav-item:active {
+                background: var(--bg-light-tint);
+                color: var(--primary-navy) !important;
+                transform: translateX(3px);
+            }
+
+            [data-bs-theme="dark"] .mobile-nav-item {
+                color: #f8fafc !important;
+            }
+
+            [data-bs-theme="dark"] .mobile-nav-item:hover,
+            [data-bs-theme="dark"] .mobile-nav-item:active {
+                background: rgba(255, 255, 255, 0.06);
+                color: var(--accent-gold) !important;
+            }
+
+            .mobile-nav-icon {
+                width: 36px;
+                height: 36px;
+                border-radius: 10px;
+                background: var(--primary-subtle);
+                color: var(--primary-navy);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 1.05rem;
+                flex-shrink: 0;
+                transition: all 0.2s ease;
+            }
+
+            [data-bs-theme="dark"] .mobile-nav-icon {
+                background: rgba(255, 255, 255, 0.06);
+                color: var(--accent-gold);
+            }
+
+            .mobile-nav-item:hover .mobile-nav-icon {
+                background: var(--primary-navy);
+                color: #ffffff;
+            }
+
+            [data-bs-theme="dark"] .mobile-nav-item:hover .mobile-nav-icon {
+                background: var(--accent-gold);
+                color: #002244;
+            }
+
+            .mobile-nav-text {
+                display: flex;
+                flex-direction: column;
+                line-height: 1.25;
+            }
+
+            .mobile-nav-title {
+                font-size: 0.92rem;
+                font-weight: 700;
+            }
+
+            .mobile-nav-sub {
+                font-size: 0.74rem;
+                font-weight: 400;
+                color: var(--text-muted);
+                margin-top: 1px;
+            }
+
+            .mobile-nav-arrow {
+                font-size: 0.78rem;
+                color: var(--text-muted);
+                margin-left: auto;
+                transition: transform 0.2s ease;
+            }
+
+            .mobile-nav-item:hover .mobile-nav-arrow {
+                transform: translateX(2px);
+                color: var(--primary-navy);
+            }
+
+            [data-bs-theme="dark"] .mobile-nav-item:hover .mobile-nav-arrow {
+                color: var(--accent-gold);
+            }
+
+            .btn-outline-brand-mobile {
+                border: 1.5px solid var(--border-subtle);
+                color: var(--primary-navy);
+                background: var(--bg-card);
+                font-size: 0.92rem;
+                transition: all 0.2s ease;
+            }
+
+            .btn-outline-brand-mobile:hover {
+                border-color: var(--primary-navy);
+                background: var(--primary-subtle);
+                color: var(--primary-dark);
+            }
+
+            [data-bs-theme="dark"] .btn-outline-brand-mobile {
+                border-color: rgba(255, 255, 255, 0.15);
+                background: rgba(255, 255, 255, 0.04);
+                color: #f1f5f9;
+            }
+
+            [data-bs-theme="dark"] .btn-outline-brand-mobile:hover {
+                border-color: var(--accent-gold);
+                color: var(--accent-gold);
+            }
+
+            .btn-brand-primary-mobile {
+                background: linear-gradient(135deg, var(--primary-navy) 0%, var(--primary-light) 100%);
+                color: #ffffff !important;
+                border: none;
+                font-size: 0.92rem;
+                box-shadow: 0 4px 12px rgba(0, 51, 102, 0.25);
+            }
+
+            .btn-brand-primary-mobile:hover {
+                background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary-navy) 100%);
+            }
+        }
+
         /* Dark/Light Mode Switcher Button */
         .theme-toggle-btn {
             width: 38px;
@@ -1802,7 +1960,8 @@
             </div>
 
             <div class="collapse navbar-collapse" id="navbarMainCollapse">
-                <ul class="navbar-nav mx-auto mb-3 mb-lg-0">
+                <!-- Desktop Navigation Links (Large Screens) -->
+                <ul class="navbar-nav mx-auto mb-3 mb-lg-0 d-none d-lg-flex">
                     <li class="nav-item">
                         <a class="nav-link nav-link-custom" href="#pillars">Core Pillars</a>
                     </li>
@@ -1820,9 +1979,87 @@
                     </li>
                 </ul>
 
-                <div class="d-flex flex-column flex-lg-row align-items-stretch align-items-lg-center gap-2.5">
-                    <!-- Desktop Theme Toggle -->
-                    <button class="theme-toggle-btn theme-toggle-action d-none d-lg-inline-flex" type="button" aria-label="Toggle dark or light theme" title="Toggle theme">
+                <!-- Mobile App Navigation Drawer (Phones & Tablets) -->
+                <div class="mobile-nav-panel d-lg-none w-100">
+                    <div class="mobile-nav-list mb-3">
+                        <a class="mobile-nav-item text-decoration-none" href="#pillars" onclick="closeMobileNav()">
+                            <div class="mobile-nav-icon">
+                                <i class="bi bi-grid-1x2-fill"></i>
+                            </div>
+                            <div class="mobile-nav-text">
+                                <span class="mobile-nav-title">Core Pillars</span>
+                                <span class="mobile-nav-sub">Modular ERP Architecture</span>
+                            </div>
+                            <i class="bi bi-chevron-right mobile-nav-arrow"></i>
+                        </a>
+
+                        <a class="mobile-nav-item text-decoration-none" href="#tour" onclick="closeMobileNav()">
+                            <div class="mobile-nav-icon">
+                                <i class="bi bi-laptop-fill"></i>
+                            </div>
+                            <div class="mobile-nav-text">
+                                <span class="mobile-nav-title">Platform Tour</span>
+                                <span class="mobile-nav-sub">Interactive System Walkthrough</span>
+                            </div>
+                            <i class="bi bi-chevron-right mobile-nav-arrow"></i>
+                        </a>
+
+                        <a class="mobile-nav-item text-decoration-none" href="#calculator" onclick="closeMobileNav()">
+                            <div class="mobile-nav-icon">
+                                <i class="bi bi-calculator-fill"></i>
+                            </div>
+                            <div class="mobile-nav-text">
+                                <span class="mobile-nav-title">ROI Calculator</span>
+                                <span class="mobile-nav-sub">Estimate School Cost Savings</span>
+                            </div>
+                            <i class="bi bi-chevron-right mobile-nav-arrow"></i>
+                        </a>
+
+                        <a class="mobile-nav-item text-decoration-none" href="#pricing" onclick="closeMobileNav()">
+                            <div class="mobile-nav-icon">
+                                <i class="bi bi-tags-fill"></i>
+                            </div>
+                            <div class="mobile-nav-text">
+                                <span class="mobile-nav-title">Pricing Plans</span>
+                                <span class="mobile-nav-sub">Transparent SaaS Subscription Tiers</span>
+                            </div>
+                            <i class="bi bi-chevron-right mobile-nav-arrow"></i>
+                        </a>
+
+                        <a class="mobile-nav-item text-decoration-none" href="#faq" onclick="closeMobileNav()">
+                            <div class="mobile-nav-icon">
+                                <i class="bi bi-question-circle-fill"></i>
+                            </div>
+                            <div class="mobile-nav-text">
+                                <span class="mobile-nav-title">Help &amp; FAQs</span>
+                                <span class="mobile-nav-sub">Common Questions &amp; Support</span>
+                            </div>
+                            <i class="bi bi-chevron-right mobile-nav-arrow"></i>
+                        </a>
+                    </div>
+
+                    <!-- Mobile Action Buttons -->
+                    <div class="mobile-auth-actions pt-3 border-top">
+                        <a href="{{ route('login') }}" class="btn btn-outline-brand-mobile w-100 py-2.5 rounded-3 fw-semibold text-decoration-none d-flex align-items-center justify-content-center gap-2">
+                            <i class="bi bi-person-lock"></i>
+                            <span>Client Sign In</span>
+                        </a>
+                        <a href="{{ route('register') }}" class="btn btn-brand-primary-mobile w-100 py-2.5 rounded-3 fw-bold text-decoration-none d-flex align-items-center justify-content-center gap-2 shadow-sm">
+                            <i class="bi bi-rocket-takeoff-fill"></i>
+                            <span>Register School Free</span>
+                        </a>
+                        <div class="text-center mt-2 pt-2 border-top">
+                            <span class="text-muted d-inline-flex align-items-center gap-1.5" style="font-size: 0.72rem;">
+                                <i class="bi bi-patch-check-fill text-success"></i>
+                                <span>GES SBA Standard Compliant &bull; Instant Activation</span>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Desktop Action Buttons (Large Screens) -->
+                <div class="d-none d-lg-flex align-items-center gap-2.5">
+                    <button class="theme-toggle-btn theme-toggle-action" type="button" aria-label="Toggle dark or light theme" title="Toggle theme">
                         <i class="bi bi-moon-stars-fill theme-icon-el"></i>
                     </button>
                     <a href="{{ route('login') }}" class="btn-brand-outline text-decoration-none justify-content-center">
@@ -2904,6 +3141,15 @@
                 }
             });
         });
+
+        // Helper to smoothly collapse mobile menu on anchor tap
+        function closeMobileNav() {
+            const navbarCollapse = document.getElementById('navbarMainCollapse');
+            if (navbarCollapse && navbarCollapse.classList.contains('show')) {
+                const bsCollapse = bootstrap.Collapse.getInstance(navbarCollapse) || new bootstrap.Collapse(navbarCollapse);
+                bsCollapse.hide();
+            }
+        }
     </script>
 
     @php
