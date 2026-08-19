@@ -371,27 +371,5 @@
 
     </div>
 
-    <!-- Live Infrastructure Status Bar -->
-    <div class="row">
-        <div class="col-12">
-            <div class="glass-card p-3.5 d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-3">
-                <div class="d-flex align-items-center gap-3">
-                    <span class="badge-live-pulse" style="width: 8px; height: 8px; background: #10b981; border-radius: 50%; display: inline-block;"></span>
-                    <span class="small fw-semibold" style="color: var(--text-heading); font-size: 0.82rem;">
-                        EduLink Ghana ERP Infrastructure &bull; All Subsystems Active
-                    </span>
-                </div>
-                <div class="d-flex align-items-center gap-3 flex-wrap">
-                    <span class="text-muted small d-inline-flex align-items-center gap-1" style="font-size: 0.75rem;">
-                        <i class="bi bi-check-circle-fill text-success"></i> GES SBA Engine: <strong>30/70 &amp; 50/50 Ready</strong>
-                    </span>
-                    <span class="text-muted small d-inline-flex align-items-center gap-1" style="font-size: 0.75rem;">
-                        <i class="bi bi-check-circle-fill text-success"></i> MoMo Gateway: <strong>Connected</strong>
-                    </span>
-                </div>
-            </div>
-        </div>
-    </div>
-
 </div>
 @endsection
