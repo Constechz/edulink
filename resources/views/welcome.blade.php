@@ -1529,10 +1529,7 @@
 
         @media (max-width: 991.98px) {
             .hero-section-wrap {
-                padding: 3rem 0 3.5rem 0;
-            }
-            .hero-main-title {
-                font-size: 2.4rem;
+                padding: 2.75rem 0 3rem 0;
             }
             .erp-mockup-body {
                 height: 320px;
@@ -1541,10 +1538,226 @@
                 display: none;
             }
             .calculator-card {
-                padding: 2.5rem 1.5rem;
+                padding: 2rem 1.25rem;
             }
             .cta-banner-section {
-                padding: 3rem 1.5rem;
+                padding: 2.5rem 1.25rem;
+            }
+        }
+
+        /* ==========================================================================
+           STANDARD MOBILE TYPOGRAPHY & RESPONSIVE SCALING (< 768px & < 576px)
+           ========================================================================== */
+        @media (max-width: 768px) {
+            body {
+                font-size: 0.9375rem; /* Standard 15px mobile body */
+            }
+
+            /* Main Headings */
+            h1, .h1 {
+                font-size: 1.85rem !important;
+                line-height: 1.25 !important;
+                letter-spacing: -0.5px !important;
+            }
+            h2, .h2 {
+                font-size: 1.5rem !important;
+                line-height: 1.3 !important;
+                letter-spacing: -0.4px !important;
+            }
+            h3, .h3 {
+                font-size: 1.25rem !important;
+                line-height: 1.35 !important;
+            }
+            h4, .h4 {
+                font-size: 1.1rem !important;
+                line-height: 1.4 !important;
+            }
+            h5, .h5 {
+                font-size: 0.98rem !important;
+            }
+            h6, .h6 {
+                font-size: 0.88rem !important;
+            }
+            p, .lead {
+                font-size: 0.92rem !important;
+                line-height: 1.6 !important;
+            }
+
+            /* Hero Section Mobile Typography */
+            .hero-section-wrap {
+                padding: 2rem 0 2.5rem 0 !important;
+            }
+            .hero-main-title {
+                font-size: 1.85rem !important;
+                line-height: 1.25 !important;
+                letter-spacing: -0.5px !important;
+                margin-bottom: 0.85rem !important;
+            }
+            .hero-sub-desc {
+                font-size: 0.95rem !important;
+                line-height: 1.6 !important;
+                margin-bottom: 1.5rem !important;
+            }
+            .hero-stat-card {
+                padding: 0.75rem 0.85rem !important;
+            }
+            .hero-stat-number {
+                font-size: 1.35rem !important;
+            }
+            .hero-stat-label {
+                font-size: 0.68rem !important;
+            }
+
+            /* Section Headers */
+            .section-tagline {
+                font-size: 0.75rem !important;
+                letter-spacing: 0.8px !important;
+                margin-bottom: 0.35rem !important;
+            }
+            .section-header-title {
+                font-size: 1.5rem !important;
+                line-height: 1.3 !important;
+                letter-spacing: -0.4px !important;
+                margin-bottom: 0.6rem !important;
+            }
+            .section-header-desc {
+                font-size: 0.92rem !important;
+                line-height: 1.6 !important;
+                margin-bottom: 2rem !important;
+            }
+
+            /* Buttons & Actions */
+            .btn-brand-gold, .btn-brand-primary {
+                font-size: 0.92rem !important;
+                padding: 0.65rem 1.25rem !important;
+                border-radius: 10px !important;
+            }
+            .btn-brand-outline {
+                font-size: 0.88rem !important;
+                padding: 0.5rem 1rem !important;
+            }
+
+            /* Pillar & Feature Cards */
+            .pillar-card-pro {
+                padding: 1.4rem 1.2rem !important;
+                border-radius: 14px !important;
+            }
+            .pillar-icon-box {
+                width: 48px !important;
+                height: 48px !important;
+                font-size: 1.3rem !important;
+                margin-bottom: 1rem !important;
+            }
+            .pillar-card-pro h4 {
+                font-size: 1.12rem !important;
+            }
+            .pillar-card-pro p {
+                font-size: 0.88rem !important;
+                line-height: 1.55 !important;
+            }
+
+            /* Pricing Cards */
+            .pricing-card-pro {
+                padding: 1.5rem 1.25rem !important;
+                border-radius: 14px !important;
+            }
+            .pricing-card-pro h4 {
+                font-size: 1.15rem !important;
+            }
+            .pricing-amount-row {
+                font-size: 1.75rem !important;
+            }
+            .pricing-card-pro li span {
+                font-size: 0.85rem !important;
+            }
+
+            /* Showcase Tabs & Content */
+            .showcase-tab-item {
+                padding: 0.75rem 0.85rem !important;
+                border-radius: 10px !important;
+            }
+            .showcase-tab-item h6 {
+                font-size: 0.88rem !important;
+            }
+            .showcase-tab-item .text-muted {
+                font-size: 0.75rem !important;
+            }
+            .showcase-content-panel {
+                padding: 1.25rem 1rem !important;
+                border-radius: 14px !important;
+            }
+
+            /* Calculator & CTA Banners */
+            .calculator-card {
+                padding: 1.5rem 1.15rem !important;
+                border-radius: 16px !important;
+            }
+            .calculator-card h3 {
+                font-size: 1.3rem !important;
+            }
+            .calc-result-box {
+                padding: 1.25rem 1rem !important;
+            }
+            .calc-result-box .display-5 {
+                font-size: 1.6rem !important;
+            }
+            .cta-banner-section {
+                padding: 2.25rem 1.25rem !important;
+                border-radius: 16px !important;
+            }
+            .cta-banner-section h2 {
+                font-size: 1.55rem !important;
+                line-height: 1.3 !important;
+            }
+
+            /* FAQ Accordion */
+            .faq-card-item summary {
+                font-size: 0.92rem !important;
+                padding: 0.85rem 1rem !important;
+            }
+            .faq-answer-content {
+                font-size: 0.88rem !important;
+                padding: 0.75rem 1rem !important;
+            }
+
+            /* Trust & School Badges */
+            .trust-school-chip {
+                font-size: 0.78rem !important;
+                padding: 0.35rem 0.75rem !important;
+            }
+
+            /* Footer */
+            .site-footer {
+                padding: 3rem 0 2rem 0 !important;
+            }
+            .site-footer h6 {
+                font-size: 0.92rem !important;
+            }
+            .footer-nav-link {
+                font-size: 0.85rem !important;
+            }
+        }
+
+        @media (max-width: 576px) {
+            /* Extra Small Mobile Screen Fine-Tuning (e.g. 360px - 414px) */
+            .hero-main-title {
+                font-size: 1.65rem !important;
+                line-height: 1.25 !important;
+            }
+            .hero-sub-desc {
+                font-size: 0.9rem !important;
+            }
+            .section-header-title {
+                font-size: 1.35rem !important;
+            }
+            .cta-banner-section h2 {
+                font-size: 1.4rem !important;
+            }
+            .pricing-amount-row {
+                font-size: 1.55rem !important;
+            }
+            .nav-link-custom {
+                font-size: 0.9rem !important;
             }
         }
     </style>
